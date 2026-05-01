@@ -67,6 +67,17 @@
     max-width: 1100px;
   }
 
+  /* ── REFINEMENT 1: Provocative hook ── */
+  .header-provocation {
+    font-size: 22px;
+    font-style: italic;
+    color: var(--red);
+    max-width: 700px;
+    margin-bottom: 24px;
+    font-family: 'EB Garamond', serif;
+    line-height: 1.3;
+  }
+
   .header-label {
     font-family: 'DM Mono', monospace;
     font-size: 11px;
@@ -379,6 +390,16 @@
     margin-bottom: 6px;
   }
 
+  /* ── MICRO-PROOF NOTES ── */
+  .proof-note {
+    font-size: 13px;
+    color: rgba(15,14,11,0.55);
+    font-style: italic;
+    margin-top: 8px;
+    border-left: 2px solid var(--amber);
+    padding-left: 12px;
+  }
+
   /* ── TABS ── */
   .tab-nav {
     display: flex;
@@ -687,6 +708,8 @@
     <span>Total audit duration: 2–4 weeks</span>
   </div>
   <div class="header-body">
+    <!-- REFINEMENT 1: Direct, provoking question as emotional hook -->
+    <p class="header-provocation">Is your product bleeding users, trust, or revenue from faultlines you can’t see?</p>
     <div class="header-label">Proprietary Diagnostic Methodology</div>
     <h1>The Fault Topology<br><em>Method™</em></h1>
     <p class="header-sub">A structured forensic process that maps where products break, why they break, and what it costs — turning UX problems into quantified business intelligence.</p>
@@ -727,6 +750,8 @@
     <a href="#phase3">Phase 3</a>
     <a href="#phase4">Phase 4</a>
     <a href="#remediation-card">Remedy Card</a>
+    <!-- REFINEMENT 5: nav link for new applied section -->
+    <a href="#applied-forensics">Applied</a>
   </div>
 </nav>
 
@@ -874,10 +899,13 @@
         </ul>
       </div>
       <div>
+        <!-- REFINEMENT 2: Forensic lens with concrete transformation example -->
         <div class="ruled-box-red" style="margin-top:0">
           <h4>The forensic lens on artifacts</h4>
           <p style="font-size:15px">Reviews and support tickets are read not for what users say but for <strong>what users cannot name</strong>. Users rarely identify the root cause of their frustration — they describe symptoms.</p>
-          <p style="font-size:15px;margin-bottom:0"><em>Example: A user says "this is confusing." The forensic question is: was it information architecture, visual hierarchy, mental model mismatch, or missing feedback?</em></p>
+          <p style="font-size:15px;margin-bottom:0">
+            <em>Example: “This is confusing” → forensic reading traces it to a <strong>mental model mismatch</strong> in navigation structure, not a button label.</em>
+          </p>
         </div>
         <p style="margin-top:16px"><strong>Deliverable:</strong> A <em>Pre-Existing Evidence Register</em> — cataloguing all available data, rating quality and recency of each source, and flagging where critical data is absent. No data about a critical flow is itself a finding.</p>
       </div>
@@ -944,7 +972,7 @@
         <button class="tab-btn" onclick="showTab('h-psych', this)">A.3 — Psychological Layer</button>
       </div>
 
-      <!-- FOUNDATION TAB -->
+      <!-- FOUNDATION TAB (unchanged) -->
       <div id="h-foundation" class="tab-panel active">
         <p style="margin-bottom:24px;font-style:italic">The classic 10 heuristics applied with forensic specificity — not just "does this violate the heuristic" but "what is the business cost of this violation."</p>
 
@@ -1112,7 +1140,7 @@
         </div>
       </div>
 
-      <!-- BUSINESS-IMPACT TAB -->
+      <!-- BUSINESS-IMPACT TAB with micro-proof notes (REFINEMENT 3) -->
       <div id="h-business" class="tab-panel">
         <p style="margin-bottom:24px;font-style:italic">Heuristics developed from 23 years across industries — not in any textbook. This is where the FTM differentiates from every standard audit.</p>
 
@@ -1131,6 +1159,7 @@
             <li>Do visual design choices signal the appropriate level of seriousness for the domain?</li>
             <li>Where does the product feel like it is serving the business at the user's expense?</li>
           </ul>
+          <p class="proof-note">⚡ Rooted in a real trust breakdown at PayPal: merchants perceived unfairness in dispute outcomes despite a fair system, silently eroding adoption — this heuristic was built from that diagnosis.</p>
           <div class="forensic-box">What is the trust debt this product is accumulating — and what will it cost when it is called?</div>
         </div>
 
@@ -1216,6 +1245,7 @@
             <li>Where has the product been extended beyond its original design envelope?</li>
             <li>What has been bolted on versus genuinely integrated?</li>
           </ul>
+          <p class="proof-note">⚡ Applied at Cisco to surface design debt across 6 product teams — patterns that worked for a prototype had become systemic drag at enterprise scale.</p>
           <div class="forensic-box">What is the operational cost of scale-induced UX debt — in support time, training costs, and efficiency loss?</div>
         </div>
 
@@ -1236,7 +1266,7 @@
         </div>
       </div>
 
-      <!-- PSYCHOLOGICAL TAB -->
+      <!-- PSYCHOLOGICAL TAB (unchanged) -->
       <div id="h-psych" class="tab-panel">
         <p style="margin-bottom:24px;font-style:italic">Drawing on cognitive science, behavioural economics, and predictive processing theory — the intellectual layer that separates the FTM from generalist auditors.</p>
 
@@ -1752,6 +1782,43 @@
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ── REFINEMENT 4: APPLIED FORENSICS (industry-specific proof) ── -->
+<section id="applied-forensics" style="background:var(--paper-dark)">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-meta">
+        <span class="section-num" style="color:var(--paper)">—</span>
+        <span class="section-tag">Industry Application</span>
+      </div>
+      <div>
+        <h2 class="section-title">Applied Forensics</h2>
+        <p class="section-subtitle">The FTM speaks the language of your domain — faultlines look different in fintech than in enterprise SaaS.</p>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="ruled-box">
+        <h4>Fintech / Payments</h4>
+        <p>We don't just find a "confusing flow" — we identify the exact <strong>Trust Faultline</strong> that's causing a 2% involuntary churn in your high-value merchant segment.</p>
+        <p class="proof-note">⚡ Derived from diagnosing the hidden trust breakdown in PayPal's dispute resolution, where perception of unfairness silently undermined adoption despite a fair system.</p>
+      </div>
+      <div class="ruled-box">
+        <h4>Enterprise SaaS</h4>
+        <p>We don't just point out "inconsistent design" — we map the <strong>Systemic Faultlines</strong> in your design system that are slowing down six product teams and creating a fragmented customer experience.</p>
+        <p class="proof-note">⚡ Applied at Cisco, where a design debt audit revealed pattern duplication across 6+ teams — the fix unified the product suite and accelerated velocity.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── REFINEMENT 5: CLEAR CALL TO ACTION SECTION ── -->
+<section style="background:var(--ink); padding:64px 0; text-align:center; color:var(--paper); border-bottom:none;">
+  <div class="container">
+    <h2 style="font-family:'Syne',sans-serif; font-size:clamp(28px,4vw,42px); font-weight:800; margin-bottom:16px;">Suspect your product has hidden faultlines?</h2>
+    <p style="font-size:20px; opacity:0.7; margin-bottom:32px;">Let's conduct a 30-minute diagnostic scoping session to find out.</p>
+    <a href="mailto:anilksoman@gmail.com?subject=Fault Topology Method Inquiry" style="display:inline-block; background:var(--red); color:white; padding:16px 40px; text-decoration:none; font-family:'DM Mono',monospace; font-size:14px; letter-spacing:0.1em; text-transform:uppercase;">Start the Conversation</a>
   </div>
 </section>
 
