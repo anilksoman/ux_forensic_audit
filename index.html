@@ -1,584 +1,1795 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>The Fault Topology Method™ | UX Forensic Audit Framework</title>
-  <!-- Font Awesome 6 for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Fault Topology Method™ | UX Forensic Audit Framework</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e0b;
+    --paper: #f5f0e8;
+    --paper-dark: #ede7d6;
+    --red: #c0392b;
+    --red-muted: #922b21;
+    --amber: #d4a017;
+    --green: #1a6b3c;
+    --blue: #1a3a6b;
+    --rule: #c8bfa8;
+    --ghost: rgba(15,14,11,0.06);
+  }
 
-    :root {
-      --deep-navy: #0a1a2f;
-      --slate: #1e2b3c;
-      --steel: #2c3e50;
-      --forensic-orange: #ff6b4a;
-      --teal-accent: #2ec4b6;
-      --soft-white: #f8fafc;
-      --cool-gray: #e9eef3;
-      --text-primary: #1a2a3a;
-      --text-secondary: #4a5b6b;
-      --border-light: #dce4ec;
-      --card-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.08), 0 8px 20px -8px rgba(0, 20, 30, 0.06);
-      --transition: all 0.25s ease;
-    }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background: var(--soft-white);
-      color: var(--text-primary);
-      line-height: 1.5;
-      font-size: 1rem;
-    }
+  html { scroll-behavior: smooth; }
 
-    .container {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 0 1.5rem;
-    }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
 
-    /* Typography */
-    h1, h2, h3 {
-      font-weight: 600;
-      letter-spacing: -0.02em;
-    }
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0;
+  }
 
-    h1 {
-      font-size: clamp(2.2rem, 6vw, 3.4rem);
-      line-height: 1.2;
-    }
+  /* ── HEADER ── */
+  header {
+    position: relative;
+    border-bottom: 2px solid var(--ink);
+    padding: 0;
+    overflow: hidden;
+  }
 
-    h2 {
-      font-size: clamp(1.8rem, 4vw, 2.5rem);
-      margin-bottom: 1.5rem;
-    }
+  .header-eyebrow {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 10px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-    h3 {
-      font-size: 1.35rem;
-      margin-bottom: 0.5rem;
-    }
+  .header-body {
+    padding: 72px 48px 60px;
+    max-width: 1100px;
+  }
 
-    .section {
-      padding: 4.5rem 0;
-    }
+  .header-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .header-label::before {
+    content: '';
+    display: inline-block;
+    width: 28px; height: 1px;
+    background: var(--red);
+  }
 
-    .section-label {
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-weight: 700;
-      color: var(--forensic-orange);
-      margin-bottom: 0.75rem;
-    }
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(40px, 6vw, 80px);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    max-width: 800px;
+    margin-bottom: 28px;
+  }
+  h1 em { font-style: italic; color: var(--red); font-family: 'EB Garamond', serif; font-weight: 400; }
 
-    /* Hero */
-    .hero {
-      background: linear-gradient(135deg, #0a1a2f 0%, #132b40 100%);
-      color: white;
-      padding: 5rem 0 4rem;
-      position: relative;
-      overflow: hidden;
-    }
+  .header-sub {
+    font-size: 20px;
+    max-width: 640px;
+    color: rgba(15,14,11,0.7);
+    margin-bottom: 48px;
+    font-style: italic;
+  }
 
-    .hero::before {
-      content: "";
-      position: absolute;
-      top: -20%;
-      right: -10%;
-      width: 60%;
-      height: 140%;
-      background: radial-gradient(circle at 30% 40%, rgba(46, 196, 182, 0.12) 0%, transparent 60%);
-      pointer-events: none;
-    }
+  .phase-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border: 1px solid var(--rule);
+    background: var(--paper-dark);
+    margin-top: 40px;
+  }
+  .phase-item {
+    padding: 20px 24px;
+    border-right: 1px solid var(--rule);
+    cursor: pointer;
+    transition: background 0.2s;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .phase-item:last-child { border-right: none; }
+  .phase-item:hover { background: var(--ink); color: var(--paper); }
+  .phase-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    margin-bottom: 4px;
+  }
+  .phase-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .phase-days {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    opacity: 0.5;
+    margin-top: 4px;
+  }
 
-    .hero .container {
-      position: relative;
-      z-index: 2;
-    }
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    background: var(--ink);
+    z-index: 100;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 0 32px;
+  }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  nav a {
+    color: rgba(245,240,232,0.55);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 14px 18px;
+    white-space: nowrap;
+    transition: color 0.2s;
+    border-right: 1px solid rgba(255,255,255,0.07);
+  }
+  nav a:hover, nav a.active { color: var(--paper); }
+  nav a:first-child { padding-left: 0; }
 
-    .hero h1 {
-      max-width: 800px;
-      margin-bottom: 1.2rem;
-    }
+  /* ── LAYOUT ── */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 48px;
+  }
 
-    .hero .subhead {
-      font-size: 1.25rem;
-      color: #cbd5e1;
-      max-width: 650px;
-      margin-bottom: 2rem;
-    }
+  section {
+    padding: 80px 0;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+  }
 
-    .badge {
-      display: inline-block;
-      background: rgba(255, 107, 74, 0.18);
-      color: #ffaa8c;
-      border: 1px solid rgba(255, 107, 74, 0.3);
-      padding: 0.35rem 1rem;
-      border-radius: 30px;
-      font-size: 0.9rem;
-      font-weight: 500;
-      margin-bottom: 1.5rem;
-      backdrop-filter: blur(4px);
-    }
+  .section-header {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 48px;
+    margin-bottom: 56px;
+    align-items: start;
+  }
 
-    .tm {
-      font-size: 0.7em;
-      vertical-align: super;
-    }
+  .section-meta {
+    padding-top: 6px;
+  }
 
-    /* Cards grid */
-    .grid-4 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 1.8rem;
-      margin-top: 2rem;
-    }
+  .section-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 72px;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--paper-dark);
+    letter-spacing: -0.04em;
+    -webkit-text-stroke: 2px var(--rule);
+    display: block;
+  }
 
-    .phase-card {
-      background: white;
-      border-radius: 24px;
-      padding: 2rem 1.5rem;
-      box-shadow: var(--card-shadow);
-      transition: var(--transition);
-      border: 1px solid var(--border-light);
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-    }
+  .section-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--red);
+    display: block;
+    margin-top: 8px;
+  }
 
-    .phase-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 28px 40px -16px rgba(0, 0, 0, 0.12);
-      border-color: var(--teal-accent);
-    }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(28px, 3.5vw, 42px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
 
-    .phase-icon {
-      font-size: 2.2rem;
-      color: var(--forensic-orange);
-      margin-bottom: 0.3rem;
-    }
+  .section-subtitle {
+    font-size: 17px;
+    font-style: italic;
+    color: rgba(15,14,11,0.6);
+    margin-top: 12px;
+    max-width: 640px;
+  }
 
-    .phase-num {
-      font-weight: 700;
-      color: var(--teal-accent);
-      font-size: 0.9rem;
-      letter-spacing: 0.05em;
-    }
+  /* ── TYPOGRAPHY ── */
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    margin-bottom: 12px;
+    margin-top: 36px;
+  }
 
-    .card-title {
-      font-size: 1.5rem;
-      font-weight: 650;
-    }
+  h4 {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 10px;
+    margin-top: 28px;
+  }
 
-    .card-desc {
-      color: var(--text-secondary);
-      font-size: 0.95rem;
-      flex: 1;
-    }
+  p { margin-bottom: 16px; }
 
-    .timeline {
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--steel);
-      background: #f0f4f9;
-      padding: 0.3rem 0.7rem;
-      border-radius: 20px;
-      align-self: flex-start;
-      margin-top: 0.3rem;
-    }
+  strong { font-weight: 600; }
 
-    /* Detail sections */
-    .detail-block {
-      background: white;
-      border-radius: 28px;
-      padding: 2.5rem 2rem;
-      margin-bottom: 2.5rem;
-      box-shadow: var(--card-shadow);
-      border: 1px solid var(--border-light);
-    }
+  em { font-style: italic; }
 
-    .detail-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-      margin-top: 2rem;
-    }
+  /* ── COMPONENTS ── */
+  .ruled-box {
+    border: 1px solid var(--rule);
+    background: var(--paper-dark);
+    padding: 28px 32px;
+    margin: 28px 0;
+  }
 
-    .bullet-list {
-      list-style: none;
-      padding: 0;
-    }
+  .ruled-box-red {
+    border-left: 3px solid var(--red);
+    background: rgba(192,57,43,0.04);
+    padding: 20px 24px;
+    margin: 20px 0;
+  }
 
-    .bullet-list li {
-      padding-left: 1.6rem;
-      position: relative;
-      margin-bottom: 0.7rem;
-      color: var(--text-secondary);
-    }
+  .forensic-q {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    line-height: 1.6;
+    color: rgba(15,14,11,0.75);
+    margin-bottom: 8px;
+    padding-left: 16px;
+    border-left: 2px solid var(--rule);
+  }
+  .forensic-q::before { content: '→ '; color: var(--red); }
 
-    .bullet-list li::before {
-      content: "●";
-      color: var(--forensic-orange);
-      font-weight: bold;
-      position: absolute;
-      left: 0;
-      font-size: 1.1rem;
-    }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin: 24px 0;
+  }
 
-    .accordion {
-      margin-top: 1.8rem;
-    }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin: 24px 0;
+  }
 
-    .accordion-item {
-      border-bottom: 1px solid var(--border-light);
-      padding: 0.2rem 0;
-    }
+  .card {
+    border: 1px solid var(--rule);
+    padding: 24px;
+    background: var(--paper);
+    position: relative;
+  }
+  .card-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .card h3 { margin-top: 0; font-size: 16px; }
+  .card p { font-size: 15px; margin: 0; color: rgba(15,14,11,0.7); }
 
-    .accordion-header {
-      width: 100%;
-      background: transparent;
-      border: none;
-      text-align: left;
-      padding: 1rem 0.5rem;
-      font-size: 1.1rem;
-      font-weight: 600;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-      color: var(--text-primary);
-      transition: color 0.2s;
-    }
+  /* ── HEURISTIC BLOCKS ── */
+  .heuristic-block {
+    border-top: 1px solid var(--rule);
+    padding: 28px 0;
+  }
+  .heuristic-block:last-child { border-bottom: 1px solid var(--rule); }
 
-    .accordion-header:hover {
-      color: var(--forensic-orange);
-    }
+  .heuristic-header {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 20px;
+    align-items: start;
+    margin-bottom: 12px;
+  }
 
-    .accordion-header i {
-      transition: transform 0.25s;
-      color: var(--forensic-orange);
-    }
+  .heuristic-code {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--red);
+    background: rgba(192,57,43,0.08);
+    padding: 4px 8px;
+    text-align: center;
+  }
 
-    .accordion-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s ease;
-      padding: 0 0.5rem;
-    }
+  .heuristic-name { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; }
+  .heuristic-def { font-size: 15px; font-style: italic; color: rgba(15,14,11,0.65); margin-bottom: 12px; }
+  .heuristic-questions { padding-left: 0; list-style: none; }
+  .heuristic-questions li {
+    font-size: 15px;
+    padding: 5px 0 5px 18px;
+    position: relative;
+    color: rgba(15,14,11,0.8);
+    border-bottom: 1px dotted var(--rule);
+  }
+  .heuristic-questions li::before { content: '→'; position: absolute; left: 0; color: var(--red); font-size: 12px; top: 7px; }
+  .heuristic-questions li:last-child { border-bottom: none; }
 
-    .accordion-content.active {
-      max-height: 1000px;
-      padding-bottom: 1.2rem;
-    }
+  .forensic-box {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 14px 18px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    line-height: 1.6;
+    margin-top: 14px;
+  }
+  .forensic-box::before {
+    content: 'FORENSIC QUESTION ';
+    color: var(--amber);
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
 
-    .accordion-header.active i {
-      transform: rotate(180deg);
-    }
+  /* ── TABS ── */
+  .tab-nav {
+    display: flex;
+    border-bottom: 2px solid var(--rule);
+    margin-bottom: 32px;
+    gap: 0;
+  }
+  .tab-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 12px 24px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: rgba(15,14,11,0.45);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.2s;
+  }
+  .tab-btn.active {
+    color: var(--ink);
+    border-bottom-color: var(--red);
+    font-weight: 500;
+  }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
 
-    .highlight-box {
-      background: #f0f7f9;
-      border-left: 5px solid var(--teal-accent);
-      padding: 1.4rem 1.8rem;
-      border-radius: 0 12px 12px 0;
-      margin: 1.8rem 0;
-      font-weight: 500;
-    }
+  /* ── CONVERGENCE MATRIX ── */
+  .matrix-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin: 24px 0;
+  }
+  .matrix-table th {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 500;
+  }
+  .matrix-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  .matrix-table tr:nth-child(even) td { background: var(--paper-dark); }
+  .conf-high { color: var(--green); font-weight: 600; }
+  .conf-med { color: var(--amber); font-weight: 600; }
+  .conf-low { color: rgba(15,14,11,0.4); }
+  .conf-anom { color: var(--red); font-weight: 600; }
 
-    .tag {
-      display: inline-block;
-      background: #eef2f6;
-      color: #2c3e50;
-      padding: 0.2rem 0.7rem;
-      border-radius: 14px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      margin-right: 0.4rem;
-      margin-bottom: 0.5rem;
-    }
+  /* ── FAULT TYPES ── */
+  .fault-type-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    border: 1px solid var(--rule);
+    margin: 28px 0;
+  }
+  .fault-type {
+    padding: 20px 16px;
+    border-right: 1px solid var(--rule);
+    position: relative;
+  }
+  .fault-type:last-child { border-right: none; }
+  .fault-depth {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+  }
+  .ft1 .fault-depth { background: #b8d4e8; }
+  .ft2 .fault-depth { background: #f0c040; }
+  .ft3 .fault-depth { background: #e87840; }
+  .ft4 .fault-depth { background: #c03020; }
+  .ft5 .fault-depth { background: #601010; }
 
-    .faultline-legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.2rem;
-      margin-top: 1.5rem;
-    }
+  .fault-type-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: rgba(15,14,11,0.4);
+    margin-bottom: 6px;
+  }
+  .fault-type-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .fault-type p { font-size: 13px; color: rgba(15,14,11,0.65); margin: 0; line-height: 1.5; }
+  .fault-meta { margin-top: 10px; }
+  .fault-meta span {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: rgba(15,14,11,0.5);
+    display: block;
+    line-height: 1.8;
+  }
 
-    .legend-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 4px;
-      display: inline-block;
-      margin-right: 0.4rem;
-    }
+  /* ── RICE-F ── */
+  .rice-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    border: 1px solid var(--rule);
+    margin: 28px 0;
+  }
+  .rice-item {
+    padding: 24px 20px;
+    border-right: 1px solid var(--rule);
+    text-align: center;
+  }
+  .rice-item:last-child { border-right: none; }
+  .rice-letter {
+    font-family: 'Syne', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--red);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .rice-word { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(15,14,11,0.5); margin-bottom: 8px; }
+  .rice-scale { font-size: 13px; color: rgba(15,14,11,0.65); }
 
-    .dot-surface { background: #3498db; }
-    .dot-structural { background: #f39c12; }
-    .dot-trust { background: #e74c3c; }
-    .dot-systemic { background: #8e44ad; }
-    .dot-strategic { background: #2c3e50; }
+  .formula-box {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 24px 32px;
+    text-align: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 18px;
+    margin: 24px 0;
+    letter-spacing: 0.05em;
+  }
+  .formula-box em { color: var(--amber); font-style: normal; }
 
-    footer {
-      background: var(--deep-navy);
-      color: #b0c4d9;
-      padding: 2.5rem 0;
-      text-align: center;
-      font-size: 0.9rem;
-    }
+  /* ── HORIZONS ── */
+  .horizon-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 0;
+    border: 1px solid var(--rule);
+    margin-bottom: -1px;
+  }
+  .horizon-label {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .horizon-num { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: rgba(245,240,232,0.4); text-transform: uppercase; margin-bottom: 4px; }
+  .horizon-time { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; }
+  .horizon-body { padding: 28px 32px; }
+  .horizon-body h3 { margin-top: 0; font-size: 17px; }
 
-    @media (max-width: 640px) {
-      .detail-block {
-        padding: 1.8rem 1.2rem;
-      }
-      .phase-card {
-        padding: 1.6rem 1.2rem;
-      }
-    }
+  /* ── REMEDIATION CARD ── */
+  .remedy-card {
+    border: 1px solid var(--ink);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    margin: 32px 0;
+    background: var(--paper);
+  }
+  .remedy-card-header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 14px 20px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .remedy-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    border-bottom: 1px solid var(--rule);
+  }
+  .remedy-row:last-child { border-bottom: none; }
+  .remedy-key {
+    padding: 12px 16px;
+    background: var(--paper-dark);
+    border-right: 1px solid var(--rule);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(15,14,11,0.5);
+    display: flex;
+    align-items: center;
+  }
+  .remedy-val { padding: 12px 16px; color: var(--ink); font-size: 13px; line-height: 1.5; }
+  .sev-critical { color: var(--red); font-weight: 600; }
 
-    button {
-      font-family: inherit;
-    }
-  </style>
+  /* ── STAKEHOLDER TABLE ── */
+  .stakeholder-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border: 1px solid var(--rule);
+    margin: 28px 0;
+  }
+  .sh-item {
+    padding: 24px;
+    border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .sh-item:nth-child(3n) { border-right: none; }
+  .sh-item:nth-last-child(-n+3) { border-bottom: none; }
+  .sh-role { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--red); margin-bottom: 10px; }
+  .sh-item ul { padding-left: 0; list-style: none; }
+  .sh-item li { font-size: 14px; padding: 4px 0 4px 14px; position: relative; color: rgba(15,14,11,0.75); border-bottom: 1px dotted var(--rule); }
+  .sh-item li::before { content: '→'; position: absolute; left: 0; color: var(--rule); font-size: 11px; }
+  .sh-item li:last-child { border-bottom: none; }
+
+  /* ── METRIC MATRIX ── */
+  .metric-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin: 24px 0;
+  }
+  .metric-table th {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: var(--paper-dark);
+    border: 1px solid var(--rule);
+    padding: 10px 14px;
+    text-align: left;
+  }
+  .metric-table td {
+    padding: 10px 14px;
+    border: 1px solid var(--rule);
+    vertical-align: top;
+    font-size: 14px;
+  }
+  .metric-table tr:hover td { background: rgba(15,14,11,0.02); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink);
+    color: rgba(245,240,232,0.55);
+    padding: 48px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  footer strong { color: var(--paper); }
+
+  /* ── PULL QUOTE ── */
+  .pull-quote {
+    border-left: 4px solid var(--red);
+    padding: 20px 28px;
+    font-size: 22px;
+    font-style: italic;
+    line-height: 1.4;
+    color: rgba(15,14,11,0.8);
+    margin: 36px 0;
+    background: var(--paper-dark);
+  }
+
+  /* ── UTILITY ── */
+  .mono { font-family: 'DM Mono', monospace; font-size: 14px; }
+  .red { color: var(--red); }
+  .rule-above { border-top: 1px solid var(--rule); padding-top: 20px; margin-top: 20px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 800px) {
+    .container { padding: 0 24px; }
+    .section-header { grid-template-columns: 1fr; gap: 16px; }
+    .section-num { font-size: 48px; }
+    .phase-bar, .fault-type-grid, .rice-grid { grid-template-columns: repeat(2, 1fr); }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .stakeholder-grid { grid-template-columns: 1fr; }
+    .sh-item { border-right: none !important; }
+    .sh-item:nth-last-child(-n+3) { border-bottom: 1px solid var(--rule) !important; }
+    .sh-item:last-child { border-bottom: none !important; }
+    .heuristic-header { grid-template-columns: 44px 1fr; }
+    .horizon-row { grid-template-columns: 1fr; }
+    .remedy-row { grid-template-columns: 1fr; }
+    .remedy-key { border-right: none; border-bottom: 1px solid var(--rule); }
+  }
+</style>
 </head>
 <body>
-  <!-- Hero Section -->
-  <header class="hero">
-    <div class="container">
-      <span class="badge"><i class="fas fa-fingerprint" style="margin-right: 0.4rem;"></i> Diagnostic Forensic Framework</span>
-      <h1>The Fault Topology Method<span class="tm">™</span></h1>
-      <p class="subhead">A structured forensic process that maps where products break, why they break, and what it costs — turning UX problems into quantified business intelligence.</p>
-      <p style="color: #9bb5cf; max-width: 600px;"><i class="fas fa-magnifying-glass-chart"></i> Stop guessing. Start diagnosing. Reveal the faultlines silently eroding trust, adoption, and revenue.</p>
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="header-eyebrow">
+    <span>UX Forensic Audit Framework — Public Methodology</span>
+    <span>Total audit duration: 2–4 weeks</span>
+  </div>
+  <div class="header-body">
+    <div class="header-label">Proprietary Diagnostic Methodology</div>
+    <h1>The Fault Topology<br><em>Method™</em></h1>
+    <p class="header-sub">A structured forensic process that maps where products break, why they break, and what it costs — turning UX problems into quantified business intelligence.</p>
+
+    <div class="phase-bar">
+      <a href="#phase1" class="phase-item">
+        <div class="phase-num">Phase 01</div>
+        <div class="phase-name">Reconnaissance</div>
+        <div class="phase-days">1–3 days</div>
+      </a>
+      <a href="#phase2" class="phase-item">
+        <div class="phase-num">Phase 02</div>
+        <div class="phase-name">Investigation</div>
+        <div class="phase-days">5–10 days</div>
+      </a>
+      <a href="#phase3" class="phase-item">
+        <div class="phase-num">Phase 03</div>
+        <div class="phase-name">Diagnosis</div>
+        <div class="phase-days">3–5 days</div>
+      </a>
+      <a href="#phase4" class="phase-item">
+        <div class="phase-num">Phase 04</div>
+        <div class="phase-name">Remediation</div>
+        <div class="phase-days">3–5 days</div>
+      </a>
     </div>
-  </header>
+  </div>
+</header>
 
-  <!-- Framework Overview -->
-  <section class="section">
-    <div class="container">
-      <span class="section-label">The Four Phases</span>
-      <h2>From symptoms to strategic repair</h2>
-      <div class="grid-4">
-        <div class="phase-card">
-          <div class="phase-icon"><i class="fas fa-clipboard-list"></i></div>
-          <div class="phase-num">PHASE 1</div>
-          <div class="card-title">Reconnaissance</div>
-          <div class="card-desc">Establish context & baseline. Align stakeholders, collect artifacts, measure vital signs.</div>
-          <div class="timeline">1–3 days</div>
-        </div>
-        <div class="phase-card">
-          <div class="phase-icon"><i class="fas fa-microscope"></i></div>
-          <div class="phase-num">PHASE 2</div>
-          <div class="card-title">Investigation</div>
-          <div class="card-desc">Dual‑track evaluation: expert heuristics + algorithmic data forensics.</div>
-          <div class="timeline">5–10 days</div>
-        </div>
-        <div class="phase-card">
-          <div class="phase-icon"><i class="fas fa-project-diagram"></i></div>
-          <div class="phase-num">PHASE 3</div>
-          <div class="card-title">Diagnosis</div>
-          <div class="card-desc">Synthesise findings into a fault topology – classify depth, map root causes.</div>
-          <div class="timeline">3–5 days</div>
-        </div>
-        <div class="phase-card">
-          <div class="phase-icon"><i class="fas fa-wrench"></i></div>
-          <div class="phase-num">PHASE 4</div>
-          <div class="card-title">Remediation</div>
-          <div class="card-desc">Prioritised three‑horizon fix roadmap with business cases & success metrics.</div>
-          <div class="timeline">3–5 days</div>
-        </div>
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-inner">
+    <a href="#overview">Overview</a>
+    <a href="#phase1">Phase 1</a>
+    <a href="#phase2">Phase 2</a>
+    <a href="#heuristics">Heuristics</a>
+    <a href="#convergence">Convergence</a>
+    <a href="#phase3">Phase 3</a>
+    <a href="#phase4">Phase 4</a>
+    <a href="#remediation-card">Remedy Card</a>
+  </div>
+</nav>
+
+<!-- ── OVERVIEW ── -->
+<section id="overview">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-meta">
+        <span class="section-num">00</span>
+        <span class="section-tag">The Method</span>
+      </div>
+      <div>
+        <h2 class="section-title">Why "topology"?</h2>
+        <p class="section-subtitle">From mathematics: the study of spatial relationships and how surfaces connect.</p>
       </div>
     </div>
-  </section>
 
-  <!-- Phase 1 Reconnaissance -->
-  <section class="section" style="padding-top: 0;">
-    <div class="container">
-      <div class="detail-block">
-        <span class="section-label"><i class="fas fa-binoculars"></i> Phase 1</span>
-        <h2>Reconnaissance – The Forensic Baseline</h2>
-        <p style="color: #4a5b6b; max-width: 800px;">Before investigating a crime scene, you document the scene as found. We interview stakeholders across product, engineering, sales, support, and data — then gather every artifact that shaped the product.</p>
-        <div class="detail-grid">
-          <div>
-            <h4><i class="fas fa-users-between-lines" style="color: var(--forensic-orange);"></i> Stakeholder Alignment</h4>
-            <ul class="bullet-list">
-              <li>Product leadership: what would "fixed" look like in measurable terms?</li>
-              <li>Engineering: known technical debts affecting UX</li>
-              <li>Customer success: top 10 support ticket categories</li>
-              <li>Sales: objections prospects raise about the product</li>
-              <li>Data team: biggest drop-off points, retention curve shape</li>
-            </ul>
-            <p style="margin-top: 1rem;"><strong>Deliverable:</strong> Stakeholder Perception Map – revealing internal misalignment that creates faultlines.</p>
-          </div>
-          <div>
-            <h4><i class="fas fa-file-import" style="color: var(--forensic-orange);"></i> Artifact Collection & Metrics</h4>
-            <ul class="bullet-list">
-              <li>PRDs, design files, user research reports</li>
-              <li>Support tickets (90+ days), app store reviews, NPS verbatims</li>
-              <li>Onboarding completion, feature adoption, A/B test results</li>
-              <li>Baseline metric matrix: activation, engagement, retention, support load, performance, sentiment</li>
-            </ul>
-            <p><strong>Deliverable:</strong> Quantitative Baseline Report – the product's vital signs before investigation.</p>
-          </div>
-        </div>
-        <div class="highlight-box">
-          <i class="fas fa-lightbulb" style="color: var(--teal-accent); margin-right: 0.5rem;"></i> 
-          <strong>Forensic lens:</strong> We read between the lines of user complaints. “Confusing” often means mental model mismatch, violated predictions, or missing feedback — not just bad UI.
-        </div>
+    <div class="grid-2">
+      <div>
+        <p>Applied to UX, topology means we map the <strong>shape of the problem</strong>, not just the symptoms. Most audits produce a list of design opinions. The Fault Topology Method produces a <strong>forensic intelligence report</strong> — with quantified business impact, root causes, and a clear prioritised remediation sequence.</p>
+        <p>The word "forensic" is deliberate too. Forensics means applying structured method to recover truth from evidence. We do not ask "what does this look like?" We ask "what does the evidence prove — and what does it cost?"</p>
       </div>
-
-      <!-- Phase 2 Investigation -->
-      <div class="detail-block">
-        <span class="section-label"><i class="fas fa-search-plus"></i> Phase 2</span>
-        <h2>Investigation – Dual‑Track Evaluation Engine</h2>
-        <p style="color: #4a5b6b; max-width: 850px;">Expert heuristic judgment and algorithmic data analysis run simultaneously. We look for <strong>convergence</strong> (high confidence) and <strong>divergence</strong> (hidden anomalies).</p>
-        
-        <div class="detail-grid" style="margin-top: 1.5rem;">
-          <div>
-            <h3 style="color: var(--forensic-orange);">Track A – Heuristic Evaluation</h3>
-            <p><span class="tag">Foundation</span><span class="tag">Business‑Impact</span><span class="tag">Psychological</span></p>
-            <p><strong>Three-tier system beyond Nielsen’s 10:</strong></p>
-            <ul class="bullet-list">
-              <li><strong>Foundation:</strong> Extended Nielsen heuristics with forensic cost estimation</li>
-              <li><strong>Business‑Impact:</strong> Trust architecture, cognitive load architecture, failure mode dignity, scale‑induced debt, adoption gravity, cross‑channel coherence</li>
-              <li><strong>Psychological:</strong> Relevance realization, predictive processing alignment, loss aversion architecture, cognitive load distribution, agency & autonomy</li>
-            </ul>
-          </div>
-          <div>
-            <h3 style="color: var(--teal-accent);">Track B – Algorithmic & Data Forensics</h3>
-            <ul class="bullet-list">
-              <li><strong>Funnel & revenue forensics:</strong> where value leaks</li>
-              <li><strong>Rage click & dead zone analysis</strong></li>
-              <li><strong>Session recording patterns</strong> (hesitation, re‑reading, tab switching)</li>
-              <li><strong>Support ticket forensics:</strong> failure demand %, vocabulary of confusion, workaround index</li>
-              <li><strong>Competitive benchmark mapping</strong></li>
-              <li><strong>Performance/technical UX impact</strong> (Core Web Vitals on critical flows)</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="accordion">
-          <div class="accordion-item">
-            <button class="accordion-header" aria-expanded="false">
-              <span><i class="fas fa-table"></i> The Convergence Matrix (heart of the method)</span>
-              <i class="fas fa-chevron-down"></i>
-            </button>
-            <div class="accordion-content">
-              <p>Findings are mapped by source, severity, business impact, and confidence:</p>
-              <ul class="bullet-list">
-                <li><strong>Confirmed (High):</strong> Heuristic + data alignment</li>
-                <li><strong>Indicated (Medium):</strong> One track, plausible in other</li>
-                <li><strong>Suspected (Low):</strong> Single source, absent/contradicted</li>
-                <li><strong>Anomaly:</strong> Data signal without heuristic explanation → further investigation</li>
-              </ul>
-              <p style="margin-top: 0.5rem;"><em>Convergence = high confidence faultline. Divergence = hidden risk or measurement gap.</em></p>
-            </div>
-          </div>
-        </div>
+      <div>
+        <div class="pull-quote">"The output is not a list of design opinions. It is a forensic intelligence report with quantified business impact and a clear implementation roadmap."</div>
       </div>
+    </div>
 
-      <!-- Phase 3 Diagnosis -->
-      <div class="detail-block">
-        <span class="section-label"><i class="fas fa-sitemap"></i> Phase 3</span>
-        <h2>Diagnosis – Building the Fault Topology</h2>
-        <p>Every finding is classified into five faultline types and plotted on a 2D Fault Map (journey stage × depth).</p>
-        
-        <div class="faultline-legend" style="margin: 1.2rem 0 1.8rem;">
-          <div><span class="legend-dot dot-surface"></span> <strong>Surface</strong> – visible usability friction</div>
-          <div><span class="legend-dot dot-structural"></span> <strong>Structural</strong> – IA/navigation problems</div>
-          <div><span class="legend-dot dot-trust"></span> <strong>Trust</strong> – dark patterns, opaque behavior</div>
-          <div><span class="legend-dot dot-systemic"></span> <strong>Systemic</strong> – foundational design debt</div>
-          <div><span class="legend-dot dot-strategic"></span> <strong>Strategic</strong> – product–market misalignment</div>
+    <div class="ruled-box">
+      <h4>The Dual-Track Principle</h4>
+      <p>Most UX audits run either heuristic evaluation (expert judgment) <em>or</em> data analysis. The Fault Topology Method runs <strong>both simultaneously</strong> and then looks for convergence and divergence between them.</p>
+      <div class="grid-2" style="margin-top:16px">
+        <div class="ruled-box-red">
+          <strong>Convergence</strong> — heuristic finding confirmed by data<br>
+          <span class="mono" style="font-size:12px">→ High confidence faultline</span>
         </div>
-
-        <div class="detail-grid">
-          <div>
-            <h4><i class="fas fa-map-marked-alt"></i> The Fault Map</h4>
-            <p>Nodes are sized by business impact, colored by confidence. We instantly see where problems concentrate — are they surface-level onboarding hiccups, or systemic engagement fractures?</p>
-            <p><strong>Topology reading:</strong> Trust faultlines across the entire journey signal a design philosophy problem, not just a UI bug.</p>
-          </div>
-          <div>
-            <h4><i class="fas fa-tree"></i> Root Cause Analysis (5‑Whys)</h4>
-            <p>For critical faults, we drill down to the organisational root cause:</p>
-            <ul class="bullet-list">
-              <li>User research gap</li>
-              <li>Stakeholder override</li>
-              <li>Technical constraint accepted without UX mitigation</li>
-              <li>Legacy debt / org boundary</li>
-              <li>Measurement gap (nobody watched the metric)</li>
-            </ul>
-            <p><strong>Deliverable:</strong> Root Cause Register – linking symptoms to process failures.</p>
-          </div>
+        <div class="ruled-box-red">
+          <strong>Divergence</strong> — heuristic finding contradicted by data<br>
+          <span class="mono" style="font-size:12px">→ Interesting anomaly requiring deeper investigation</span>
         </div>
-      </div>
-
-      <!-- Phase 4 Remediation -->
-      <div class="detail-block">
-        <span class="section-label"><i class="fas fa-screwdriver-wrench"></i> Phase 4</span>
-        <h2>Remediation – Prioritised Fix Architecture</h2>
-        <p>We score every faultline with <strong>RICE‑F</strong> (Reach, Impact, Confidence, Effort, Forensic Severity multiplier) and sequence them into a three‑horizon roadmap.</p>
-        
-        <div class="detail-grid">
-          <div>
-            <div style="background:#f4f7fc; border-radius: 16px; padding: 1.5rem;">
-              <h4><i class="far fa-clock" style="color: var(--forensic-orange);"></i> Horizon 1 (0–30 days)</h4>
-              <p><strong>Immediate Relief:</strong> high‑confidence quick wins with exact implementation specs and success metrics. Labels, errors, missing feedback, accessibility fixes.</p>
-            </div>
-          </div>
-          <div>
-            <div style="background:#f4f7fc; border-radius: 16px; padding: 1.5rem;">
-              <h4><i class="fas fa-layer-group" style="color: var(--forensic-orange);"></i> Horizon 2 (30–90 days)</h4>
-              <p><strong>Structural Repair:</strong> IA restructure, onboarding redesign, trust signals, cross‑platform coherence. Design briefs with before/after hypotheses.</p>
-            </div>
-          </div>
-          <div>
-            <div style="background:#f4f7fc; border-radius: 16px; padding: 1.5rem; grid-column: span 2;">
-              <h4><i class="fas fa-building-columns" style="color: var(--forensic-orange);"></i> Horizon 3 (90+ days)</h4>
-              <p><strong>Strategic Reconstruction:</strong> core mental model realignment, design system overhaul, value proposition clarification. Executive briefs with ROI projections and risk of inaction.</p>
-            </div>
-          </div>
+        <div class="ruled-box-red">
+          <strong>Data without heuristic explanation</strong><br>
+          <span class="mono" style="font-size:12px">→ Hidden faultline</span>
         </div>
-
-        <div style="margin-top: 2rem;">
-          <p><strong><i class="fas fa-id-card"></i> Remediation Cards:</strong> Every fix is delivered as a structured card (Faultline ID, evidence, root cause, business impact, annotated recommendation, success metric).</p>
-          <p><strong><i class="fas fa-file-contract"></i> Executive Summary:</strong> 10-page C‑suite document with verdict, fault map, top 5 critical faultlines, total cost of inaction, and measurement dashboard.</p>
-        </div>
-      </div>
-
-      <!-- Final CTA -->
-      <div style="text-align: center; margin-top: 2.5rem;">
-        <div class="highlight-box" style="display: inline-block; text-align: left; max-width: 700px; background: #eaf6f9;">
-          <p style="font-size: 1.3rem; font-weight: 600; margin-bottom: 0.5rem;">Stop treating symptoms. Uncover the topology of product failure.</p>
-          <p style="color: #2c3e50;">The Fault Topology Method™ delivers a forensic intelligence report — not opinions. Quantified impact, root causes, and a clear remediation sequence.</p>
+        <div class="ruled-box-red">
+          <strong>Heuristic without data signal</strong><br>
+          <span class="mono" style="font-size:12px">→ Potential future faultline or measurement gap</span>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <footer>
-    <div class="container">
-      <p><strong>The Fault Topology Method™</strong> — A forensic approach to mapping where products break, why they break, and what it costs.</p>
-      <p style="margin-top: 0.5rem; font-size: 0.8rem;">© 2026 UX Forensic Audit Framework. All rights reserved.</p>
+<!-- ── PHASE 1 ── -->
+<section id="phase1">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-meta">
+        <span class="section-num">01</span>
+        <span class="section-tag">1–3 days</span>
+      </div>
+      <div>
+        <h2 class="section-title">Reconnaissance</h2>
+        <p class="section-subtitle">Establishing the forensic baseline. Before investigating a crime scene, you document the scene as found.</p>
+      </div>
     </div>
-  </footer>
 
-  <script>
-    // Accordion functionality
-    document.querySelectorAll('.accordion-header').forEach(button => {
-      button.addEventListener('click', () => {
-        const currentlyActive = document.querySelector('.accordion-header.active');
-        if (currentlyActive && currentlyActive !== button) {
-          currentlyActive.classList.remove('active');
-          currentlyActive.nextElementSibling.classList.remove('active');
-        }
-        button.classList.toggle('active');
-        const content = button.nextElementSibling;
-        content.classList.toggle('active');
-        button.setAttribute('aria-expanded', content.classList.contains('active'));
-      });
+    <p>The Reconnaissance phase is about understanding what the product <em>thinks it is</em> versus what users actually experience — before any evaluation begins. This prevents the most common audit failure: evaluating against the wrong criteria.</p>
+
+    <!-- 1.1 Stakeholder -->
+    <h3>1.1 — Stakeholder Alignment Sessions</h3>
+    <p><strong>Purpose:</strong> Understand what success looks like from every internal perspective — which are often in conflict with each other.</p>
+
+    <div class="stakeholder-grid">
+      <div class="sh-item">
+        <div class="sh-role">Product Leadership</div>
+        <ul>
+          <li>What does this product do in one sentence — for the user, not the pitch deck?</li>
+          <li>Where do you believe users struggle most?</li>
+          <li>What metrics concern you that you cannot explain?</li>
+          <li>What has been tried before to fix problems — and what happened?</li>
+          <li>What would "fixed" look like in measurable terms?</li>
+        </ul>
+      </div>
+      <div class="sh-item">
+        <div class="sh-role">Engineering Leadership</div>
+        <ul>
+          <li>Where are the known technical debts that affect user experience?</li>
+          <li>What are the most frequent user-reported bugs?</li>
+          <li>What does your error logging show about where things break?</li>
+          <li>Where does the product behave differently than designed?</li>
+        </ul>
+      </div>
+      <div class="sh-item">
+        <div class="sh-role">Customer Success / Support</div>
+        <ul>
+          <li>What are the top 10 support ticket categories?</li>
+          <li>What do users say when they cancel or churn?</li>
+          <li>What workarounds have users invented?</li>
+          <li>What questions come up in every onboarding call?</li>
+        </ul>
+      </div>
+      <div class="sh-item">
+        <div class="sh-role">Sales Team</div>
+        <ul>
+          <li>What objections do prospects raise about the product?</li>
+          <li>What features do prospects ask for that don't exist?</li>
+          <li>What do lost deals cite as the reason?</li>
+        </ul>
+      </div>
+      <div class="sh-item">
+        <div class="sh-role">Data / Analytics</div>
+        <ul>
+          <li>Where are the biggest drop-off points in the funnel?</li>
+          <li>What is the retention curve shape — and where does it inflect?</li>
+          <li>Which features have lowest adoption despite being core to the value proposition?</li>
+          <li>Where do users spend unexpected amounts of time?</li>
+        </ul>
+      </div>
+      <div class="sh-item">
+        <div class="sh-role">Deliverable</div>
+        <ul>
+          <li><strong>Stakeholder Perception Map</strong> — documenting where internal perspectives align, conflict, and have blind spots</li>
+          <li>Internal misalignment itself creates product faultlines — this becomes a forensic exhibit in the final report</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 1.2 Artifacts -->
+    <h3>1.2 — Artifact Collection</h3>
+    <p><strong>Purpose:</strong> Gather every document that shaped the product to understand the gap between intention and reality.</p>
+
+    <div class="grid-2">
+      <div class="ruled-box">
+        <h4>What is collected</h4>
+        <ul style="list-style:none;padding:0">
+          <li class="forensic-q">Original PRDs and design system documentation</li>
+          <li class="forensic-q">Existing user research reports</li>
+          <li class="forensic-q">Support ticket logs (last 90 days minimum)</li>
+          <li class="forensic-q">App store / G2 / Capterra reviews (last 6 months)</li>
+          <li class="forensic-q">NPS data and verbatim comments</li>
+          <li class="forensic-q">Onboarding completion rates</li>
+          <li class="forensic-q">Feature adoption analytics</li>
+          <li class="forensic-q">A/B test results (past 12 months)</li>
+          <li class="forensic-q">Competitor comparison documents</li>
+        </ul>
+      </div>
+      <div>
+        <div class="ruled-box-red" style="margin-top:0">
+          <h4>The forensic lens on artifacts</h4>
+          <p style="font-size:15px">Reviews and support tickets are read not for what users say but for <strong>what users cannot name</strong>. Users rarely identify the root cause of their frustration — they describe symptoms.</p>
+          <p style="font-size:15px;margin-bottom:0"><em>Example: A user says "this is confusing." The forensic question is: was it information architecture, visual hierarchy, mental model mismatch, or missing feedback?</em></p>
+        </div>
+        <p style="margin-top:16px"><strong>Deliverable:</strong> A <em>Pre-Existing Evidence Register</em> — cataloguing all available data, rating quality and recency of each source, and flagging where critical data is absent. No data about a critical flow is itself a finding.</p>
+      </div>
+    </div>
+
+    <!-- 1.3 Baseline -->
+    <h3>1.3 — Baseline Metric Establishment</h3>
+    <p><strong>Purpose:</strong> Create the quantitative fingerprint of the product's current health before any qualitative evaluation begins.</p>
+
+    <table class="metric-table">
+      <thead>
+        <tr>
+          <th>Metric Category</th>
+          <th>Specific Metrics</th>
+          <th>Benchmark Against</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Acquisition</td><td>Traffic sources, conversion to signup</td><td>Industry standard</td></tr>
+        <tr><td>Activation</td><td>Onboarding completion rate, time to first value</td><td>Category average</td></tr>
+        <tr><td>Engagement</td><td>DAU/MAU ratio, session depth, feature adoption</td><td>Historical baseline</td></tr>
+        <tr><td>Retention</td><td>D1/D7/D30 retention, churn rate, resurrection rate</td><td>Cohort comparison</td></tr>
+        <tr><td>Revenue</td><td>Conversion to paid, expansion revenue, NRR</td><td>Business target</td></tr>
+        <tr><td>Support load</td><td>Ticket volume per user, resolution time, repeat contacts</td><td>Historical baseline</td></tr>
+        <tr><td>Performance</td><td>Load times, error rates, API failure rates</td><td>Technical SLA</td></tr>
+        <tr><td>Sentiment</td><td>NPS, App store rating, review sentiment score</td><td>Competitor comparison</td></tr>
+      </tbody>
+    </table>
+
+    <div class="ruled-box">
+      <h4>The Forensic Significance Test — for each metric, ask:</h4>
+      <div class="forensic-q">Is this metric moving in the same direction as all others? (Divergence signals a specific faultline)</div>
+      <div class="forensic-q">Does this metric behave differently for different user segments? (Reveals who is being underserved)</div>
+      <div class="forensic-q">Has this metric changed at a specific date? (Date-correlated changes reveal what caused the problem)</div>
+      <div class="forensic-q" style="border-left-color:var(--red)">What metric is conspicuously absent from reporting? (What nobody measures is often where the biggest problems hide)</div>
+    </div>
+
+    <p><strong>Deliverable:</strong> A <em>Quantitative Baseline Report</em> — the product's vital signs before investigation. This becomes the comparison document for measuring remediation impact later.</p>
+  </div>
+</section>
+
+<!-- ── PHASE 2 ── -->
+<section id="phase2">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-meta">
+        <span class="section-num">02</span>
+        <span class="section-tag">5–10 days</span>
+      </div>
+      <div>
+        <h2 class="section-title">Investigation</h2>
+        <p class="section-subtitle">The Dual-Track Evaluation Engine — where forensic audit diverges most fundamentally from standard UX review.</p>
+      </div>
+    </div>
+
+    <!-- HEURISTICS TABS -->
+    <div id="heuristics">
+      <h3 style="margin-top:0">Track A — Heuristic Evaluation: Three-Tier System</h3>
+      <p>Your framework does not just use Nielsen's 10 (which every auditor uses). It applies <strong>three layers</strong> of heuristic evaluation that elevate this to strategic forensics.</p>
+
+      <div class="tab-nav">
+        <button class="tab-btn active" onclick="showTab('h-foundation', this)">A.1 — Foundation (Nielsen Extended)</button>
+        <button class="tab-btn" onclick="showTab('h-business', this)">A.2 — Business-Impact Heuristics</button>
+        <button class="tab-btn" onclick="showTab('h-psych', this)">A.3 — Psychological Layer</button>
+      </div>
+
+      <!-- FOUNDATION TAB -->
+      <div id="h-foundation" class="tab-panel active">
+        <p style="margin-bottom:24px;font-style:italic">The classic 10 heuristics applied with forensic specificity — not just "does this violate the heuristic" but "what is the business cost of this violation."</p>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">H1</div>
+            <div>
+              <div class="heuristic-name">Visibility of System Status</div>
+              <div class="heuristic-def">Forensic extension: Where does status invisibility create anxiety, duplicate actions, or support tickets?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Can users always locate themselves within the product?</li>
+            <li>Are loading, processing, and error states clearly communicated?</li>
+            <li>Do background processes (sync, save, calculation) have visible indicators?</li>
+            <li>Where does the absence of feedback cause users to repeat actions?</li>
+            <li>Are confirmation states (success, completion, submission) unambiguous?</li>
+          </ul>
+          <div class="forensic-box">What is the estimated support cost of status confusion in this product?</div>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">H2</div>
+            <div>
+              <div class="heuristic-name">Match Between System and Real World</div>
+              <div class="heuristic-def">Forensic extension: Where do terminology mismatches create support escalations or onboarding failures?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Does the product use jargon internal to the company rather than natural to the user?</li>
+            <li>Are metaphors and icons consistent with how users understand the domain?</li>
+            <li>Do labels describe what things ARE or what they DO?</li>
+            <li>Are error messages written in user language or system language?</li>
+            <li>Do confirmation dialogues reflect the user's mental model?</li>
+          </ul>
+          <div class="forensic-box">What is the churn contribution of mental model mismatch?</div>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">H3</div>
+            <div>
+              <div class="heuristic-name">User Control and Freedom</div>
+              <div class="heuristic-def">Forensic extension: Where does the absence of control create rage clicks, session abandonment, or trust destruction?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Can every action be undone within a reasonable window?</li>
+            <li>Are destructive actions (delete, cancel subscription, clear data) reversible or clearly warned?</li>
+            <li>Can users exit any flow without losing progress?</li>
+            <li>Are users ever trapped in a sequence they cannot exit without completing?</li>
+            <li>Does the back button/gesture always work as expected?</li>
+          </ul>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">H4</div>
+            <div>
+              <div class="heuristic-name">Consistency and Standards</div>
+              <div class="heuristic-def">Forensic extension: Where does inconsistency create cognitive load that accumulates into abandonment?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Are the same actions triggered by the same patterns throughout the product?</li>
+            <li>Do similar components behave identically across different contexts?</li>
+            <li>Is the product consistent with platform conventions (iOS, Android, Web)?</li>
+            <li>Are there areas of the product that feel like different products (indicating team or era boundaries)?</li>
+          </ul>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">H5</div>
+            <div>
+              <div class="heuristic-name">Error Prevention</div>
+              <div class="heuristic-def">Forensic extension: What is the operational cost of preventable errors — support tickets, data loss, failed transactions?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Are confirmation steps present before irreversible actions?</li>
+            <li>Are form fields validated in real-time with specific guidance, not just error states?</li>
+            <li>Are dangerous actions separated from common actions spatially?</li>
+            <li>Are there places where a single misclick causes disproportionate damage?</li>
+          </ul>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">H6</div>
+            <div>
+              <div class="heuristic-name">Recognition Over Recall</div>
+              <div class="heuristic-def">Forensic extension: Where does excessive recall demand create power-user dependency and new-user failure?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Are all available actions visible or easily discoverable without memorisation?</li>
+            <li>Do users need to remember information from one screen to use another?</li>
+            <li>Does the product penalise infrequent users who have forgotten the interface?</li>
+            <li>Are there hidden features users need to be told about to discover?</li>
+          </ul>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">H7</div>
+            <div>
+              <div class="heuristic-name">Flexibility and Efficiency of Use</div>
+              <div class="heuristic-def">Forensic extension: Where does rigid linearity create expert user frustration and novice user abandonment simultaneously?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Can experienced users bypass unnecessary steps?</li>
+            <li>Are keyboard shortcuts, bulk actions, and power features available?</li>
+            <li>Do advanced features interfere with novice users' ability to find basic functions?</li>
+          </ul>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">H8</div>
+            <div>
+              <div class="heuristic-name">Aesthetic and Minimalist Design</div>
+              <div class="heuristic-def">Forensic extension: Where does visual noise increase cognitive load enough to affect task completion rates?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Does every element on each screen earn its presence?</li>
+            <li>Is there information presented that users do not need at the moment of decision?</li>
+            <li>Does progressive disclosure work — revealing complexity only when needed?</li>
+            <li>Does the visual hierarchy direct attention to what matters?</li>
+          </ul>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">H9</div>
+            <div>
+              <div class="heuristic-name">Help Users Recognise, Diagnose, and Recover From Errors</div>
+              <div class="heuristic-def">Forensic extension: What percentage of support contacts could be eliminated by better error communication?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Do error messages identify what went wrong in user language?</li>
+            <li>Do they explain why it went wrong and tell users exactly what to do next?</li>
+            <li>Are errors distinguished by severity — informational, warning, critical?</li>
+            <li>Do error states preserve user input rather than clearing forms?</li>
+          </ul>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">H10</div>
+            <div>
+              <div class="heuristic-name">Help and Documentation</div>
+              <div class="heuristic-def">Forensic extension: What is the failure demand (support contacts caused by interface failure) versus value demand (contacts for legitimate complex needs)?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Is contextual help available at points of likely confusion?</li>
+            <li>Are help articles written for users' questions or the company's product structure?</li>
+            <li>What percentage of support tickets reference topics the interface should handle independently?</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- BUSINESS-IMPACT TAB -->
+      <div id="h-business" class="tab-panel">
+        <p style="margin-bottom:24px;font-style:italic">Heuristics developed from 23 years across industries — not in any textbook. This is where the FTM differentiates from every standard audit.</p>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">B1</div>
+            <div>
+              <div class="heuristic-name">Trust Coherence</div>
+              <div class="heuristic-def">Does every interaction reinforce trust — or do specific moments break the trust covenant?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Where does the product ask for more than it needs from users?</li>
+            <li>Are there moments where the product's behaviour cannot be explained from a user's perspective?</li>
+            <li>Are there dark patterns — default opt-ins, hidden costs, misleading progress indicators?</li>
+            <li>Do visual design choices signal the appropriate level of seriousness for the domain?</li>
+            <li>Where does the product feel like it is serving the business at the user's expense?</li>
+          </ul>
+          <div class="forensic-box">What is the trust debt this product is accumulating — and what will it cost when it is called?</div>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">B2</div>
+            <div>
+              <div class="heuristic-name">Cognitive Load Architecture</div>
+              <div class="heuristic-def">How does the product distribute cognitive demand across the user journey — and where does it ask too much at the worst moment?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Where in the journey does the product require the most cognitive effort?</li>
+            <li>Does this align with where users have the most motivation (early) or least (mid-journey fatigue)?</li>
+            <li>Are complex decisions front-loaded into onboarding when users have least context?</li>
+            <li>Does the information architecture reflect the user's cognitive model or the product team's org structure?</li>
+          </ul>
+          <div class="forensic-box">Where does cognitive overload convert into abandonment — and what is the revenue cost of each abandonment point?</div>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">B3</div>
+            <div>
+              <div class="heuristic-name">Feedback Loop Integrity</div>
+              <div class="heuristic-def">Does the product create healthy feedback loops that build user competence and confidence — or anxiety loops that erode both?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Does using the product make users feel more capable over time?</li>
+            <li>Are there features that users avoid because past experience taught them to fear them?</li>
+            <li>Does the product celebrate user progress and milestone achievement?</li>
+            <li>Does the product communicate the consequences of actions before they are taken?</li>
+          </ul>
+          <div class="forensic-box">Which features have the highest avoidance rate — and what does that avoidance cost in retention and expansion revenue?</div>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">B4</div>
+            <div>
+              <div class="heuristic-name">Cross-Channel Coherence</div>
+              <div class="heuristic-def">Does the experience remain coherent as users move between touchpoints — web, mobile, email, support, sales?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Does the product remember context across sessions and devices?</li>
+            <li>Do email communications use the same language and mental models as the interface?</li>
+            <li>Does the support experience align with interface promises?</li>
+            <li>Does the mobile experience complement rather than truncate the web experience?</li>
+          </ul>
+          <div class="forensic-box">Where do cross-channel inconsistencies create the highest support load and churn risk?</div>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">B5</div>
+            <div>
+              <div class="heuristic-name">Failure Mode Dignity</div>
+              <div class="heuristic-def">When things go wrong — and they always do — does the product treat users with dignity?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>When the product fails (downtime, error, data loss), how does it communicate?</li>
+            <li>Are users left in states of uncertainty during failures?</li>
+            <li>Does the product apologise for its failures or blame users?</li>
+            <li>Are failure states designed with the same care as success states?</li>
+          </ul>
+          <div class="forensic-box">What is the NPS impact of failure states — and how does the dignity of failure handling affect recovery?</div>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">B6</div>
+            <div>
+              <div class="heuristic-name">Scale-Induced Debt</div>
+              <div class="heuristic-def">Where has the product accumulated design decisions that made sense at a smaller scale but create faultlines at current scale?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Are there interface patterns that work for 100 items but break at 10,000?</li>
+            <li>Are there admin interfaces designed for small teams now used by hundreds?</li>
+            <li>Where has the product been extended beyond its original design envelope?</li>
+            <li>What has been bolted on versus genuinely integrated?</li>
+          </ul>
+          <div class="forensic-box">What is the operational cost of scale-induced UX debt — in support time, training costs, and efficiency loss?</div>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">B7</div>
+            <div>
+              <div class="heuristic-name">Adoption Gravity</div>
+              <div class="heuristic-def">Does the product create conditions for expanding user adoption — or does it inadvertently resist it?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>How does the product encourage users to discover more of its value over time?</li>
+            <li>Does the product's value proposition become clearer or more opaque as users engage more deeply?</li>
+            <li>Are sharing, collaboration, and expansion features prominent or buried?</li>
+          </ul>
+          <div class="forensic-box">Where is adoption gravity weakest — and what is the expansion revenue being left uncaptured?</div>
+        </div>
+      </div>
+
+      <!-- PSYCHOLOGICAL TAB -->
+      <div id="h-psych" class="tab-panel">
+        <p style="margin-bottom:24px;font-style:italic">Drawing on cognitive science, behavioural economics, and predictive processing theory — the intellectual layer that separates the FTM from generalist auditors.</p>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">P1</div>
+            <div>
+              <div class="heuristic-name">Relevance Realization</div>
+              <div class="heuristic-def"><em>From: John Vervaeke's cognitive science framework.</em> Does the product help users determine what is relevant to their current goal — or does it present everything and demand users sort it themselves?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Does the interface surface what is most relevant to the user's current context?</li>
+            <li>Is relevance determined by user behaviour and history — or is it static for all users?</li>
+            <li>Does the product's information architecture reflect relevance hierarchies or categorical hierarchies?</li>
+          </ul>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">P2</div>
+            <div>
+              <div class="heuristic-name">Predictive Processing Alignment</div>
+              <div class="heuristic-def"><em>From: Karl Friston's predictive brain framework.</em> Does the product behave in ways that align with users' predictive models — or does it consistently violate predictions, generating surprise and friction?</div>
+            </div>
+          </div>
+          <p style="font-size:15px;margin-bottom:12px;background:var(--paper-dark);padding:12px 16px;border-left:2px solid var(--rule)"><em>Core insight: The brain is fundamentally a prediction machine. When interfaces consistently violate predictions, the cognitive cost accumulates into what users describe as "confusing" or "frustrating" — even when they cannot articulate why.</em></p>
+          <ul class="heuristic-questions">
+            <li>Do interface elements behave as their visual appearance predicts?</li>
+            <li>Are there elements that look interactive but are not — or vice versa?</li>
+            <li>Where does the product require users to update their mental model unexpectedly?</li>
+            <li>Are there flows where the next step is unpredictable from the current step?</li>
+          </ul>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">P3</div>
+            <div>
+              <div class="heuristic-name">Loss Aversion Architecture</div>
+              <div class="heuristic-def"><em>From: Kahneman and Tversky's prospect theory.</em> Does the product use loss aversion appropriately — to motivate beneficial actions — or does it weaponise it to manipulate users?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Are loss framings used to communicate genuine risk — or to create artificial urgency?</li>
+            <li>Do progress indicators represent real progress — or manufactured commitment?</li>
+            <li>Are free trial endings and subscription renewals communicated with appropriate advance notice?</li>
+            <li>Does the product use scarcity honestly?</li>
+          </ul>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">P4</div>
+            <div>
+              <div class="heuristic-name">Cognitive Load Distribution</div>
+              <div class="heuristic-def"><em>From: John Sweller's cognitive load theory.</em> How is cognitive load distributed across intrinsic (task complexity), extraneous (interface complexity), and germane (learning investment) dimensions?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Where does the interface add extraneous cognitive load on top of inherently complex tasks?</li>
+            <li>Are there tasks where interface complexity exceeds task complexity — meaning the interface is harder than the problem?</li>
+            <li>Does the product scaffold complex tasks — breaking them into manageable cognitive chunks?</li>
+            <li>Where does the product fail to offload cognitive work it could handle for the user?</li>
+          </ul>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">P5</div>
+            <div>
+              <div class="heuristic-name">Agency and Autonomy</div>
+              <div class="heuristic-def"><em>From: Self-determination theory (Deci and Ryan).</em> Does the product create experiences of genuine user agency — or an illusion of choice while constraining actual autonomy?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Do users feel in control of their data, their preferences, and their experience?</li>
+            <li>Are choices meaningful or manufactured?</li>
+            <li>Does the product respect user decisions — or repeatedly override or question them?</li>
+            <li>Where does the product's business interest conflict with the user's expressed preferences?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRACK B -->
+    <h3 style="margin-top:48px">Track B — Algorithmic & Data Forensics</h3>
+    <p>Where Track A applies expert judgment, Track B applies structured data analysis to find faultlines that expert judgment alone cannot see.</p>
+
+    <div class="grid-2">
+      <div class="card">
+        <span class="card-num">B.1 — Funnel Forensics</span>
+        <h3>Revenue Topology Map</h3>
+        <p>Map all funnels (not just conversion — include activation, feature adoption, support resolution, and expansion). Assign revenue value to each drop-off: <span class="mono">Drop-off × ACV = Revenue Impact</span>. Segment by user type, device, acquisition channel. Time-stamp to reveal what caused the problem.</p>
+      </div>
+      <div class="card">
+        <span class="card-num">B.2 — Behaviour Pattern Analysis</span>
+        <h3>Behaviour Gap Map</h3>
+        <p><strong>Rage click analysis</strong> (false affordances), <strong>dead zone analysis</strong> (features that failed to communicate value), <strong>navigation pattern mining</strong> (designed path vs actual path), <strong>session recording patterns</strong> (hesitation, reversal, tab-opening), <strong>return visit behaviour</strong> (what users believe the product's core value is).</p>
+      </div>
+      <div class="card">
+        <span class="card-num">B.3 — Support Ticket Forensics</span>
+        <h3>Support Intelligence Report</h3>
+        <p>Calculate <strong>Failure Demand %</strong> — typically 30–60% of all support contacts are caused by product failure (and almost always invisible to product teams). Build Interface-Support Correlation Matrix. Extract vocabulary of confusion. Map the <strong>Workaround Index</strong>.</p>
+      </div>
+      <div class="card">
+        <span class="card-num">B.4 — Competitive Benchmark</span>
+        <h3>Competitive Forensic Map</h3>
+        <p>Run identical tasks on 3–5 competitors. A faultline that exists in your product but not competitors is a <strong>competitive vulnerability</strong>. A faultline that exists across all competitors is a <strong>market opportunity</strong> — solving it creates genuine differentiation.</p>
+      </div>
+      <div class="card">
+        <span class="card-num">B.5 — Performance & Technical UX</span>
+        <h3>Performance Faultline Report</h3>
+        <p>Core Web Vitals forensics (LCP, INP, CLS) on highest-traffic, most conversion-critical, and highest support-ticket-generating pages. Slow is a design problem, not just an engineering problem.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONVERGENCE MATRIX ── -->
+<section id="convergence" style="background:var(--paper-dark)">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-meta">
+        <span class="section-num" style="color:var(--paper)">2.5</span>
+        <span class="section-tag">Phase 2 Synthesis</span>
+      </div>
+      <div>
+        <h2 class="section-title">The Convergence Matrix</h2>
+        <p class="section-subtitle">The analytical heart of the Fault Topology Method — before moving to diagnosis, all Track A and Track B findings are entered here.</p>
+      </div>
+    </div>
+
+    <table class="matrix-table">
+      <thead>
+        <tr>
+          <th>Finding</th>
+          <th>Source</th>
+          <th>Severity</th>
+          <th>Business Impact</th>
+          <th>Confidence</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>User cannot recover from mid-flow error without losing progress</td>
+          <td>Heuristic H3 + Funnel drop-off at step 4</td>
+          <td>Critical</td>
+          <td>Quantified monthly revenue leak</td>
+          <td><span class="conf-high">HIGH — dual confirmation</span></td>
+        </tr>
+        <tr>
+          <td>Navigation labels use internal product language, not user language</td>
+          <td>Heuristic P2 only</td>
+          <td>Medium</td>
+          <td>Estimated (single source)</td>
+          <td><span class="conf-med">MEDIUM — indicated</span></td>
+        </tr>
+        <tr>
+          <td>Repeated rage-clicks on non-interactive pricing element</td>
+          <td>Rage click data only</td>
+          <td>High</td>
+          <td>Quantified conversion loss</td>
+          <td><span class="conf-high">HIGH — quantified</span></td>
+        </tr>
+        <tr>
+          <td>Onboarding step 3 generates 40% of all support contacts</td>
+          <td>Support tickets + Competitive benchmark</td>
+          <td>Critical</td>
+          <td>Revenue + market risk</td>
+          <td><span class="conf-high">HIGH — triple confirmation</span></td>
+        </tr>
+        <tr>
+          <td>Anomalous session length spike on feature X — no heuristic explanation</td>
+          <td>Session data only</td>
+          <td>Unknown</td>
+          <td>Under investigation</td>
+          <td><span class="conf-anom">ANOMALY — investigate further</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="grid-2" style="margin-top:8px">
+      <div class="ruled-box" style="margin:0">
+        <h4>Confidence Levels</h4>
+        <p style="font-size:15px"><strong class="conf-high">Confirmed (High)</strong> — found by both heuristic and algorithmic analysis</p>
+        <p style="font-size:15px"><strong class="conf-med">Indicated (Medium)</strong> — found by one track, plausible in the other</p>
+        <p style="font-size:15px"><strong class="conf-low">Suspected (Low)</strong> — found by one track, contradicted or absent in the other</p>
+        <p style="font-size:15px;margin:0"><strong class="conf-anom">Anomaly</strong> — data signal present with no heuristic explanation — requires further investigation</p>
+      </div>
+      <div class="ruled-box" style="margin:0;background:var(--ink);color:var(--paper)">
+        <h4 style="color:var(--amber)">Why this matters</h4>
+        <p style="font-size:15px">Convergence = high confidence faultline — action it now.<br><br>Divergence = hidden risk or measurement gap — watch it.<br><br>Anomaly = the most interesting finding in any audit. Something the data shows that no heuristic explains. This is where forensic instinct earns its money.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PHASE 3 ── -->
+<section id="phase3">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-meta">
+        <span class="section-num">03</span>
+        <span class="section-tag">3–5 days</span>
+      </div>
+      <div>
+        <h2 class="section-title">Diagnosis</h2>
+        <p class="section-subtitle">Building the Fault Topology. This is where investigation becomes intelligence.</p>
+      </div>
+    </div>
+
+    <h3 style="margin-top:0">3.1 — Faultline Classification: Five Types</h3>
+    <p>Every finding from Phase 2 is classified into one of five Faultline Types — connecting UX problems to business consequences. The fault map plots them on two axes: user journey stage (X) and faultline depth (Y).</p>
+
+    <div class="fault-type-grid">
+      <div class="fault-type ft1">
+        <div class="fault-type-num">Type 1</div>
+        <div class="fault-type-name">Surface</div>
+        <p>Visible usability problems creating immediate friction</p>
+        <div class="fault-meta">
+          <span>Examples: unclear labels, missing feedback</span>
+          <span>Effort: Low–Medium</span>
+          <span>Fix time: Days–weeks</span>
+        </div>
+        <div class="fault-depth"></div>
+      </div>
+      <div class="fault-type ft2">
+        <div class="fault-type-num">Type 2</div>
+        <div class="fault-type-name">Structural</div>
+        <p>IA or navigation problems making the right action hard to find</p>
+        <div class="fault-meta">
+          <span>Examples: org-structured nav, buried critical functions</span>
+          <span>Effort: Medium–High</span>
+          <span>Fix time: Weeks–months</span>
+        </div>
+        <div class="fault-depth"></div>
+      </div>
+      <div class="fault-type ft3">
+        <div class="fault-type-num">Type 3</div>
+        <div class="fault-type-name">Trust</div>
+        <p>Interactions that erode user trust through dark patterns or unexplained behaviour</p>
+        <div class="fault-meta">
+          <span>Examples: unclear data usage, unexpected charges</span>
+          <span>Risk: Churn, reviews, regulatory</span>
+          <span>Fix time: Weeks–months</span>
+        </div>
+        <div class="fault-depth"></div>
+      </div>
+      <div class="fault-type ft4">
+        <div class="fault-type-num">Type 4</div>
+        <div class="fault-type-name">Systemic</div>
+        <p>Deep structural problems rooted in foundational design decisions affecting the entire product</p>
+        <div class="fault-meta">
+          <span>Examples: design system debt, cross-platform incoherence</span>
+          <span>Effort: Very High</span>
+          <span>Fix time: Months–quarters</span>
+        </div>
+        <div class="fault-depth"></div>
+      </div>
+      <div class="fault-type ft5">
+        <div class="fault-type-num">Type 5</div>
+        <div class="fault-type-name">Strategic</div>
+        <p>Misalignment between what the product is designed to do and what users actually need</p>
+        <div class="fault-meta">
+          <span>Examples: features built on unvalidated assumptions</span>
+          <span>Effort: Highest — requires strategy</span>
+          <span>Fix time: Quarters–reorientation</span>
+        </div>
+        <div class="fault-depth"></div>
+      </div>
+    </div>
+
+    <div class="ruled-box-red" style="margin:32px 0">
+      <h4>Reading the Topology</h4>
+      <p>A product with problems concentrated in <strong>Onboarding at Surface level</strong> has a fixable first impression problem.</p>
+      <p>A product with problems concentrated in <strong>Engagement at Systemic level</strong> has a fundamental rethink requirement.</p>
+      <p style="margin:0">A product with <strong>Trust faultlines distributed across the entire journey</strong> has a coherence and honesty problem at the design philosophy level — which transforms the remediation conversation from tactical to strategic.</p>
+    </div>
+
+    <h3>3.2 — Root Cause Analysis: The 5-Why Forensic Method</h3>
+    <p>For each Critical and High severity faultline, a structured root cause analysis is conducted — adapted from manufacturing quality control for organisational UX diagnosis.</p>
+
+    <div class="ruled-box">
+      <h4>The Five Whys — UX Forensic Form</h4>
+      <div class="forensic-q">Why does the user fail at this step?</div>
+      <div class="forensic-q">Why does the interface create this condition?</div>
+      <div class="forensic-q">Why was the interface designed this way?</div>
+      <div class="forensic-q">Why was that design decision made?</div>
+      <div class="forensic-q" style="border-left-color:var(--red)">Why was that organisational condition present that allowed this decision? <em>(Almost always reveals org or process root causes — not just design failures.)</em></div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <span class="card-num">Root Cause Type</span>
+        <h3>User Research Gap</h3>
+        <p>Decision made without user data</p>
+      </div>
+      <div class="card">
+        <span class="card-num">Root Cause Type</span>
+        <h3>Stakeholder Override</h3>
+        <p>User-centred recommendation overruled by business requirement</p>
+      </div>
+      <div class="card">
+        <span class="card-num">Root Cause Type</span>
+        <h3>Technical Constraint</h3>
+        <p>Engineering limitation accepted without UX mitigation</p>
+      </div>
+      <div class="card">
+        <span class="card-num">Root Cause Type</span>
+        <h3>Legacy Debt</h3>
+        <p>Original decision made in different product context, never revisited</p>
+      </div>
+      <div class="card">
+        <span class="card-num">Root Cause Type</span>
+        <h3>Org Boundary</h3>
+        <p>Feature built by a team that did not communicate with adjacent teams</p>
+      </div>
+      <div class="card">
+        <span class="card-num">Root Cause Type</span>
+        <h3>Measurement Gap</h3>
+        <p>Nobody was watching this metric, so nobody knew it was failing</p>
+      </div>
+    </div>
+
+    <p><strong>Deliverable:</strong> A <em>Root Cause Register</em> — for each critical faultline, a documented chain from symptom to root cause, with the organisational implication named explicitly.</p>
+  </div>
+</section>
+
+<!-- ── PHASE 4 ── -->
+<section id="phase4">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-meta">
+        <span class="section-num">04</span>
+        <span class="section-tag">3–5 days</span>
+      </div>
+      <div>
+        <h2 class="section-title">Remediation</h2>
+        <p class="section-subtitle">The Prioritised Fix Architecture. A forensic report without a clear remediation roadmap is intelligence without action.</p>
+      </div>
+    </div>
+
+    <h3 style="margin-top:0">4.1 — RICE-F Prioritisation</h3>
+    <p>Every faultline is scored on four dimensions — with a Forensic Severity multiplier — to produce a prioritised remediation sequence. This ensures highest-value, highest-confidence, lowest-effort fixes are addressed first.</p>
+
+    <div class="rice-grid">
+      <div class="rice-item">
+        <div class="rice-letter">R</div>
+        <div class="rice-word">Reach</div>
+        <div class="rice-scale">How many users are affected?<br><em>1 (edge case) → 5 (all users)</em></div>
+      </div>
+      <div class="rice-item">
+        <div class="rice-letter">I</div>
+        <div class="rice-word">Impact</div>
+        <div class="rice-scale">If fixed, improvement per user?<br><em>1 (marginal) → 5 (transformative)</em></div>
+      </div>
+      <div class="rice-item">
+        <div class="rice-letter">C</div>
+        <div class="rice-word">Confidence</div>
+        <div class="rice-scale">Certainty of diagnosis and fix?<br><em>1 (suspected) → 5 (confirmed)</em></div>
+      </div>
+      <div class="rice-item">
+        <div class="rice-letter">E</div>
+        <div class="rice-word">Effort</div>
+        <div class="rice-scale">Resource required to fix?<br><em>1 (very high) → 5 (very low)</em></div>
+      </div>
+      <div class="rice-item">
+        <div class="rice-letter">F</div>
+        <div class="rice-word">Forensic Severity</div>
+        <div class="rice-scale">Surface ×1.0 / Structural ×1.2 / Trust ×1.5 / Systemic ×1.3 / Strategic ×1.4</div>
+      </div>
+    </div>
+
+    <div class="formula-box">
+      RICE-F Score = <em>( R × I × C × E × F )</em>
+    </div>
+
+    <h3>4.2 — Three-Horizon Remediation Roadmap</h3>
+
+    <div class="horizon-row">
+      <div class="horizon-label">
+        <div class="horizon-num">Horizon 1</div>
+        <div class="horizon-time">0–30 days</div>
+      </div>
+      <div class="horizon-body">
+        <h3>Immediate Relief</h3>
+        <p><strong>Criteria:</strong> High confidence + Low effort + Clear impact. These are not guesses — they are identified through forensic rigour.</p>
+        <p><strong>Typical fixes:</strong> Label and copy changes, error message rewrites, missing feedback states, broken interaction patterns, accessibility failures, performance quick wins.</p>
+        <p style="margin:0"><strong>Deliverable format:</strong> Specific, actionable tickets ready for developer implementation — no ambiguity about what needs to change. Each card includes exact current state, exact recommended change, heuristic violated, business impact, implementation spec, and success metric.</p>
+      </div>
+    </div>
+    <div class="horizon-row">
+      <div class="horizon-label">
+        <div class="horizon-num">Horizon 2</div>
+        <div class="horizon-time">30–90 days</div>
+      </div>
+      <div class="horizon-body">
+        <h3>Structural Repair</h3>
+        <p><strong>Criteria:</strong> Medium-high confidence + Medium effort + Significant impact.</p>
+        <p><strong>Typical fixes:</strong> Information architecture restructuring, navigation pattern redesign, onboarding flow revision, feature consolidation, trust signal improvements, cross-platform coherence.</p>
+        <p><strong>Deliverable format:</strong> Design briefs with the <em>Before/After Hypothesis</em>:</p>
+        <div class="ruled-box-red" style="margin-top:12px;margin-bottom:0">
+          <em>"Currently, [X% of users] are [failing/abandoning/missing] [specific action] because [root cause]. By [specific design change], we predict [metric] will improve by [range] within [measurement window]."</em>
+        </div>
+      </div>
+    </div>
+    <div class="horizon-row" style="margin-bottom:32px">
+      <div class="horizon-label">
+        <div class="horizon-num">Horizon 3</div>
+        <div class="horizon-time">90+ days</div>
+      </div>
+      <div class="horizon-body">
+        <h3>Strategic Reconstruction</h3>
+        <p><strong>Criteria:</strong> Systemic and strategic faultlines requiring product strategy involvement. These cannot be fixed by design alone.</p>
+        <p><strong>Typical fixes:</strong> Core mental model realignment, design system overhaul, value proposition clarification, fundamental navigation architecture change, cross-channel experience unification.</p>
+        <p style="margin:0"><strong>Deliverable format:</strong> Executive-level strategic briefs with: The Faultline → The Evidence → Cost of Inaction → Options (with different resource requirements) → Recommendation → Success Metrics.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── REMEDIATION CARD ── -->
+<section id="remediation-card" style="background:var(--paper-dark)">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-meta">
+        <span class="section-num" style="color:var(--paper)">4.3</span>
+        <span class="section-tag">Standard Format</span>
+      </div>
+      <div>
+        <h2 class="section-title">The Remediation Card</h2>
+        <p class="section-subtitle">Every individual fix recommendation is delivered as a structured card — making implementation as frictionless as possible for the receiving team.</p>
+      </div>
+    </div>
+
+    <div class="remedy-card">
+      <div class="remedy-card-header">
+        <span>REMEDIATION CARD #023</span>
+        <span>RICE-F Score: 48.0</span>
+      </div>
+      <div class="remedy-row">
+        <div class="remedy-key">Faultline ID</div>
+        <div class="remedy-val">FL-023</div>
+      </div>
+      <div class="remedy-row">
+        <div class="remedy-key">Type</div>
+        <div class="remedy-val">Surface → Trust</div>
+      </div>
+      <div class="remedy-row">
+        <div class="remedy-key">Severity</div>
+        <div class="remedy-val"><span class="sev-critical">Critical</span></div>
+      </div>
+      <div class="remedy-row">
+        <div class="remedy-key">Horizon</div>
+        <div class="remedy-val">1 — Immediate Relief (0–30 days)</div>
+      </div>
+      <div class="remedy-row">
+        <div class="remedy-key">The Faultline</div>
+        <div class="remedy-val">Error message on payment failure returns system-level code ("Transaction declined: ERR_402") with no guidance on next action. User is left at a dead end with no recovery path.</div>
+      </div>
+      <div class="remedy-row">
+        <div class="remedy-key">The Evidence</div>
+        <div class="remedy-val">
+          <strong>Heuristic:</strong> H9 (Error Recovery), H2 (User Language), B5 (Failure Mode Dignity)<br>
+          <strong>Data:</strong> 23% of payment-attempt sessions end without retry; rage clicks on this screen average 4.2 per session<br>
+          <strong>User verbatim:</strong> "Had no idea what went wrong or what to try next — just gave up"
+        </div>
+      </div>
+      <div class="remedy-row">
+        <div class="remedy-key">Root Cause</div>
+        <div class="remedy-val">Engineering limitation accepted without UX mitigation — payment processor error codes passed through directly to UI without translation layer.</div>
+      </div>
+      <div class="remedy-row">
+        <div class="remedy-key">Business Impact</div>
+        <div class="remedy-val">
+          <strong>Users affected:</strong> ~1,800/month hitting this state<br>
+          <strong>Revenue impact:</strong> Estimated ₹X lakh/month in failed conversions<br>
+          <strong>Risk:</strong> Trust erosion at highest-intent moment in user journey
+        </div>
+      </div>
+      <div class="remedy-row">
+        <div class="remedy-key">The Recommendation</div>
+        <div class="remedy-val">Rewrite error message to: "Your payment didn't go through. This sometimes happens with prepaid cards or when billing details don't match. Try a different card, or check your card details and try again." Add retry CTA and support link. No code changes — copy and UI update only.</div>
+      </div>
+      <div class="remedy-row">
+        <div class="remedy-key">Success Metric</div>
+        <div class="remedy-val">
+          <strong>Measure:</strong> Payment retry rate after error state<br>
+          <strong>Baseline:</strong> 12% retry<br>
+          <strong>Target:</strong> &gt;35% retry within 30 days of fix
+        </div>
+      </div>
+    </div>
+
+    <p>Every audit delivers two documents: a <strong>Full Forensic Report</strong> (40–80 pages for product, design, and engineering teams) and a <strong>10-page Executive Summary</strong> for C-suite with: verdict, fault map, top 5 critical faultlines, total cost of inaction, three-horizon roadmap, investment requirement, ROI projection, risk of inaction, and recommended next step.</p>
+
+    <div class="ruled-box" style="margin-top:32px">
+      <h4>Post-Remediation Measurement Dashboard</h4>
+      <p>Every audit includes a measurement framework — because the audit's value is only fully realised when improvements can be attributed to specific fixes.</p>
+      <div class="grid-3">
+        <div>
+          <strong style="font-size:15px">Horizon 1 fixes</strong>
+          <p style="font-size:14px;margin-top:4px">Baseline → 30-day → 90-day metric, with attribution confidence</p>
+        </div>
+        <div>
+          <strong style="font-size:15px">Horizon 2 fixes</strong>
+          <p style="font-size:14px;margin-top:4px">Baseline → 90-day → 6-month metric, with business value realised</p>
+        </div>
+        <div>
+          <strong style="font-size:15px">Overall audit</strong>
+          <p style="font-size:14px;margin-top:4px">Total revenue impact (estimated vs realised), support load reduction, NPS movement, competitive position</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div>
+    <strong>The Fault Topology Method™</strong><br>
+    A forensic approach to mapping where products break, why they break, and what it costs.
+  </div>
+  <div style="text-align:right">
+    Public methodology documentation<br>
+    © 2026 Anil Kumar Soman. All rights reserved.
+  </div>
+</footer>
+
+<script>
+  function showTab(id, btn) {
+    const parent = btn.closest('div');
+    parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const section = btn.closest('section') || document.getElementById('phase2');
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  // Active nav highlight
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav a');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('active'));
+        const link = document.querySelector(`nav a[href="#${entry.target.id}"]`);
+        if (link) link.classList.add('active');
+      }
     });
-  </script>
+  }, { threshold: 0.3 });
+  sections.forEach(s => observer.observe(s));
+</script>
 </body>
 </html>
