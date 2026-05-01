@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Fault Topology Method™ | UX Forensic Audit Framework</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -65,16 +65,6 @@
   .header-body {
     padding: 72px 48px 60px;
     max-width: 1100px;
-  }
-
-  .header-provocation {
-    font-size: 22px;
-    font-style: italic;
-    color: var(--red);
-    max-width: 700px;
-    margin-bottom: 24px;
-    font-family: 'EB Garamond', serif;
-    line-height: 1.3;
   }
 
   .header-label {
@@ -389,16 +379,6 @@
     margin-bottom: 6px;
   }
 
-  /* ── MICRO-PROOF NOTES ── */
-  .proof-note {
-    font-size: 13px;
-    color: rgba(15,14,11,0.55);
-    font-style: italic;
-    margin-top: 8px;
-    border-left: 2px solid var(--amber);
-    padding-left: 12px;
-  }
-
   /* ── TABS ── */
   .tab-nav {
     display: flex;
@@ -683,16 +663,8 @@
   /* ── RESPONSIVE ── */
   @media (max-width: 800px) {
     .container { padding: 0 24px; }
-    .header-eyebrow { padding: 10px 20px; font-size: 10px; letter-spacing: 0.1em; flex-wrap: wrap; gap: 4px; justify-content: center; text-align: center; }
-    .header-body { padding: 48px 24px 40px; }
-    .header-provocation { font-size: 18px; margin-bottom: 16px; }
-    .header-sub { font-size: 17px; margin-bottom: 32px; }
-    h1 { font-size: clamp(32px, 7vw, 56px); }
-    section { padding: 56px 0; }
-    .section-header { grid-template-columns: 1fr; gap: 16px; margin-bottom: 36px; }
+    .section-header { grid-template-columns: 1fr; gap: 16px; }
     .section-num { font-size: 48px; }
-    .section-title { font-size: clamp(24px, 5vw, 34px); }
-    .section-subtitle { font-size: 15px; }
     .phase-bar, .fault-type-grid, .rice-grid { grid-template-columns: repeat(2, 1fr); }
     .grid-2, .grid-3 { grid-template-columns: 1fr; }
     .stakeholder-grid { grid-template-columns: 1fr; }
@@ -700,92 +672,9 @@
     .sh-item:nth-last-child(-n+3) { border-bottom: 1px solid var(--rule) !important; }
     .sh-item:last-child { border-bottom: none !important; }
     .heuristic-header { grid-template-columns: 44px 1fr; }
-    .heuristic-name { font-size: 15px; }
-    .heuristic-questions li { font-size: 14px; }
     .horizon-row { grid-template-columns: 1fr; }
-    .horizon-label { padding: 20px 24px; flex-direction: row; gap: 12px; align-items: center; }
-    .horizon-time { font-size: 16px; }
-    .horizon-body { padding: 20px 24px; }
     .remedy-row { grid-template-columns: 1fr; }
     .remedy-key { border-right: none; border-bottom: 1px solid var(--rule); }
-    .tab-nav { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
-    .tab-nav::-webkit-scrollbar { display: none; }
-    .tab-btn { padding: 10px 14px; font-size: 10px; white-space: nowrap; flex-shrink: 0; }
-    .card { padding: 20px; }
-    .ruled-box { padding: 20px 24px; }
-    .forensic-brief { padding: 20px 24px; font-size: 13px; }
-    .forensic-summary { padding: 20px 24px; font-size: 12px; }
-    .pull-quote { font-size: 18px; padding: 16px 20px; }
-    .formula-box { font-size: 14px; padding: 20px 24px; }
-    footer { padding: 32px 24px; flex-direction: column; text-align: center; gap: 12px; }
-    .nav-inner { padding: 0 16px; }
-    nav a { padding: 12px 12px; font-size: 10px; letter-spacing: 0.06em; }
-    .proof-note { font-size: 12px; padding-left: 10px; }
-    .fault-type { padding: 16px 12px; }
-    .fault-type-name { font-size: 13px; }
-    .fault-type p { font-size: 11px; }
-    .rice-item { padding: 16px 12px; }
-    .rice-letter { font-size: 28px; }
-
-    .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 24px 0; }
-    .metric-table, .matrix-table { font-size: 12px; }
-    .metric-table th, .metric-table td, .matrix-table th, .matrix-table td { padding: 8px 10px; white-space: nowrap; }
-  }
-
-  @media (max-width: 480px) {
-    .container { padding: 0 16px; }
-    body { font-size: 16px; }
-    .header-eyebrow { padding: 8px 12px; font-size: 9px; letter-spacing: 0.06em; }
-    .header-body { padding: 36px 16px 32px; }
-    .header-provocation { font-size: 16px; }
-    .header-sub { font-size: 15px; }
-    h1 { font-size: clamp(28px, 8vw, 42px); margin-bottom: 20px; }
-    .header-label { font-size: 10px; letter-spacing: 0.12em; }
-    section { padding: 40px 0; }
-    .section-header { margin-bottom: 28px; }
-    .section-num { font-size: 38px; }
-    .section-title { font-size: clamp(22px, 6vw, 28px); }
-    .section-subtitle { font-size: 14px; }
-    .phase-bar, .fault-type-grid, .rice-grid { grid-template-columns: 1fr; }
-    .heuristic-header { grid-template-columns: 36px 1fr; gap: 12px; }
-    .heuristic-code { font-size: 11px; padding: 3px 6px; }
-    .heuristic-name { font-size: 14px; }
-    .heuristic-def { font-size: 13px; }
-    .heuristic-questions li { font-size: 13px; padding: 4px 0 4px 14px; }
-    .heuristic-block { padding: 20px 0; }
-    .forensic-box { font-size: 11px; padding: 12px 14px; }
-    .forensic-box::before { font-size: 9px; }
-    .card { padding: 16px; }
-    .card h3 { font-size: 14px; }
-    .card p { font-size: 13px; }
-    .horizon-label { padding: 16px 20px; }
-    .horizon-time { font-size: 14px; }
-    .horizon-body { padding: 16px 20px; }
-    .horizon-body h3 { font-size: 15px; }
-    .remedy-card-header { flex-direction: column; gap: 4px; align-items: flex-start; font-size: 10px; }
-    .remedy-card { font-size: 11px; }
-    .remedy-key { font-size: 9px; padding: 10px 12px; }
-    .remedy-val { font-size: 11px; padding: 10px 12px; }
-    .pull-quote { font-size: 16px; padding: 14px 16px; margin: 24px 0; }
-    .formula-box { font-size: 12px; padding: 16px 20px; }
-    .ruled-box { padding: 16px 20px; }
-    .ruled-box-red { padding: 14px 16px; }
-    .forensic-brief { padding: 16px 20px; font-size: 11px; line-height: 1.8; }
-    .forensic-brief .brief-key { min-width: 110px; }
-    .forensic-summary { padding: 16px 20px; font-size: 10px; line-height: 1.9; }
-    .forensic-summary .summary-key { min-width: 130px; }
-    .metric-table, .matrix-table { font-size: 11px; }
-    .metric-table th, .metric-table td, .matrix-table th, .matrix-table td { padding: 6px 8px; }
-    .nav-inner { padding: 0 8px; }
-    nav a { padding: 10px 8px; font-size: 9px; letter-spacing: 0.04em; }
-    .tab-btn { padding: 8px 10px; font-size: 9px; }
-    .sh-item { padding: 16px; }
-    .sh-item li { font-size: 13px; }
-    .proof-note { font-size: 11px; }
-    footer { padding: 24px 16px; font-size: 10px; }
-    .fault-meta span { font-size: 9px; }
-    .rice-scale { font-size: 11px; }
-    .rice-letter { font-size: 24px; }
   }
 </style>
 </head>
@@ -798,7 +687,6 @@
     <span>Total audit duration: 2–4 weeks</span>
   </div>
   <div class="header-body">
-    <p class="header-provocation">Is your product bleeding users, trust, or revenue from faultlines you can’t see?</p>
     <div class="header-label">Proprietary Diagnostic Methodology</div>
     <h1>The Fault Topology<br><em>Method™</em></h1>
     <p class="header-sub">A structured forensic process that maps where products break, why they break, and what it costs — turning UX problems into quantified business intelligence.</p>
@@ -839,7 +727,6 @@
     <a href="#phase3">Phase 3</a>
     <a href="#phase4">Phase 4</a>
     <a href="#remediation-card">Remedy Card</a>
-    <a href="#applied-forensics">Applied</a>
   </div>
 </nav>
 
@@ -908,6 +795,7 @@
 
     <p>The Reconnaissance phase is about understanding what the product <em>thinks it is</em> versus what users actually experience — before any evaluation begins. This prevents the most common audit failure: evaluating against the wrong criteria.</p>
 
+    <!-- 1.1 Stakeholder -->
     <h3>1.1 — Stakeholder Alignment Sessions</h3>
     <p><strong>Purpose:</strong> Understand what success looks like from every internal perspective — which are often in conflict with each other.</p>
 
@@ -966,6 +854,7 @@
       </div>
     </div>
 
+    <!-- 1.2 Artifacts -->
     <h3>1.2 — Artifact Collection</h3>
     <p><strong>Purpose:</strong> Gather every document that shaped the product to understand the gap between intention and reality.</p>
 
@@ -988,32 +877,35 @@
         <div class="ruled-box-red" style="margin-top:0">
           <h4>The forensic lens on artifacts</h4>
           <p style="font-size:15px">Reviews and support tickets are read not for what users say but for <strong>what users cannot name</strong>. Users rarely identify the root cause of their frustration — they describe symptoms.</p>
-          <p style="font-size:15px;margin-bottom:0"><em>Example: “This is confusing” → forensic reading traces it to a <strong>mental model mismatch</strong> in navigation structure, not a button label.</em></p>
+          <p style="font-size:15px;margin-bottom:0"><em>Example: A user says "this is confusing." The forensic question is: was it information architecture, visual hierarchy, mental model mismatch, or missing feedback?</em></p>
         </div>
         <p style="margin-top:16px"><strong>Deliverable:</strong> A <em>Pre-Existing Evidence Register</em> — cataloguing all available data, rating quality and recency of each source, and flagging where critical data is absent. No data about a critical flow is itself a finding.</p>
       </div>
     </div>
 
+    <!-- 1.3 Baseline -->
     <h3>1.3 — Baseline Metric Establishment</h3>
     <p><strong>Purpose:</strong> Create the quantitative fingerprint of the product's current health before any qualitative evaluation begins.</p>
 
-    <div class="table-responsive">
-      <table class="metric-table">
-        <thead>
-          <tr><th>Metric Category</th><th>Specific Metrics</th><th>Benchmark Against</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Acquisition</td><td>Traffic sources, conversion to signup</td><td>Industry standard</td></tr>
-          <tr><td>Activation</td><td>Onboarding completion rate, time to first value</td><td>Category average</td></tr>
-          <tr><td>Engagement</td><td>DAU/MAU ratio, session depth, feature adoption</td><td>Historical baseline</td></tr>
-          <tr><td>Retention</td><td>D1/D7/D30 retention, churn rate, resurrection rate</td><td>Cohort comparison</td></tr>
-          <tr><td>Revenue</td><td>Conversion to paid, expansion revenue, NRR</td><td>Business target</td></tr>
-          <tr><td>Support load</td><td>Ticket volume per user, resolution time, repeat contacts</td><td>Historical baseline</td></tr>
-          <tr><td>Performance</td><td>Load times, error rates, API failure rates</td><td>Technical SLA</td></tr>
-          <tr><td>Sentiment</td><td>NPS, App store rating, review sentiment score</td><td>Competitor comparison</td></tr>
-        </tbody>
-      </table>
-    </div>
+    <table class="metric-table">
+      <thead>
+        <tr>
+          <th>Metric Category</th>
+          <th>Specific Metrics</th>
+          <th>Benchmark Against</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Acquisition</td><td>Traffic sources, conversion to signup</td><td>Industry standard</td></tr>
+        <tr><td>Activation</td><td>Onboarding completion rate, time to first value</td><td>Category average</td></tr>
+        <tr><td>Engagement</td><td>DAU/MAU ratio, session depth, feature adoption</td><td>Historical baseline</td></tr>
+        <tr><td>Retention</td><td>D1/D7/D30 retention, churn rate, resurrection rate</td><td>Cohort comparison</td></tr>
+        <tr><td>Revenue</td><td>Conversion to paid, expansion revenue, NRR</td><td>Business target</td></tr>
+        <tr><td>Support load</td><td>Ticket volume per user, resolution time, repeat contacts</td><td>Historical baseline</td></tr>
+        <tr><td>Performance</td><td>Load times, error rates, API failure rates</td><td>Technical SLA</td></tr>
+        <tr><td>Sentiment</td><td>NPS, App store rating, review sentiment score</td><td>Competitor comparison</td></tr>
+      </tbody>
+    </table>
 
     <div class="ruled-box">
       <h4>The Forensic Significance Test — for each metric, ask:</h4>
@@ -1052,47 +944,415 @@
         <button class="tab-btn" onclick="showTab('h-psych', this)">A.3 — Psychological Layer</button>
       </div>
 
-      <!-- FOUNDATION TAB (content unchanged) -->
+      <!-- FOUNDATION TAB -->
       <div id="h-foundation" class="tab-panel active">
         <p style="margin-bottom:24px;font-style:italic">The classic 10 heuristics applied with forensic specificity — not just "does this violate the heuristic" but "what is the business cost of this violation."</p>
-        <!-- H1..H10 blocks keep as before, I'll include a couple for brevity but keep entire original set -->
+
         <div class="heuristic-block">
-          <div class="heuristic-header"><div class="heuristic-code">H1</div><div><div class="heuristic-name">Visibility of System Status</div><div class="heuristic-def">Forensic extension: Where does status invisibility create anxiety, duplicate actions, or support tickets?</div></div></div>
-          <ul class="heuristic-questions"><li>Can users always locate themselves within the product?</li><li>Are loading, processing, and error states clearly communicated?</li><li>Do background processes (sync, save, calculation) have visible indicators?</li><li>Where does the absence of feedback cause users to repeat actions?</li><li>Are confirmation states (success, completion, submission) unambiguous?</li></ul>
+          <div class="heuristic-header">
+            <div class="heuristic-code">H1</div>
+            <div>
+              <div class="heuristic-name">Visibility of System Status</div>
+              <div class="heuristic-def">Forensic extension: Where does status invisibility create anxiety, duplicate actions, or support tickets?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Can users always locate themselves within the product?</li>
+            <li>Are loading, processing, and error states clearly communicated?</li>
+            <li>Do background processes (sync, save, calculation) have visible indicators?</li>
+            <li>Where does the absence of feedback cause users to repeat actions?</li>
+            <li>Are confirmation states (success, completion, submission) unambiguous?</li>
+          </ul>
           <div class="forensic-box">What is the estimated support cost of status confusion in this product?</div>
         </div>
-        <!-- … rest of H2-H10 … (abbreviated here for space; keep the original full list) -->
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">H2</div>
+            <div>
+              <div class="heuristic-name">Match Between System and Real World</div>
+              <div class="heuristic-def">Forensic extension: Where do terminology mismatches create support escalations or onboarding failures?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Does the product use jargon internal to the company rather than natural to the user?</li>
+            <li>Are metaphors and icons consistent with how users understand the domain?</li>
+            <li>Do labels describe what things ARE or what they DO?</li>
+            <li>Are error messages written in user language or system language?</li>
+            <li>Do confirmation dialogues reflect the user's mental model?</li>
+          </ul>
+          <div class="forensic-box">What is the churn contribution of mental model mismatch?</div>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">H3</div>
+            <div>
+              <div class="heuristic-name">User Control and Freedom</div>
+              <div class="heuristic-def">Forensic extension: Where does the absence of control create rage clicks, session abandonment, or trust destruction?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Can every action be undone within a reasonable window?</li>
+            <li>Are destructive actions (delete, cancel subscription, clear data) reversible or clearly warned?</li>
+            <li>Can users exit any flow without losing progress?</li>
+            <li>Are users ever trapped in a sequence they cannot exit without completing?</li>
+            <li>Does the back button/gesture always work as expected?</li>
+          </ul>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">H4</div>
+            <div>
+              <div class="heuristic-name">Consistency and Standards</div>
+              <div class="heuristic-def">Forensic extension: Where does inconsistency create cognitive load that accumulates into abandonment?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Are the same actions triggered by the same patterns throughout the product?</li>
+            <li>Do similar components behave identically across different contexts?</li>
+            <li>Is the product consistent with platform conventions (iOS, Android, Web)?</li>
+            <li>Are there areas of the product that feel like different products (indicating team or era boundaries)?</li>
+          </ul>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">H5</div>
+            <div>
+              <div class="heuristic-name">Error Prevention</div>
+              <div class="heuristic-def">Forensic extension: What is the operational cost of preventable errors — support tickets, data loss, failed transactions?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Are confirmation steps present before irreversible actions?</li>
+            <li>Are form fields validated in real-time with specific guidance, not just error states?</li>
+            <li>Are dangerous actions separated from common actions spatially?</li>
+            <li>Are there places where a single misclick causes disproportionate damage?</li>
+          </ul>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">H6</div>
+            <div>
+              <div class="heuristic-name">Recognition Over Recall</div>
+              <div class="heuristic-def">Forensic extension: Where does excessive recall demand create power-user dependency and new-user failure?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Are all available actions visible or easily discoverable without memorisation?</li>
+            <li>Do users need to remember information from one screen to use another?</li>
+            <li>Does the product penalise infrequent users who have forgotten the interface?</li>
+            <li>Are there hidden features users need to be told about to discover?</li>
+          </ul>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">H7</div>
+            <div>
+              <div class="heuristic-name">Flexibility and Efficiency of Use</div>
+              <div class="heuristic-def">Forensic extension: Where does rigid linearity create expert user frustration and novice user abandonment simultaneously?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Can experienced users bypass unnecessary steps?</li>
+            <li>Are keyboard shortcuts, bulk actions, and power features available?</li>
+            <li>Do advanced features interfere with novice users' ability to find basic functions?</li>
+          </ul>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">H8</div>
+            <div>
+              <div class="heuristic-name">Aesthetic and Minimalist Design</div>
+              <div class="heuristic-def">Forensic extension: Where does visual noise increase cognitive load enough to affect task completion rates?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Does every element on each screen earn its presence?</li>
+            <li>Is there information presented that users do not need at the moment of decision?</li>
+            <li>Does progressive disclosure work — revealing complexity only when needed?</li>
+            <li>Does the visual hierarchy direct attention to what matters?</li>
+          </ul>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">H9</div>
+            <div>
+              <div class="heuristic-name">Help Users Recognise, Diagnose, and Recover From Errors</div>
+              <div class="heuristic-def">Forensic extension: What percentage of support contacts could be eliminated by better error communication?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Do error messages identify what went wrong in user language?</li>
+            <li>Do they explain why it went wrong and tell users exactly what to do next?</li>
+            <li>Are errors distinguished by severity — informational, warning, critical?</li>
+            <li>Do error states preserve user input rather than clearing forms?</li>
+          </ul>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">H10</div>
+            <div>
+              <div class="heuristic-name">Help and Documentation</div>
+              <div class="heuristic-def">Forensic extension: What is the failure demand (support contacts caused by interface failure) versus value demand (contacts for legitimate complex needs)?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Is contextual help available at points of likely confusion?</li>
+            <li>Are help articles written for users' questions or the company's product structure?</li>
+            <li>What percentage of support tickets reference topics the interface should handle independently?</li>
+          </ul>
+        </div>
       </div>
 
-      <!-- BUSINESS-IMPACT TAB (content unchanged) -->
+      <!-- BUSINESS-IMPACT TAB -->
       <div id="h-business" class="tab-panel">
         <p style="margin-bottom:24px;font-style:italic">Heuristics developed from 23 years across industries — not in any textbook. This is where the FTM differentiates from every standard audit.</p>
-        <!-- B1..B7 blocks … (keep original) -->
+
         <div class="heuristic-block">
-          <div class="heuristic-header"><div class="heuristic-code">B1</div><div><div class="heuristic-name">Trust Coherence</div><div class="heuristic-def">Does every interaction reinforce trust — or do specific moments break the trust covenant?</div></div></div>
-          <ul class="heuristic-questions"><li>Where does the product ask for more than it needs from users?</li><li>Are there moments where the product's behaviour cannot be explained from a user's perspective?</li><li>Are there dark patterns — default opt-ins, hidden costs, misleading progress indicators?</li><li>Do visual design choices signal the appropriate level of seriousness for the domain?</li><li>Where does the product feel like it is serving the business at the user's expense?</li></ul>
-          <p class="proof-note">⚡ Rooted in a real trust breakdown at PayPal: merchants perceived unfairness in dispute outcomes despite a fair system, silently eroding adoption — this heuristic was built from that diagnosis.</p>
+          <div class="heuristic-header">
+            <div class="heuristic-code">B1</div>
+            <div>
+              <div class="heuristic-name">Trust Coherence</div>
+              <div class="heuristic-def">Does every interaction reinforce trust — or do specific moments break the trust covenant?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Where does the product ask for more than it needs from users?</li>
+            <li>Are there moments where the product's behaviour cannot be explained from a user's perspective?</li>
+            <li>Are there dark patterns — default opt-ins, hidden costs, misleading progress indicators?</li>
+            <li>Do visual design choices signal the appropriate level of seriousness for the domain?</li>
+            <li>Where does the product feel like it is serving the business at the user's expense?</li>
+          </ul>
           <div class="forensic-box">What is the trust debt this product is accumulating — and what will it cost when it is called?</div>
         </div>
-        <!-- … B2–B7 … -->
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">B2</div>
+            <div>
+              <div class="heuristic-name">Cognitive Load Architecture</div>
+              <div class="heuristic-def">How does the product distribute cognitive demand across the user journey — and where does it ask too much at the worst moment?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Where in the journey does the product require the most cognitive effort?</li>
+            <li>Does this align with where users have the most motivation (early) or least (mid-journey fatigue)?</li>
+            <li>Are complex decisions front-loaded into onboarding when users have least context?</li>
+            <li>Does the information architecture reflect the user's cognitive model or the product team's org structure?</li>
+          </ul>
+          <div class="forensic-box">Where does cognitive overload convert into abandonment — and what is the revenue cost of each abandonment point?</div>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">B3</div>
+            <div>
+              <div class="heuristic-name">Feedback Loop Integrity</div>
+              <div class="heuristic-def">Does the product create healthy feedback loops that build user competence and confidence — or anxiety loops that erode both?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Does using the product make users feel more capable over time?</li>
+            <li>Are there features that users avoid because past experience taught them to fear them?</li>
+            <li>Does the product celebrate user progress and milestone achievement?</li>
+            <li>Does the product communicate the consequences of actions before they are taken?</li>
+          </ul>
+          <div class="forensic-box">Which features have the highest avoidance rate — and what does that avoidance cost in retention and expansion revenue?</div>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">B4</div>
+            <div>
+              <div class="heuristic-name">Cross-Channel Coherence</div>
+              <div class="heuristic-def">Does the experience remain coherent as users move between touchpoints — web, mobile, email, support, sales?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Does the product remember context across sessions and devices?</li>
+            <li>Do email communications use the same language and mental models as the interface?</li>
+            <li>Does the support experience align with interface promises?</li>
+            <li>Does the mobile experience complement rather than truncate the web experience?</li>
+          </ul>
+          <div class="forensic-box">Where do cross-channel inconsistencies create the highest support load and churn risk?</div>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">B5</div>
+            <div>
+              <div class="heuristic-name">Failure Mode Dignity</div>
+              <div class="heuristic-def">When things go wrong — and they always do — does the product treat users with dignity?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>When the product fails (downtime, error, data loss), how does it communicate?</li>
+            <li>Are users left in states of uncertainty during failures?</li>
+            <li>Does the product apologise for its failures or blame users?</li>
+            <li>Are failure states designed with the same care as success states?</li>
+          </ul>
+          <div class="forensic-box">What is the NPS impact of failure states — and how does the dignity of failure handling affect recovery?</div>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">B6</div>
+            <div>
+              <div class="heuristic-name">Scale-Induced Debt</div>
+              <div class="heuristic-def">Where has the product accumulated design decisions that made sense at a smaller scale but create faultlines at current scale?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Are there interface patterns that work for 100 items but break at 10,000?</li>
+            <li>Are there admin interfaces designed for small teams now used by hundreds?</li>
+            <li>Where has the product been extended beyond its original design envelope?</li>
+            <li>What has been bolted on versus genuinely integrated?</li>
+          </ul>
+          <div class="forensic-box">What is the operational cost of scale-induced UX debt — in support time, training costs, and efficiency loss?</div>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">B7</div>
+            <div>
+              <div class="heuristic-name">Adoption Gravity</div>
+              <div class="heuristic-def">Does the product create conditions for expanding user adoption — or does it inadvertently resist it?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>How does the product encourage users to discover more of its value over time?</li>
+            <li>Does the product's value proposition become clearer or more opaque as users engage more deeply?</li>
+            <li>Are sharing, collaboration, and expansion features prominent or buried?</li>
+          </ul>
+          <div class="forensic-box">Where is adoption gravity weakest — and what is the expansion revenue being left uncaptured?</div>
+        </div>
       </div>
 
-      <!-- PSYCHOLOGICAL TAB (unchanged) -->
+      <!-- PSYCHOLOGICAL TAB -->
       <div id="h-psych" class="tab-panel">
         <p style="margin-bottom:24px;font-style:italic">Drawing on cognitive science, behavioural economics, and predictive processing theory — the intellectual layer that separates the FTM from generalist auditors.</p>
-        <!-- P1..P5 blocks … -->
+
         <div class="heuristic-block">
-          <div class="heuristic-header"><div class="heuristic-code">P1</div><div><div class="heuristic-name">Relevance Realization</div><div class="heuristic-def"><em>From: John Vervaeke's cognitive science framework.</em> Does the product help users determine what is relevant to their current goal — or does it present everything and demand users sort it themselves?</div></div></div>
-          <ul class="heuristic-questions"><li>Does the interface surface what is most relevant to the user's current context?</li><li>Is relevance determined by user behaviour and history — or is it static for all users?</li><li>Does the product's information architecture reflect relevance hierarchies or categorical hierarchies?</li></ul>
+          <div class="heuristic-header">
+            <div class="heuristic-code">P1</div>
+            <div>
+              <div class="heuristic-name">Relevance Realization</div>
+              <div class="heuristic-def"><em>From: John Vervaeke's cognitive science framework.</em> Does the product help users determine what is relevant to their current goal — or does it present everything and demand users sort it themselves?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Does the interface surface what is most relevant to the user's current context?</li>
+            <li>Is relevance determined by user behaviour and history — or is it static for all users?</li>
+            <li>Does the product's information architecture reflect relevance hierarchies or categorical hierarchies?</li>
+          </ul>
         </div>
-        <!-- … P2–P5 … -->
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">P2</div>
+            <div>
+              <div class="heuristic-name">Predictive Processing Alignment</div>
+              <div class="heuristic-def"><em>From: Karl Friston's predictive brain framework.</em> Does the product behave in ways that align with users' predictive models — or does it consistently violate predictions, generating surprise and friction?</div>
+            </div>
+          </div>
+          <p style="font-size:15px;margin-bottom:12px;background:var(--paper-dark);padding:12px 16px;border-left:2px solid var(--rule)"><em>Core insight: The brain is fundamentally a prediction machine. When interfaces consistently violate predictions, the cognitive cost accumulates into what users describe as "confusing" or "frustrating" — even when they cannot articulate why.</em></p>
+          <ul class="heuristic-questions">
+            <li>Do interface elements behave as their visual appearance predicts?</li>
+            <li>Are there elements that look interactive but are not — or vice versa?</li>
+            <li>Where does the product require users to update their mental model unexpectedly?</li>
+            <li>Are there flows where the next step is unpredictable from the current step?</li>
+          </ul>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">P3</div>
+            <div>
+              <div class="heuristic-name">Loss Aversion Architecture</div>
+              <div class="heuristic-def"><em>From: Kahneman and Tversky's prospect theory.</em> Does the product use loss aversion appropriately — to motivate beneficial actions — or does it weaponise it to manipulate users?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Are loss framings used to communicate genuine risk — or to create artificial urgency?</li>
+            <li>Do progress indicators represent real progress — or manufactured commitment?</li>
+            <li>Are free trial endings and subscription renewals communicated with appropriate advance notice?</li>
+            <li>Does the product use scarcity honestly?</li>
+          </ul>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">P4</div>
+            <div>
+              <div class="heuristic-name">Cognitive Load Distribution</div>
+              <div class="heuristic-def"><em>From: John Sweller's cognitive load theory.</em> How is cognitive load distributed across intrinsic (task complexity), extraneous (interface complexity), and germane (learning investment) dimensions?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Where does the interface add extraneous cognitive load on top of inherently complex tasks?</li>
+            <li>Are there tasks where interface complexity exceeds task complexity — meaning the interface is harder than the problem?</li>
+            <li>Does the product scaffold complex tasks — breaking them into manageable cognitive chunks?</li>
+            <li>Where does the product fail to offload cognitive work it could handle for the user?</li>
+          </ul>
+        </div>
+
+        <div class="heuristic-block">
+          <div class="heuristic-header">
+            <div class="heuristic-code">P5</div>
+            <div>
+              <div class="heuristic-name">Agency and Autonomy</div>
+              <div class="heuristic-def"><em>From: Self-determination theory (Deci and Ryan).</em> Does the product create experiences of genuine user agency — or an illusion of choice while constraining actual autonomy?</div>
+            </div>
+          </div>
+          <ul class="heuristic-questions">
+            <li>Do users feel in control of their data, their preferences, and their experience?</li>
+            <li>Are choices meaningful or manufactured?</li>
+            <li>Does the product respect user decisions — or repeatedly override or question them?</li>
+            <li>Where does the product's business interest conflict with the user's expressed preferences?</li>
+          </ul>
+        </div>
       </div>
     </div>
 
-    <!-- TRACK B (unchanged) -->
+    <!-- TRACK B -->
     <h3 style="margin-top:48px">Track B — Algorithmic & Data Forensics</h3>
     <p>Where Track A applies expert judgment, Track B applies structured data analysis to find faultlines that expert judgment alone cannot see.</p>
-    <!-- cards grid … -->
+
+    <div class="grid-2">
+      <div class="card">
+        <span class="card-num">B.1 — Funnel Forensics</span>
+        <h3>Revenue Topology Map</h3>
+        <p>Map all funnels (not just conversion — include activation, feature adoption, support resolution, and expansion). Assign revenue value to each drop-off: <span class="mono">Drop-off × ACV = Revenue Impact</span>. Segment by user type, device, acquisition channel. Time-stamp to reveal what caused the problem.</p>
+      </div>
+      <div class="card">
+        <span class="card-num">B.2 — Behaviour Pattern Analysis</span>
+        <h3>Behaviour Gap Map</h3>
+        <p><strong>Rage click analysis</strong> (false affordances), <strong>dead zone analysis</strong> (features that failed to communicate value), <strong>navigation pattern mining</strong> (designed path vs actual path), <strong>session recording patterns</strong> (hesitation, reversal, tab-opening), <strong>return visit behaviour</strong> (what users believe the product's core value is).</p>
+      </div>
+      <div class="card">
+        <span class="card-num">B.3 — Support Ticket Forensics</span>
+        <h3>Support Intelligence Report</h3>
+        <p>Calculate <strong>Failure Demand %</strong> — typically 30–60% of all support contacts are caused by product failure (and almost always invisible to product teams). Build Interface-Support Correlation Matrix. Extract vocabulary of confusion. Map the <strong>Workaround Index</strong>.</p>
+      </div>
+      <div class="card">
+        <span class="card-num">B.4 — Competitive Benchmark</span>
+        <h3>Competitive Forensic Map</h3>
+        <p>Run identical tasks on 3–5 competitors. A faultline that exists in your product but not competitors is a <strong>competitive vulnerability</strong>. A faultline that exists across all competitors is a <strong>market opportunity</strong> — solving it creates genuine differentiation.</p>
+      </div>
+      <div class="card">
+        <span class="card-num">B.5 — Performance & Technical UX</span>
+        <h3>Performance Faultline Report</h3>
+        <p>Core Web Vitals forensics (LCP, INP, CLS) on highest-traffic, most conversion-critical, and highest support-ticket-generating pages. Slow is a design problem, not just an engineering problem.</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1100,23 +1360,78 @@
 <section id="convergence" style="background:var(--paper-dark)">
   <div class="container">
     <div class="section-header">
-      <div class="section-meta"><span class="section-num" style="color:var(--paper)">2.5</span><span class="section-tag">Phase 2 Synthesis</span></div>
-      <div><h2 class="section-title">The Convergence Matrix</h2><p class="section-subtitle">The analytical heart of the Fault Topology Method — before moving to diagnosis, all Track A and Track B findings are entered here.</p></div>
+      <div class="section-meta">
+        <span class="section-num" style="color:var(--paper)">2.5</span>
+        <span class="section-tag">Phase 2 Synthesis</span>
+      </div>
+      <div>
+        <h2 class="section-title">The Convergence Matrix</h2>
+        <p class="section-subtitle">The analytical heart of the Fault Topology Method — before moving to diagnosis, all Track A and Track B findings are entered here.</p>
+      </div>
     </div>
 
-    <div class="table-responsive">
-      <table class="matrix-table">
-        <thead><tr><th>Finding</th><th>Source</th><th>Severity</th><th>Business Impact</th><th>Confidence</th></tr></thead>
-        <tbody>
-          <tr><td>User cannot recover from mid-flow error without losing progress</td><td>Heuristic H3 + Funnel drop-off at step 4</td><td>Critical</td><td>Quantified monthly revenue leak</td><td><span class="conf-high">HIGH — dual confirmation</span></td></tr>
-          <tr><td>Navigation labels use internal product language, not user language</td><td>Heuristic P2 only</td><td>Medium</td><td>Estimated (single source)</td><td><span class="conf-med">MEDIUM — indicated</span></td></tr>
-          <tr><td>Repeated rage-clicks on non-interactive pricing element</td><td>Rage click data only</td><td>High</td><td>Quantified conversion loss</td><td><span class="conf-high">HIGH — quantified</span></td></tr>
-          <tr><td>Onboarding step 3 generates 40% of all support contacts</td><td>Support tickets + Competitive benchmark</td><td>Critical</td><td>Revenue + market risk</td><td><span class="conf-high">HIGH — triple confirmation</span></td></tr>
-          <tr><td>Anomalous session length spike on feature X — no heuristic explanation</td><td>Session data only</td><td>Unknown</td><td>Under investigation</td><td><span class="conf-anom">ANOMALY — investigate further</span></td></tr>
-        </tbody>
-      </table>
+    <table class="matrix-table">
+      <thead>
+        <tr>
+          <th>Finding</th>
+          <th>Source</th>
+          <th>Severity</th>
+          <th>Business Impact</th>
+          <th>Confidence</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>User cannot recover from mid-flow error without losing progress</td>
+          <td>Heuristic H3 + Funnel drop-off at step 4</td>
+          <td>Critical</td>
+          <td>Quantified monthly revenue leak</td>
+          <td><span class="conf-high">HIGH — dual confirmation</span></td>
+        </tr>
+        <tr>
+          <td>Navigation labels use internal product language, not user language</td>
+          <td>Heuristic P2 only</td>
+          <td>Medium</td>
+          <td>Estimated (single source)</td>
+          <td><span class="conf-med">MEDIUM — indicated</span></td>
+        </tr>
+        <tr>
+          <td>Repeated rage-clicks on non-interactive pricing element</td>
+          <td>Rage click data only</td>
+          <td>High</td>
+          <td>Quantified conversion loss</td>
+          <td><span class="conf-high">HIGH — quantified</span></td>
+        </tr>
+        <tr>
+          <td>Onboarding step 3 generates 40% of all support contacts</td>
+          <td>Support tickets + Competitive benchmark</td>
+          <td>Critical</td>
+          <td>Revenue + market risk</td>
+          <td><span class="conf-high">HIGH — triple confirmation</span></td>
+        </tr>
+        <tr>
+          <td>Anomalous session length spike on feature X — no heuristic explanation</td>
+          <td>Session data only</td>
+          <td>Unknown</td>
+          <td>Under investigation</td>
+          <td><span class="conf-anom">ANOMALY — investigate further</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="grid-2" style="margin-top:8px">
+      <div class="ruled-box" style="margin:0">
+        <h4>Confidence Levels</h4>
+        <p style="font-size:15px"><strong class="conf-high">Confirmed (High)</strong> — found by both heuristic and algorithmic analysis</p>
+        <p style="font-size:15px"><strong class="conf-med">Indicated (Medium)</strong> — found by one track, plausible in the other</p>
+        <p style="font-size:15px"><strong class="conf-low">Suspected (Low)</strong> — found by one track, contradicted or absent in the other</p>
+        <p style="font-size:15px;margin:0"><strong class="conf-anom">Anomaly</strong> — data signal present with no heuristic explanation — requires further investigation</p>
+      </div>
+      <div class="ruled-box" style="margin:0;background:var(--ink);color:var(--paper)">
+        <h4 style="color:var(--amber)">Why this matters</h4>
+        <p style="font-size:15px">Convergence = high confidence faultline — action it now.<br><br>Divergence = hidden risk or measurement gap — watch it.<br><br>Anomaly = the most interesting finding in any audit. Something the data shows that no heuristic explains. This is where forensic instinct earns its money.</p>
+      </div>
     </div>
-    <!-- … confidence boxes … -->
   </div>
 </section>
 
@@ -1124,10 +1439,130 @@
 <section id="phase3">
   <div class="container">
     <div class="section-header">
-      <div class="section-meta"><span class="section-num">03</span><span class="section-tag">3–5 days</span></div>
-      <div><h2 class="section-title">Diagnosis</h2><p class="section-subtitle">Building the Fault Topology. This is where investigation becomes intelligence.</p></div>
+      <div class="section-meta">
+        <span class="section-num">03</span>
+        <span class="section-tag">3–5 days</span>
+      </div>
+      <div>
+        <h2 class="section-title">Diagnosis</h2>
+        <p class="section-subtitle">Building the Fault Topology. This is where investigation becomes intelligence.</p>
+      </div>
     </div>
-    <!-- … fault type grid, root cause, etc. … -->
+
+    <h3 style="margin-top:0">3.1 — Faultline Classification: Five Types</h3>
+    <p>Every finding from Phase 2 is classified into one of five Faultline Types — connecting UX problems to business consequences. The fault map plots them on two axes: user journey stage (X) and faultline depth (Y).</p>
+
+    <div class="fault-type-grid">
+      <div class="fault-type ft1">
+        <div class="fault-type-num">Type 1</div>
+        <div class="fault-type-name">Surface</div>
+        <p>Visible usability problems creating immediate friction</p>
+        <div class="fault-meta">
+          <span>Examples: unclear labels, missing feedback</span>
+          <span>Effort: Low–Medium</span>
+          <span>Fix time: Days–weeks</span>
+        </div>
+        <div class="fault-depth"></div>
+      </div>
+      <div class="fault-type ft2">
+        <div class="fault-type-num">Type 2</div>
+        <div class="fault-type-name">Structural</div>
+        <p>IA or navigation problems making the right action hard to find</p>
+        <div class="fault-meta">
+          <span>Examples: org-structured nav, buried critical functions</span>
+          <span>Effort: Medium–High</span>
+          <span>Fix time: Weeks–months</span>
+        </div>
+        <div class="fault-depth"></div>
+      </div>
+      <div class="fault-type ft3">
+        <div class="fault-type-num">Type 3</div>
+        <div class="fault-type-name">Trust</div>
+        <p>Interactions that erode user trust through dark patterns or unexplained behaviour</p>
+        <div class="fault-meta">
+          <span>Examples: unclear data usage, unexpected charges</span>
+          <span>Risk: Churn, reviews, regulatory</span>
+          <span>Fix time: Weeks–months</span>
+        </div>
+        <div class="fault-depth"></div>
+      </div>
+      <div class="fault-type ft4">
+        <div class="fault-type-num">Type 4</div>
+        <div class="fault-type-name">Systemic</div>
+        <p>Deep structural problems rooted in foundational design decisions affecting the entire product</p>
+        <div class="fault-meta">
+          <span>Examples: design system debt, cross-platform incoherence</span>
+          <span>Effort: Very High</span>
+          <span>Fix time: Months–quarters</span>
+        </div>
+        <div class="fault-depth"></div>
+      </div>
+      <div class="fault-type ft5">
+        <div class="fault-type-num">Type 5</div>
+        <div class="fault-type-name">Strategic</div>
+        <p>Misalignment between what the product is designed to do and what users actually need</p>
+        <div class="fault-meta">
+          <span>Examples: features built on unvalidated assumptions</span>
+          <span>Effort: Highest — requires strategy</span>
+          <span>Fix time: Quarters–reorientation</span>
+        </div>
+        <div class="fault-depth"></div>
+      </div>
+    </div>
+
+    <div class="ruled-box-red" style="margin:32px 0">
+      <h4>Reading the Topology</h4>
+      <p>A product with problems concentrated in <strong>Onboarding at Surface level</strong> has a fixable first impression problem.</p>
+      <p>A product with problems concentrated in <strong>Engagement at Systemic level</strong> has a fundamental rethink requirement.</p>
+      <p style="margin:0">A product with <strong>Trust faultlines distributed across the entire journey</strong> has a coherence and honesty problem at the design philosophy level — which transforms the remediation conversation from tactical to strategic.</p>
+    </div>
+
+    <h3>3.2 — Root Cause Analysis: The 5-Why Forensic Method</h3>
+    <p>For each Critical and High severity faultline, a structured root cause analysis is conducted — adapted from manufacturing quality control for organisational UX diagnosis.</p>
+
+    <div class="ruled-box">
+      <h4>The Five Whys — UX Forensic Form</h4>
+      <div class="forensic-q">Why does the user fail at this step?</div>
+      <div class="forensic-q">Why does the interface create this condition?</div>
+      <div class="forensic-q">Why was the interface designed this way?</div>
+      <div class="forensic-q">Why was that design decision made?</div>
+      <div class="forensic-q" style="border-left-color:var(--red)">Why was that organisational condition present that allowed this decision? <em>(Almost always reveals org or process root causes — not just design failures.)</em></div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <span class="card-num">Root Cause Type</span>
+        <h3>User Research Gap</h3>
+        <p>Decision made without user data</p>
+      </div>
+      <div class="card">
+        <span class="card-num">Root Cause Type</span>
+        <h3>Stakeholder Override</h3>
+        <p>User-centred recommendation overruled by business requirement</p>
+      </div>
+      <div class="card">
+        <span class="card-num">Root Cause Type</span>
+        <h3>Technical Constraint</h3>
+        <p>Engineering limitation accepted without UX mitigation</p>
+      </div>
+      <div class="card">
+        <span class="card-num">Root Cause Type</span>
+        <h3>Legacy Debt</h3>
+        <p>Original decision made in different product context, never revisited</p>
+      </div>
+      <div class="card">
+        <span class="card-num">Root Cause Type</span>
+        <h3>Org Boundary</h3>
+        <p>Feature built by a team that did not communicate with adjacent teams</p>
+      </div>
+      <div class="card">
+        <span class="card-num">Root Cause Type</span>
+        <h3>Measurement Gap</h3>
+        <p>Nobody was watching this metric, so nobody knew it was failing</p>
+      </div>
+    </div>
+
+    <p><strong>Deliverable:</strong> A <em>Root Cause Register</em> — for each critical faultline, a documented chain from symptom to root cause, with the organisational implication named explicitly.</p>
   </div>
 </section>
 
@@ -1135,10 +1570,92 @@
 <section id="phase4">
   <div class="container">
     <div class="section-header">
-      <div class="section-meta"><span class="section-num">04</span><span class="section-tag">3–5 days</span></div>
-      <div><h2 class="section-title">Remediation</h2><p class="section-subtitle">The Prioritised Fix Architecture. A forensic report without a clear remediation roadmap is intelligence without action.</p></div>
+      <div class="section-meta">
+        <span class="section-num">04</span>
+        <span class="section-tag">3–5 days</span>
+      </div>
+      <div>
+        <h2 class="section-title">Remediation</h2>
+        <p class="section-subtitle">The Prioritised Fix Architecture. A forensic report without a clear remediation roadmap is intelligence without action.</p>
+      </div>
     </div>
-    <!-- … RICE-F, horizons, etc. … -->
+
+    <h3 style="margin-top:0">4.1 — RICE-F Prioritisation</h3>
+    <p>Every faultline is scored on four dimensions — with a Forensic Severity multiplier — to produce a prioritised remediation sequence. This ensures highest-value, highest-confidence, lowest-effort fixes are addressed first.</p>
+
+    <div class="rice-grid">
+      <div class="rice-item">
+        <div class="rice-letter">R</div>
+        <div class="rice-word">Reach</div>
+        <div class="rice-scale">How many users are affected?<br><em>1 (edge case) → 5 (all users)</em></div>
+      </div>
+      <div class="rice-item">
+        <div class="rice-letter">I</div>
+        <div class="rice-word">Impact</div>
+        <div class="rice-scale">If fixed, improvement per user?<br><em>1 (marginal) → 5 (transformative)</em></div>
+      </div>
+      <div class="rice-item">
+        <div class="rice-letter">C</div>
+        <div class="rice-word">Confidence</div>
+        <div class="rice-scale">Certainty of diagnosis and fix?<br><em>1 (suspected) → 5 (confirmed)</em></div>
+      </div>
+      <div class="rice-item">
+        <div class="rice-letter">E</div>
+        <div class="rice-word">Effort</div>
+        <div class="rice-scale">Resource required to fix?<br><em>1 (very high) → 5 (very low)</em></div>
+      </div>
+      <div class="rice-item">
+        <div class="rice-letter">F</div>
+        <div class="rice-word">Forensic Severity</div>
+        <div class="rice-scale">Surface ×1.0 / Structural ×1.2 / Trust ×1.5 / Systemic ×1.3 / Strategic ×1.4</div>
+      </div>
+    </div>
+
+    <div class="formula-box">
+      RICE-F Score = <em>( R × I × C × E × F )</em>
+    </div>
+
+    <h3>4.2 — Three-Horizon Remediation Roadmap</h3>
+
+    <div class="horizon-row">
+      <div class="horizon-label">
+        <div class="horizon-num">Horizon 1</div>
+        <div class="horizon-time">0–30 days</div>
+      </div>
+      <div class="horizon-body">
+        <h3>Immediate Relief</h3>
+        <p><strong>Criteria:</strong> High confidence + Low effort + Clear impact. These are not guesses — they are identified through forensic rigour.</p>
+        <p><strong>Typical fixes:</strong> Label and copy changes, error message rewrites, missing feedback states, broken interaction patterns, accessibility failures, performance quick wins.</p>
+        <p style="margin:0"><strong>Deliverable format:</strong> Specific, actionable tickets ready for developer implementation — no ambiguity about what needs to change. Each card includes exact current state, exact recommended change, heuristic violated, business impact, implementation spec, and success metric.</p>
+      </div>
+    </div>
+    <div class="horizon-row">
+      <div class="horizon-label">
+        <div class="horizon-num">Horizon 2</div>
+        <div class="horizon-time">30–90 days</div>
+      </div>
+      <div class="horizon-body">
+        <h3>Structural Repair</h3>
+        <p><strong>Criteria:</strong> Medium-high confidence + Medium effort + Significant impact.</p>
+        <p><strong>Typical fixes:</strong> Information architecture restructuring, navigation pattern redesign, onboarding flow revision, feature consolidation, trust signal improvements, cross-platform coherence.</p>
+        <p><strong>Deliverable format:</strong> Design briefs with the <em>Before/After Hypothesis</em>:</p>
+        <div class="ruled-box-red" style="margin-top:12px;margin-bottom:0">
+          <em>"Currently, [X% of users] are [failing/abandoning/missing] [specific action] because [root cause]. By [specific design change], we predict [metric] will improve by [range] within [measurement window]."</em>
+        </div>
+      </div>
+    </div>
+    <div class="horizon-row" style="margin-bottom:32px">
+      <div class="horizon-label">
+        <div class="horizon-num">Horizon 3</div>
+        <div class="horizon-time">90+ days</div>
+      </div>
+      <div class="horizon-body">
+        <h3>Strategic Reconstruction</h3>
+        <p><strong>Criteria:</strong> Systemic and strategic faultlines requiring product strategy involvement. These cannot be fixed by design alone.</p>
+        <p><strong>Typical fixes:</strong> Core mental model realignment, design system overhaul, value proposition clarification, fundamental navigation architecture change, cross-channel experience unification.</p>
+        <p style="margin:0"><strong>Deliverable format:</strong> Executive-level strategic briefs with: The Faultline → The Evidence → Cost of Inaction → Options (with different resource requirements) → Recommendation → Success Metrics.</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1146,42 +1663,108 @@
 <section id="remediation-card" style="background:var(--paper-dark)">
   <div class="container">
     <div class="section-header">
-      <div class="section-meta"><span class="section-num" style="color:var(--paper)">4.3</span><span class="section-tag">Standard Format</span></div>
-      <div><h2 class="section-title">The Remediation Card</h2><p class="section-subtitle">Every individual fix recommendation is delivered as a structured card — making implementation as frictionless as possible for the receiving team.</p></div>
+      <div class="section-meta">
+        <span class="section-num" style="color:var(--paper)">4.3</span>
+        <span class="section-tag">Standard Format</span>
+      </div>
+      <div>
+        <h2 class="section-title">The Remediation Card</h2>
+        <p class="section-subtitle">Every individual fix recommendation is delivered as a structured card — making implementation as frictionless as possible for the receiving team.</p>
+      </div>
     </div>
+
     <div class="remedy-card">
-      <!-- … card content … -->
+      <div class="remedy-card-header">
+        <span>REMEDIATION CARD #023</span>
+        <span>RICE-F Score: 48.0</span>
+      </div>
+      <div class="remedy-row">
+        <div class="remedy-key">Faultline ID</div>
+        <div class="remedy-val">FL-023</div>
+      </div>
+      <div class="remedy-row">
+        <div class="remedy-key">Type</div>
+        <div class="remedy-val">Surface → Trust</div>
+      </div>
+      <div class="remedy-row">
+        <div class="remedy-key">Severity</div>
+        <div class="remedy-val"><span class="sev-critical">Critical</span></div>
+      </div>
+      <div class="remedy-row">
+        <div class="remedy-key">Horizon</div>
+        <div class="remedy-val">1 — Immediate Relief (0–30 days)</div>
+      </div>
+      <div class="remedy-row">
+        <div class="remedy-key">The Faultline</div>
+        <div class="remedy-val">Error message on payment failure returns system-level code ("Transaction declined: ERR_402") with no guidance on next action. User is left at a dead end with no recovery path.</div>
+      </div>
+      <div class="remedy-row">
+        <div class="remedy-key">The Evidence</div>
+        <div class="remedy-val">
+          <strong>Heuristic:</strong> H9 (Error Recovery), H2 (User Language), B5 (Failure Mode Dignity)<br>
+          <strong>Data:</strong> 23% of payment-attempt sessions end without retry; rage clicks on this screen average 4.2 per session<br>
+          <strong>User verbatim:</strong> "Had no idea what went wrong or what to try next — just gave up"
+        </div>
+      </div>
+      <div class="remedy-row">
+        <div class="remedy-key">Root Cause</div>
+        <div class="remedy-val">Engineering limitation accepted without UX mitigation — payment processor error codes passed through directly to UI without translation layer.</div>
+      </div>
+      <div class="remedy-row">
+        <div class="remedy-key">Business Impact</div>
+        <div class="remedy-val">
+          <strong>Users affected:</strong> ~1,800/month hitting this state<br>
+          <strong>Revenue impact:</strong> Estimated ₹X lakh/month in failed conversions<br>
+          <strong>Risk:</strong> Trust erosion at highest-intent moment in user journey
+        </div>
+      </div>
+      <div class="remedy-row">
+        <div class="remedy-key">The Recommendation</div>
+        <div class="remedy-val">Rewrite error message to: "Your payment didn't go through. This sometimes happens with prepaid cards or when billing details don't match. Try a different card, or check your card details and try again." Add retry CTA and support link. No code changes — copy and UI update only.</div>
+      </div>
+      <div class="remedy-row">
+        <div class="remedy-key">Success Metric</div>
+        <div class="remedy-val">
+          <strong>Measure:</strong> Payment retry rate after error state<br>
+          <strong>Baseline:</strong> 12% retry<br>
+          <strong>Target:</strong> &gt;35% retry within 30 days of fix
+        </div>
+      </div>
     </div>
-    <!-- … dashboard … -->
+
+    <p>Every audit delivers two documents: a <strong>Full Forensic Report</strong> (40–80 pages for product, design, and engineering teams) and a <strong>10-page Executive Summary</strong> for C-suite with: verdict, fault map, top 5 critical faultlines, total cost of inaction, three-horizon roadmap, investment requirement, ROI projection, risk of inaction, and recommended next step.</p>
+
+    <div class="ruled-box" style="margin-top:32px">
+      <h4>Post-Remediation Measurement Dashboard</h4>
+      <p>Every audit includes a measurement framework — because the audit's value is only fully realised when improvements can be attributed to specific fixes.</p>
+      <div class="grid-3">
+        <div>
+          <strong style="font-size:15px">Horizon 1 fixes</strong>
+          <p style="font-size:14px;margin-top:4px">Baseline → 30-day → 90-day metric, with attribution confidence</p>
+        </div>
+        <div>
+          <strong style="font-size:15px">Horizon 2 fixes</strong>
+          <p style="font-size:14px;margin-top:4px">Baseline → 90-day → 6-month metric, with business value realised</p>
+        </div>
+        <div>
+          <strong style="font-size:15px">Overall audit</strong>
+          <p style="font-size:14px;margin-top:4px">Total revenue impact (estimated vs realised), support load reduction, NPS movement, competitive position</p>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- ── APPLIED FORENSICS ── -->
-<section id="applied-forensics" style="background:var(--paper-dark)">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-meta"><span class="section-num" style="color:var(--paper)">—</span><span class="section-tag">Industry Application</span></div>
-      <div><h2 class="section-title">Applied Forensics</h2><p class="section-subtitle">The FTM speaks the language of your domain — faultlines look different in fintech than in enterprise SaaS.</p></div>
-    </div>
-    <div class="grid-2">
-      <div class="ruled-box"><h4>Fintech / Payments</h4><p>We don't just find a "confusing flow" — we identify the exact <strong>Trust Faultline</strong> that's causing a 2% involuntary churn in your high-value merchant segment.</p><p class="proof-note">⚡ Derived from diagnosing the hidden trust breakdown in PayPal's dispute resolution, where perception of unfairness silently undermined adoption despite a fair system.</p></div>
-      <div class="ruled-box"><h4>Enterprise SaaS</h4><p>We don't just point out "inconsistent design" — we map the <strong>Systemic Faultlines</strong> in your design system that are slowing down six product teams and creating a fragmented customer experience.</p><p class="proof-note">⚡ Applied at Cisco, where a design debt audit revealed pattern duplication across 6+ teams — the fix unified the product suite and accelerated velocity.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ── CTA ── -->
-<section style="background:var(--ink); padding:64px 0; text-align:center; color:var(--paper); border-bottom:none;">
-  <div class="container">
-    <h2 style="font-family:'Syne',sans-serif; font-size:clamp(28px,4vw,42px); font-weight:800; margin-bottom:16px;">Suspect your product has hidden faultlines?</h2>
-    <p style="font-size:20px; opacity:0.7; margin-bottom:32px;">Let's conduct a 30-minute diagnostic scoping session to find out.</p>
-    <a href="mailto:anilksoman@gmail.com?subject=Fault Topology Method Inquiry" style="display:inline-block; background:var(--red); color:white; padding:16px 40px; text-decoration:none; font-family:'DM Mono',monospace; font-size:14px; letter-spacing:0.1em; text-transform:uppercase;">Start the Conversation</a>
-  </div>
-</section>
-
+<!-- ── FOOTER ── -->
 <footer>
-  <div><strong>The Fault Topology Method™</strong><br>A forensic approach to mapping where products break, why they break, and what it costs.</div>
-  <div style="text-align:right">Public methodology documentation<br>© 2026 Anil Kumar Soman. All rights reserved.</div>
+  <div>
+    <strong>The Fault Topology Method™</strong><br>
+    A forensic approach to mapping where products break, why they break, and what it costs.
+  </div>
+  <div style="text-align:right">
+    Public methodology documentation<br>
+    © 2026 Anil Kumar Soman. All rights reserved.
+  </div>
 </footer>
 
 <script>
@@ -1194,6 +1777,7 @@
     document.getElementById(id).classList.add('active');
   }
 
+  // Active nav highlight
   const sections = document.querySelectorAll('section[id]');
   const navLinks = document.querySelectorAll('nav a');
   const observer = new IntersectionObserver(entries => {
