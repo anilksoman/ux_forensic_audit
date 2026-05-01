@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>The Fault Topology Method™ | UX Forensic Audit Framework</title>
+  <!-- Font Awesome 6 for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --deep-navy: #0a1a2f;
+      --slate: #1e2b3c;
+      --steel: #2c3e50;
+      --forensic-orange: #ff6b4a;
+      --teal-accent: #2ec4b6;
+      --soft-white: #f8fafc;
+      --cool-gray: #e9eef3;
+      --text-primary: #1a2a3a;
+      --text-secondary: #4a5b6b;
+      --border-light: #dce4ec;
+      --card-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.08), 0 8px 20px -8px rgba(0, 20, 30, 0.06);
+      --transition: all 0.25s ease;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: var(--soft-white);
+      color: var(--text-primary);
+      line-height: 1.5;
+      font-size: 1rem;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Typography */
+    h1, h2, h3 {
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 6vw, 3.4rem);
+      line-height: 1.2;
+    }
+
+    h2 {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      margin-bottom: 1.5rem;
+    }
+
+    h3 {
+      font-size: 1.35rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .section {
+      padding: 4.5rem 0;
+    }
+
+    .section-label {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      color: var(--forensic-orange);
+      margin-bottom: 0.75rem;
+    }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, #0a1a2f 0%, #132b40 100%);
+      color: white;
+      padding: 5rem 0 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: -20%;
+      right: -10%;
+      width: 60%;
+      height: 140%;
+      background: radial-gradient(circle at 30% 40%, rgba(46, 196, 182, 0.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero .container {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero h1 {
+      max-width: 800px;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero .subhead {
+      font-size: 1.25rem;
+      color: #cbd5e1;
+      max-width: 650px;
+      margin-bottom: 2rem;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(255, 107, 74, 0.18);
+      color: #ffaa8c;
+      border: 1px solid rgba(255, 107, 74, 0.3);
+      padding: 0.35rem 1rem;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      backdrop-filter: blur(4px);
+    }
+
+    .tm {
+      font-size: 0.7em;
+      vertical-align: super;
+    }
+
+    /* Cards grid */
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.8rem;
+      margin-top: 2rem;
+    }
+
+    .phase-card {
+      background: white;
+      border-radius: 24px;
+      padding: 2rem 1.5rem;
+      box-shadow: var(--card-shadow);
+      transition: var(--transition);
+      border: 1px solid var(--border-light);
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .phase-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 28px 40px -16px rgba(0, 0, 0, 0.12);
+      border-color: var(--teal-accent);
+    }
+
+    .phase-icon {
+      font-size: 2.2rem;
+      color: var(--forensic-orange);
+      margin-bottom: 0.3rem;
+    }
+
+    .phase-num {
+      font-weight: 700;
+      color: var(--teal-accent);
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 650;
+    }
+
+    .card-desc {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      flex: 1;
+    }
+
+    .timeline {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--steel);
+      background: #f0f4f9;
+      padding: 0.3rem 0.7rem;
+      border-radius: 20px;
+      align-self: flex-start;
+      margin-top: 0.3rem;
+    }
+
+    /* Detail sections */
+    .detail-block {
+      background: white;
+      border-radius: 28px;
+      padding: 2.5rem 2rem;
+      margin-bottom: 2.5rem;
+      box-shadow: var(--card-shadow);
+      border: 1px solid var(--border-light);
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .bullet-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .bullet-list li {
+      padding-left: 1.6rem;
+      position: relative;
+      margin-bottom: 0.7rem;
+      color: var(--text-secondary);
+    }
+
+    .bullet-list li::before {
+      content: "●";
+      color: var(--forensic-orange);
+      font-weight: bold;
+      position: absolute;
+      left: 0;
+      font-size: 1.1rem;
+    }
+
+    .accordion {
+      margin-top: 1.8rem;
+    }
+
+    .accordion-item {
+      border-bottom: 1px solid var(--border-light);
+      padding: 0.2rem 0;
+    }
+
+    .accordion-header {
+      width: 100%;
+      background: transparent;
+      border: none;
+      text-align: left;
+      padding: 1rem 0.5rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      color: var(--text-primary);
+      transition: color 0.2s;
+    }
+
+    .accordion-header:hover {
+      color: var(--forensic-orange);
+    }
+
+    .accordion-header i {
+      transition: transform 0.25s;
+      color: var(--forensic-orange);
+    }
+
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+      padding: 0 0.5rem;
+    }
+
+    .accordion-content.active {
+      max-height: 1000px;
+      padding-bottom: 1.2rem;
+    }
+
+    .accordion-header.active i {
+      transform: rotate(180deg);
+    }
+
+    .highlight-box {
+      background: #f0f7f9;
+      border-left: 5px solid var(--teal-accent);
+      padding: 1.4rem 1.8rem;
+      border-radius: 0 12px 12px 0;
+      margin: 1.8rem 0;
+      font-weight: 500;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #eef2f6;
+      color: #2c3e50;
+      padding: 0.2rem 0.7rem;
+      border-radius: 14px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-right: 0.4rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .faultline-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      margin-top: 1.5rem;
+    }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-right: 0.4rem;
+    }
+
+    .dot-surface { background: #3498db; }
+    .dot-structural { background: #f39c12; }
+    .dot-trust { background: #e74c3c; }
+    .dot-systemic { background: #8e44ad; }
+    .dot-strategic { background: #2c3e50; }
+
+    footer {
+      background: var(--deep-navy);
+      color: #b0c4d9;
+      padding: 2.5rem 0;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 640px) {
+      .detail-block {
+        padding: 1.8rem 1.2rem;
+      }
+      .phase-card {
+        padding: 1.6rem 1.2rem;
+      }
+    }
+
+    button {
+      font-family: inherit;
+    }
+  </style>
+</head>
+<body>
+  <!-- Hero Section -->
+  <header class="hero">
+    <div class="container">
+      <span class="badge"><i class="fas fa-fingerprint" style="margin-right: 0.4rem;"></i> Diagnostic Forensic Framework</span>
+      <h1>The Fault Topology Method<span class="tm">™</span></h1>
+      <p class="subhead">A structured forensic process that maps where products break, why they break, and what it costs — turning UX problems into quantified business intelligence.</p>
+      <p style="color: #9bb5cf; max-width: 600px;"><i class="fas fa-magnifying-glass-chart"></i> Stop guessing. Start diagnosing. Reveal the faultlines silently eroding trust, adoption, and revenue.</p>
+    </div>
+  </header>
+
+  <!-- Framework Overview -->
+  <section class="section">
+    <div class="container">
+      <span class="section-label">The Four Phases</span>
+      <h2>From symptoms to strategic repair</h2>
+      <div class="grid-4">
+        <div class="phase-card">
+          <div class="phase-icon"><i class="fas fa-clipboard-list"></i></div>
+          <div class="phase-num">PHASE 1</div>
+          <div class="card-title">Reconnaissance</div>
+          <div class="card-desc">Establish context & baseline. Align stakeholders, collect artifacts, measure vital signs.</div>
+          <div class="timeline">1–3 days</div>
+        </div>
+        <div class="phase-card">
+          <div class="phase-icon"><i class="fas fa-microscope"></i></div>
+          <div class="phase-num">PHASE 2</div>
+          <div class="card-title">Investigation</div>
+          <div class="card-desc">Dual‑track evaluation: expert heuristics + algorithmic data forensics.</div>
+          <div class="timeline">5–10 days</div>
+        </div>
+        <div class="phase-card">
+          <div class="phase-icon"><i class="fas fa-project-diagram"></i></div>
+          <div class="phase-num">PHASE 3</div>
+          <div class="card-title">Diagnosis</div>
+          <div class="card-desc">Synthesise findings into a fault topology – classify depth, map root causes.</div>
+          <div class="timeline">3–5 days</div>
+        </div>
+        <div class="phase-card">
+          <div class="phase-icon"><i class="fas fa-wrench"></i></div>
+          <div class="phase-num">PHASE 4</div>
+          <div class="card-title">Remediation</div>
+          <div class="card-desc">Prioritised three‑horizon fix roadmap with business cases & success metrics.</div>
+          <div class="timeline">3–5 days</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Phase 1 Reconnaissance -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <div class="detail-block">
+        <span class="section-label"><i class="fas fa-binoculars"></i> Phase 1</span>
+        <h2>Reconnaissance – The Forensic Baseline</h2>
+        <p style="color: #4a5b6b; max-width: 800px;">Before investigating a crime scene, you document the scene as found. We interview stakeholders across product, engineering, sales, support, and data — then gather every artifact that shaped the product.</p>
+        <div class="detail-grid">
+          <div>
+            <h4><i class="fas fa-users-between-lines" style="color: var(--forensic-orange);"></i> Stakeholder Alignment</h4>
+            <ul class="bullet-list">
+              <li>Product leadership: what would "fixed" look like in measurable terms?</li>
+              <li>Engineering: known technical debts affecting UX</li>
+              <li>Customer success: top 10 support ticket categories</li>
+              <li>Sales: objections prospects raise about the product</li>
+              <li>Data team: biggest drop-off points, retention curve shape</li>
+            </ul>
+            <p style="margin-top: 1rem;"><strong>Deliverable:</strong> Stakeholder Perception Map – revealing internal misalignment that creates faultlines.</p>
+          </div>
+          <div>
+            <h4><i class="fas fa-file-import" style="color: var(--forensic-orange);"></i> Artifact Collection & Metrics</h4>
+            <ul class="bullet-list">
+              <li>PRDs, design files, user research reports</li>
+              <li>Support tickets (90+ days), app store reviews, NPS verbatims</li>
+              <li>Onboarding completion, feature adoption, A/B test results</li>
+              <li>Baseline metric matrix: activation, engagement, retention, support load, performance, sentiment</li>
+            </ul>
+            <p><strong>Deliverable:</strong> Quantitative Baseline Report – the product's vital signs before investigation.</p>
+          </div>
+        </div>
+        <div class="highlight-box">
+          <i class="fas fa-lightbulb" style="color: var(--teal-accent); margin-right: 0.5rem;"></i> 
+          <strong>Forensic lens:</strong> We read between the lines of user complaints. “Confusing” often means mental model mismatch, violated predictions, or missing feedback — not just bad UI.
+        </div>
+      </div>
+
+      <!-- Phase 2 Investigation -->
+      <div class="detail-block">
+        <span class="section-label"><i class="fas fa-search-plus"></i> Phase 2</span>
+        <h2>Investigation – Dual‑Track Evaluation Engine</h2>
+        <p style="color: #4a5b6b; max-width: 850px;">Expert heuristic judgment and algorithmic data analysis run simultaneously. We look for <strong>convergence</strong> (high confidence) and <strong>divergence</strong> (hidden anomalies).</p>
+        
+        <div class="detail-grid" style="margin-top: 1.5rem;">
+          <div>
+            <h3 style="color: var(--forensic-orange);">Track A – Heuristic Evaluation</h3>
+            <p><span class="tag">Foundation</span><span class="tag">Business‑Impact</span><span class="tag">Psychological</span></p>
+            <p><strong>Three-tier system beyond Nielsen’s 10:</strong></p>
+            <ul class="bullet-list">
+              <li><strong>Foundation:</strong> Extended Nielsen heuristics with forensic cost estimation</li>
+              <li><strong>Business‑Impact:</strong> Trust architecture, cognitive load architecture, failure mode dignity, scale‑induced debt, adoption gravity, cross‑channel coherence</li>
+              <li><strong>Psychological:</strong> Relevance realization, predictive processing alignment, loss aversion architecture, cognitive load distribution, agency & autonomy</li>
+            </ul>
+          </div>
+          <div>
+            <h3 style="color: var(--teal-accent);">Track B – Algorithmic & Data Forensics</h3>
+            <ul class="bullet-list">
+              <li><strong>Funnel & revenue forensics:</strong> where value leaks</li>
+              <li><strong>Rage click & dead zone analysis</strong></li>
+              <li><strong>Session recording patterns</strong> (hesitation, re‑reading, tab switching)</li>
+              <li><strong>Support ticket forensics:</strong> failure demand %, vocabulary of confusion, workaround index</li>
+              <li><strong>Competitive benchmark mapping</strong></li>
+              <li><strong>Performance/technical UX impact</strong> (Core Web Vitals on critical flows)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="accordion">
+          <div class="accordion-item">
+            <button class="accordion-header" aria-expanded="false">
+              <span><i class="fas fa-table"></i> The Convergence Matrix (heart of the method)</span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="accordion-content">
+              <p>Findings are mapped by source, severity, business impact, and confidence:</p>
+              <ul class="bullet-list">
+                <li><strong>Confirmed (High):</strong> Heuristic + data alignment</li>
+                <li><strong>Indicated (Medium):</strong> One track, plausible in other</li>
+                <li><strong>Suspected (Low):</strong> Single source, absent/contradicted</li>
+                <li><strong>Anomaly:</strong> Data signal without heuristic explanation → further investigation</li>
+              </ul>
+              <p style="margin-top: 0.5rem;"><em>Convergence = high confidence faultline. Divergence = hidden risk or measurement gap.</em></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 3 Diagnosis -->
+      <div class="detail-block">
+        <span class="section-label"><i class="fas fa-sitemap"></i> Phase 3</span>
+        <h2>Diagnosis – Building the Fault Topology</h2>
+        <p>Every finding is classified into five faultline types and plotted on a 2D Fault Map (journey stage × depth).</p>
+        
+        <div class="faultline-legend" style="margin: 1.2rem 0 1.8rem;">
+          <div><span class="legend-dot dot-surface"></span> <strong>Surface</strong> – visible usability friction</div>
+          <div><span class="legend-dot dot-structural"></span> <strong>Structural</strong> – IA/navigation problems</div>
+          <div><span class="legend-dot dot-trust"></span> <strong>Trust</strong> – dark patterns, opaque behavior</div>
+          <div><span class="legend-dot dot-systemic"></span> <strong>Systemic</strong> – foundational design debt</div>
+          <div><span class="legend-dot dot-strategic"></span> <strong>Strategic</strong> – product–market misalignment</div>
+        </div>
+
+        <div class="detail-grid">
+          <div>
+            <h4><i class="fas fa-map-marked-alt"></i> The Fault Map</h4>
+            <p>Nodes are sized by business impact, colored by confidence. We instantly see where problems concentrate — are they surface-level onboarding hiccups, or systemic engagement fractures?</p>
+            <p><strong>Topology reading:</strong> Trust faultlines across the entire journey signal a design philosophy problem, not just a UI bug.</p>
+          </div>
+          <div>
+            <h4><i class="fas fa-tree"></i> Root Cause Analysis (5‑Whys)</h4>
+            <p>For critical faults, we drill down to the organisational root cause:</p>
+            <ul class="bullet-list">
+              <li>User research gap</li>
+              <li>Stakeholder override</li>
+              <li>Technical constraint accepted without UX mitigation</li>
+              <li>Legacy debt / org boundary</li>
+              <li>Measurement gap (nobody watched the metric)</li>
+            </ul>
+            <p><strong>Deliverable:</strong> Root Cause Register – linking symptoms to process failures.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 4 Remediation -->
+      <div class="detail-block">
+        <span class="section-label"><i class="fas fa-screwdriver-wrench"></i> Phase 4</span>
+        <h2>Remediation – Prioritised Fix Architecture</h2>
+        <p>We score every faultline with <strong>RICE‑F</strong> (Reach, Impact, Confidence, Effort, Forensic Severity multiplier) and sequence them into a three‑horizon roadmap.</p>
+        
+        <div class="detail-grid">
+          <div>
+            <div style="background:#f4f7fc; border-radius: 16px; padding: 1.5rem;">
+              <h4><i class="far fa-clock" style="color: var(--forensic-orange);"></i> Horizon 1 (0–30 days)</h4>
+              <p><strong>Immediate Relief:</strong> high‑confidence quick wins with exact implementation specs and success metrics. Labels, errors, missing feedback, accessibility fixes.</p>
+            </div>
+          </div>
+          <div>
+            <div style="background:#f4f7fc; border-radius: 16px; padding: 1.5rem;">
+              <h4><i class="fas fa-layer-group" style="color: var(--forensic-orange);"></i> Horizon 2 (30–90 days)</h4>
+              <p><strong>Structural Repair:</strong> IA restructure, onboarding redesign, trust signals, cross‑platform coherence. Design briefs with before/after hypotheses.</p>
+            </div>
+          </div>
+          <div>
+            <div style="background:#f4f7fc; border-radius: 16px; padding: 1.5rem; grid-column: span 2;">
+              <h4><i class="fas fa-building-columns" style="color: var(--forensic-orange);"></i> Horizon 3 (90+ days)</h4>
+              <p><strong>Strategic Reconstruction:</strong> core mental model realignment, design system overhaul, value proposition clarification. Executive briefs with ROI projections and risk of inaction.</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 2rem;">
+          <p><strong><i class="fas fa-id-card"></i> Remediation Cards:</strong> Every fix is delivered as a structured card (Faultline ID, evidence, root cause, business impact, annotated recommendation, success metric).</p>
+          <p><strong><i class="fas fa-file-contract"></i> Executive Summary:</strong> 10-page C‑suite document with verdict, fault map, top 5 critical faultlines, total cost of inaction, and measurement dashboard.</p>
+        </div>
+      </div>
+
+      <!-- Final CTA -->
+      <div style="text-align: center; margin-top: 2.5rem;">
+        <div class="highlight-box" style="display: inline-block; text-align: left; max-width: 700px; background: #eaf6f9;">
+          <p style="font-size: 1.3rem; font-weight: 600; margin-bottom: 0.5rem;">Stop treating symptoms. Uncover the topology of product failure.</p>
+          <p style="color: #2c3e50;">The Fault Topology Method™ delivers a forensic intelligence report — not opinions. Quantified impact, root causes, and a clear remediation sequence.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p><strong>The Fault Topology Method™</strong> — A forensic approach to mapping where products break, why they break, and what it costs.</p>
+      <p style="margin-top: 0.5rem; font-size: 0.8rem;">© 2026 UX Forensic Audit Framework. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Accordion functionality
+    document.querySelectorAll('.accordion-header').forEach(button => {
+      button.addEventListener('click', () => {
+        const currentlyActive = document.querySelector('.accordion-header.active');
+        if (currentlyActive && currentlyActive !== button) {
+          currentlyActive.classList.remove('active');
+          currentlyActive.nextElementSibling.classList.remove('active');
+        }
+        button.classList.toggle('active');
+        const content = button.nextElementSibling;
+        content.classList.toggle('active');
+        button.setAttribute('aria-expanded', content.classList.contains('active'));
+      });
+    });
+  </script>
+</body>
+</html>
