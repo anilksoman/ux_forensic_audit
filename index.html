@@ -667,6 +667,13 @@
     gap: 16px;
   }
   footer strong { color: var(--paper); }
+  footer a { color: var(--amber); text-decoration: none; }
+  footer a:hover { color: var(--paper); }
+  .footer-nav {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
 
   /* ── PULL QUOTE ── */
   .pull-quote {
@@ -2018,7 +2025,7 @@
       <a href="https://anilksoman.github.io/" target="_blank" rel="noopener">anilksoman.github.io ↗</a>
     </span>
   </div>
-  <div style="display:flex; gap:20px; flex-wrap:wrap; align-items:center; justify-content:center;">
+  <div class="footer-nav">
     <a href="waterloo.html">Waterloo</a>
     <a href="amazon.html">Amazon</a>
     <a href="payPal.html">PayPal</a>
@@ -2026,9 +2033,9 @@
     <a href="https://anilksoman.github.io/" target="_blank" rel="noopener">Portfolio ↗</a>
     <a href="mailto:anilksoman@gmail.com">Contact</a>
   </div>
-  <div style="text-align:right">
-    Public methodology documentation<br>
-    © 2026 Anil Kumar Soman. All rights reserved.
+  <div style="text-align:right;">
+    <a href="#">↑ Back to top</a><br>
+    <span style="margin-top:4px;display:block;">© 2026 Anil Kumar Soman. All rights reserved.</span>
   </div>
 </footer>
 
