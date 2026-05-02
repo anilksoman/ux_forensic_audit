@@ -181,10 +181,14 @@
     text-transform: uppercase;
     padding: 14px 18px;
     white-space: nowrap;
-    transition: color 0.2s;
+    transition: color 0.2s, border-color 0.2s;
     border-right: 1px solid rgba(255,255,255,0.07);
+    border-bottom: 2px solid transparent;
+    display: inline-flex;
+    align-items: center;
   }
-  nav a:hover, nav a.active { color: var(--paper); }
+  nav a:hover { color: var(--paper); }
+  nav a.active { color: var(--paper); border-bottom: 2px solid var(--red); }
   nav a:first-child { padding-left: 0; }
 
   /* ── LAYOUT ── */
@@ -750,6 +754,7 @@
 <!-- ── NAV ── -->
 <nav>
   <div class="nav-inner">
+    <a href="#" style="font-weight:500; letter-spacing:0.15em; color:rgba(245,240,232,0.75); border-right:1px solid rgba(255,255,255,0.12); padding-right:20px; margin-right:4px;">FTM™</a>
     <a href="#overview">Overview</a>
     <a href="#phase1">Phase 1</a>
     <a href="#phase2">Phase 2</a>
@@ -758,7 +763,6 @@
     <a href="#phase3">Phase 3</a>
     <a href="#phase4">Phase 4</a>
     <a href="#remediation-card">Remedy Card</a>
-    <!-- REFINEMENT 5: nav link for new applied section -->
     <a href="#applied-forensics">Applied</a>
     <a href="#case-studies">In Practice</a>
   </div>
@@ -2008,7 +2012,19 @@
 <footer>
   <div>
     <strong>The Fault Topology Method™</strong><br>
-    A forensic approach to mapping where products break, why they break, and what it costs.
+    A forensic approach to mapping where products break, why they break, and what it costs.<br>
+    <span style="margin-top:6px; display:block; font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.08em;">
+      By <strong>Anil Kumar Soman</strong> · UX Forensic Auditor ·
+      <a href="https://anilksoman.github.io/" target="_blank" rel="noopener">anilksoman.github.io ↗</a>
+    </span>
+  </div>
+  <div style="display:flex; gap:20px; flex-wrap:wrap; align-items:center; justify-content:center;">
+    <a href="waterloo.html">Waterloo</a>
+    <a href="amazon.html">Amazon</a>
+    <a href="payPal.html">PayPal</a>
+    <a href="cisco.html">Cisco</a>
+    <a href="https://anilksoman.github.io/" target="_blank" rel="noopener">Portfolio ↗</a>
+    <a href="mailto:anilksoman@gmail.com">Contact</a>
   </div>
   <div style="text-align:right">
     Public methodology documentation<br>
@@ -2037,7 +2053,7 @@
         if (link) link.classList.add('active');
       }
     });
-  }, { threshold: 0.3 });
+  }, { threshold: 0.15, rootMargin: '0px 0px -20% 0px' });
   sections.forEach(s => observer.observe(s));
 </script>
 </body>
