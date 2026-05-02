@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>The Hidden Cost of Expert Paralysis | Fault Topology Method™ Case Study — Anil Soman</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ── TOKENS ── */
+        :root {
+            --ink:         #0f0e0b;
+            --paper:       #f5f0e8;
+            --paper-dark:  #ede7d6;
+            --paper-mid:   #e6dfce;
+            --red:         #c0392b;
+            --amber:       #d4a017;
+            --green:       #1a6b3c;
+            --blue:        #1a4a7a;
+            --rule:        #c8bfa8;
+            --nav-h:       48px;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; scroll-padding-top: calc(var(--nav-h) + 8px); }
+
+        body {
+            background: var(--paper);
+            color: var(--ink);
+            font-family: 'EB Garamond', Georgia, serif;
+            font-size: 18px;
+            line-height: 1.75;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none; z-index: 0;
+        }
+
+        /* ── PROGRESS BAR ── */
+        #reading-progress {
+            position: fixed; top: 0; left: 0;
+            height: 3px; width: 0%;
+            background: var(--red); z-index: 9999;
+            transition: width 0.1s linear;
+        }
+
+        /* ── HEADER ── */
+        header {
+            position: relative;
+            border-bottom: 2px solid var(--ink);
+            overflow: hidden;
+        }
+        .header-eyebrow {
+            background: var(--ink);
+            color: var(--paper);
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            padding: 10px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .eyebrow-meta { display: flex; gap: 24px; align-items: center; }
+        .eyebrow-tag {
+            background: var(--red);
+            color: var(--paper);
+            padding: 2px 8px;
+            font-size: 10px;
+            letter-spacing: 0.12em;
+        }
+        .header-body {
+            padding: 72px 48px 60px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .header-phase-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--red);
+            margin-bottom: 20px;
+            border: 1px solid var(--red);
+            padding: 5px 12px;
+        }
+        .phase-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); }
+        h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(40px, 6vw, 80px);
+            font-weight: 800;
+            line-height: 1.0;
+            letter-spacing: -0.03em;
+            max-width: 800px;
+            margin-bottom: 28px;
+        }
+        h1 em { font-style: italic; color: var(--red); font-family: 'EB Garamond', serif; font-weight: 400; }
+        .header-sub {
+            font-size: 20px;
+            max-width: 680px;
+            color: rgba(15,14,11,0.65);
+            margin-bottom: 36px;
+            font-style: italic;
+        }
+        .header-stats {
+            display: flex;
+            gap: 32px;
+            flex-wrap: wrap;
+            border-top: 1px solid var(--rule);
+            padding-top: 28px;
+        }
+        .stat-item {
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+        }
+        .stat-label {
+            color: rgba(15,14,11,0.45);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .stat-value { font-size: 13px; font-weight: 500; color: var(--ink); }
+        .stat-value.highlight { color: var(--green); }
+
+        /* ── STICKY NAV ── */
+        .case-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--ink);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            height: var(--nav-h);
+        }
+        .nav-inner {
+            display: flex;
+            overflow-x: auto;
+            scrollbar-width: none;
+            padding: 0 32px;
+            justify-content: center;
+            height: 100%;
+            align-items: stretch;
+        }
+        .nav-inner::-webkit-scrollbar { display: none; }
+        .case-nav a {
+            color: rgba(245,240,232,0.45);
+            text-decoration: none;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 0 16px;
+            white-space: nowrap;
+            border-right: 1px solid rgba(255,255,255,0.06);
+            border-bottom: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .case-nav a:last-child { border-right: none; }
+        .case-nav a:hover { color: var(--paper); }
+        .case-nav a.active { color: var(--paper); border-bottom-color: var(--red); }
+        .nav-section-links {
+            display: flex;
+            align-items: stretch;
+            margin-left: auto;
+            border-left: 1px solid rgba(255,255,255,0.08);
+            padding-left: 0;
+        }
+        .nav-section-links a {
+            font-size: 9px;
+            color: rgba(245,240,232,0.35);
+            border-right: none;
+        }
+        .nav-section-links a:hover { color: rgba(245,240,232,0.7); }
+
+        /* ── LAYOUT ── */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 48px;
+        }
+        section {
+            padding: 80px 0;
+            border-bottom: 1px solid var(--rule);
+            position: relative;
+        }
+        section:last-of-type { border-bottom: none; }
+
+        .section-phase {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+        .phase-number {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--paper);
+            background: var(--ink);
+            padding: 4px 10px;
+        }
+        .phase-name {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(15,14,11,0.45);
+        }
+        .phase-line { flex: 1; height: 1px; background: var(--rule); }
+
+        h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(26px, 3.5vw, 40px);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            margin-bottom: 8px;
+        }
+        h2 .section-num {
+            font-family: 'DM Mono', monospace;
+            font-size: 13px;
+            color: var(--red);
+            font-weight: 400;
+            margin-right: 10px;
+            letter-spacing: 0.05em;
+        }
+        .section-subtitle {
+            font-size: 16px;
+            color: rgba(15,14,11,0.5);
+            font-style: italic;
+            margin-bottom: 40px;
+        }
+        h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            margin-bottom: 10px;
+            margin-top: 40px;
+        }
+        h4 {
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--red);
+            margin-bottom: 8px;
+            margin-top: 28px;
+        }
+        p { margin-bottom: 16px; color: rgba(15,14,11,0.82); }
+        strong { font-weight: 600; color: var(--ink); }
+        em { font-style: italic; }
+
+        /* ── FORENSIC BRIEF CARD ── */
+        .forensic-brief {
+            background: var(--ink);
+            color: var(--paper);
+            padding: 32px 36px;
+            margin-bottom: 3rem;
+            font-family: 'DM Mono', monospace;
+            font-size: 12px;
+            line-height: 2;
+            position: relative;
+            border-left: 4px solid var(--red);
+        }
+        .brief-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--red);
+            margin-bottom: 1.4rem;
+            font-weight: 600;
+        }
+        .brief-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem 0.75rem;
+            margin-bottom: 0.25rem;
+        }
+        .brief-key {
+            color: rgba(245,240,232,0.38);
+            min-width: 160px;
+            flex-shrink: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .brief-val { color: rgba(245,240,232,0.85); font-weight: 500; }
+        .brief-val.severity-high { color: #e74c3c; }
+        .brief-val.outcome { color: #2ecc71; font-weight: 600; }
+        .brief-divider {
+            border: none;
+            border-top: 1px solid rgba(245,240,232,0.1);
+            margin: 0.8rem 0;
+        }
+
+        /* ── RULED BOXES ── */
+        .ruled-box {
+            border: 1px solid var(--rule);
+            background: var(--paper-dark);
+            padding: 28px 32px;
+            margin: 28px 0;
+        }
+        .ruled-box-red {
+            border-left: 3px solid var(--red);
+            background: rgba(192,57,43,0.05);
+            padding: 20px 24px;
+            margin: 24px 0;
+        }
+        .ruled-box-amber {
+            border-left: 3px solid var(--amber);
+            background: rgba(212,160,23,0.05);
+            padding: 20px 24px;
+            margin: 24px 0;
+        }
+        .ruled-box-green {
+            border-left: 3px solid var(--green);
+            background: rgba(26,107,60,0.05);
+            padding: 20px 24px;
+            margin: 24px 0;
+        }
+        .ruled-box-blue {
+            border-left: 3px solid var(--blue);
+            background: rgba(26,74,122,0.05);
+            padding: 20px 24px;
+            margin: 24px 0;
+        }
+
+        /* ── PULL QUOTE ── */
+        .pull-quote {
+            border-left: 4px solid var(--red);
+            padding: 20px 28px;
+            font-size: 22px;
+            font-style: italic;
+            line-height: 1.45;
+            color: rgba(15,14,11,0.75);
+            margin: 40px 0;
+            background: var(--paper-dark);
+        }
+        .pull-quote cite {
+            display: block;
+            font-size: 12px;
+            font-family: 'DM Mono', monospace;
+            font-style: normal;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(15,14,11,0.4);
+            margin-top: 10px;
+        }
+
+        /* ── GRID ── */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin: 24px 0;
+        }
+        .grid-card {
+            background: var(--paper-dark);
+            border: 1px solid var(--rule);
+            padding: 24px;
+        }
+        .grid-card-title {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(15,14,11,0.45);
+            margin-bottom: 12px;
+        }
+        .grid-card-headline {
+            font-family: 'Syne', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        /* ── FAULT LIST ── */
+        .fault-list {
+            list-style: none;
+            padding: 0;
+            margin: 16px 0 24px;
+        }
+        .fault-list li {
+            padding: 8px 0 8px 22px;
+            position: relative;
+            color: rgba(15,14,11,0.8);
+            border-bottom: 1px dotted var(--rule);
+            font-size: 16px;
+        }
+        .fault-list li:last-child { border-bottom: none; }
+        .fault-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--red);
+            font-family: 'DM Mono', monospace;
+            font-size: 12px;
+            top: 10px;
+        }
+
+        /* ── TOPOLOGY TABLE ── */
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 28px 0;
+            border: 1px solid var(--rule);
+        }
+        .topology-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'DM Mono', monospace;
+            font-size: 12px;
+        }
+        .topology-table thead th {
+            background: var(--ink);
+            color: var(--paper);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        .topology-table tbody td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--rule);
+            border-right: 1px solid var(--rule);
+            vertical-align: top;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+        .topology-table tbody td:last-child { border-right: none; }
+        .topology-table tbody tr:nth-child(even) td { background: var(--paper-dark); }
+        .topology-table tbody tr:hover td { background: rgba(192,57,43,0.04); }
+        .sev-critical { color: var(--red); font-weight: 700; }
+        .sev-high     { color: var(--red); font-weight: 500; }
+        .sev-medium   { color: var(--amber); font-weight: 500; }
+
+        /* ── CONVERGENCE MATRIX ── */
+        .convergence-matrix {
+            margin: 28px 0;
+            border: 1px solid var(--rule);
+            overflow-x: auto;
+        }
+        .convergence-header {
+            background: var(--ink);
+            color: var(--paper);
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            padding: 10px 16px;
+        }
+        .convergence-row {
+            display: grid;
+            grid-template-columns: 2fr 1.2fr 1fr 1.2fr 1fr;
+            border-bottom: 1px solid var(--rule);
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+        }
+        .convergence-row:last-child { border-bottom: none; }
+        .convergence-row.header-row {
+            background: var(--paper-dark);
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: rgba(15,14,11,0.45);
+        }
+        .conv-cell {
+            padding: 10px 14px;
+            border-right: 1px solid var(--rule);
+            vertical-align: top;
+            line-height: 1.5;
+        }
+        .conv-cell:last-child { border-right: none; }
+        .conf-high   { color: var(--green); font-weight: 700; }
+
+        /* ── RICE-F SCORING ── */
+        .rice-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            margin: 24px 0;
+            border: 1px solid var(--rule);
+        }
+        .rice-table thead th {
+            background: var(--paper-dark);
+            padding: 10px 14px;
+            text-align: center;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: rgba(15,14,11,0.5);
+            border: 1px solid var(--rule);
+        }
+        .rice-table thead th:first-child { text-align: left; }
+        .rice-table tbody td {
+            padding: 10px 14px;
+            border: 1px solid var(--rule);
+            text-align: center;
+            vertical-align: middle;
+            font-size: 12px;
+        }
+        .rice-table tbody td:first-child { text-align: left; font-size: 11px; }
+        .rice-total { font-weight: 700; font-size: 13px; }
+        .rice-total.high { color: var(--red); }
+        .rice-horizon-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            font-size: 9px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        .h1-badge { background: rgba(192,57,43,0.15); color: var(--red); }
+        .h2-badge { background: rgba(212,160,23,0.15); color: var(--amber); }
+        .h3-badge { background: rgba(26,74,122,0.12); color: var(--blue); }
+
+        /* ── REMEDIATION CARDS ── */
+        .remediation-card {
+            border: 1px solid var(--rule);
+            margin: 28px 0;
+            position: relative;
+        }
+        .rem-card-header {
+            background: var(--ink);
+            color: var(--paper);
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .rem-card-id {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(245,240,232,0.45);
+        }
+        .rem-card-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--paper);
+            flex: 1;
+            padding: 0 16px;
+        }
+        .rem-card-badges {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .rem-card-body { padding: 24px; }
+        .rem-row {
+            display: flex;
+            gap: 12px;
+            padding: 8px 0;
+            border-bottom: 1px dotted var(--rule);
+            font-size: 15px;
+            align-items: flex-start;
+        }
+        .rem-row:last-child { border-bottom: none; }
+        .rem-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(15,14,11,0.4);
+            min-width: 120px;
+            flex-shrink: 0;
+            padding-top: 3px;
+        }
+        .rem-val { color: rgba(15,14,11,0.82); flex: 1; }
+        .rem-val.green { color: var(--green); font-weight: 600; }
+        .rem-val.red   { color: var(--red);   font-weight: 600; }
+
+        /* ── OUTCOMES ── */
+        .outcome-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 32px 0;
+        }
+        .outcome-card {
+            background: var(--paper-dark);
+            border: 1px solid var(--rule);
+            padding: 24px 20px;
+            text-align: center;
+        }
+        .outcome-metric {
+            font-family: 'Syne', sans-serif;
+            font-size: 42px;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+        .outcome-metric.green { color: var(--green); }
+        .outcome-metric.red   { color: var(--red); }
+        .outcome-metric.amber { color: var(--amber); }
+        .outcome-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: rgba(15,14,11,0.45);
+            margin-bottom: 8px;
+        }
+        .outcome-desc {
+            font-size: 14px;
+            color: rgba(15,14,11,0.7);
+        }
+
+        /* ── FORENSIC SIGNATURE ── */
+        .forensic-summary {
+            background: var(--ink);
+            color: var(--paper);
+            padding: 32px 36px;
+            font-family: 'DM Mono', monospace;
+            font-size: 12px;
+            line-height: 2.2;
+            margin-top: 3rem;
+            border-left: 4px solid var(--green);
+        }
+        .summary-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--green);
+            margin-bottom: 1.2rem;
+            font-weight: 600;
+        }
+        .summary-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem 0.75rem;
+            margin-bottom: 0.2rem;
+        }
+        .summary-key {
+            color: rgba(245,240,232,0.35);
+            min-width: 190px;
+            flex-shrink: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .summary-val { color: rgba(245,240,232,0.8); }
+        .summary-val.outcome { color: #2ecc71; font-weight: 600; }
+        .summary-divider {
+            border: none;
+            border-top: 1px solid rgba(245,240,232,0.08);
+            margin: 0.6rem 0;
+        }
+
+        /* ── CTA BLOCK ── */
+        .cta-block {
+            background: var(--paper-dark);
+            border: 1px solid var(--ink);
+            padding: 48px;
+            margin: 48px 0 0;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 32px;
+            align-items: center;
+        }
+        .cta-headline {
+            font-family: 'Syne', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 10px;
+        }
+        .cta-sub {
+            font-size: 16px;
+            color: rgba(15,14,11,0.6);
+            font-style: italic;
+            margin: 0;
+        }
+        .cta-actions { display: flex; flex-direction: column; gap: 10px; }
+        .btn-primary {
+            display: inline-block;
+            background: var(--ink);
+            color: var(--paper);
+            text-decoration: none;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            padding: 14px 24px;
+            text-align: center;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        .btn-primary:hover { background: var(--red); }
+        .btn-ghost {
+            display: inline-block;
+            border: 1px solid var(--rule);
+            color: rgba(15,14,11,0.6);
+            text-decoration: none;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 12px 24px;
+            text-align: center;
+            transition: border-color 0.2s, color 0.2s;
+            white-space: nowrap;
+        }
+        .btn-ghost:hover { border-color: var(--ink); color: var(--ink); }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--ink);
+            color: rgba(245,240,232,0.45);
+            padding: 48px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.05em;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        footer strong { color: var(--paper); }
+        footer a { color: var(--amber); text-decoration: none; }
+        footer a:hover { color: var(--paper); }
+        .footer-nav {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 900px) {
+            .grid-2, .outcome-grid { grid-template-columns: 1fr; }
+            .cta-block { grid-template-columns: 1fr; }
+            .convergence-row { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 768px) {
+            .container { padding: 0 24px; }
+            .header-eyebrow { padding: 10px 20px; }
+            .header-body { padding: 48px 24px 40px; }
+            section { padding: 56px 0; }
+            .forensic-brief, .forensic-summary { padding: 20px 24px; }
+            .outcome-metric { font-size: 32px; }
+            .rem-label { min-width: 90px; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="reading-progress"></div>
+
+<!-- ═══════════════ HEADER ═══════════════ -->
+<header>
+    <div class="header-eyebrow">
+        <span>Fault Topology Method™ · Case File 01</span>
+        <div class="eyebrow-meta">
+            <span>Waterloo Air Management</span>
+            <span class="eyebrow-tag">Cognitive Load Faultline</span>
+            <span>~12 min read</span>
+        </div>
+    </div>
+    <div class="header-body">
+        <div class="header-phase-badge">
+            <span class="phase-dot"></span>
+            Forensic Audit — Product Selector Tool
+        </div>
+        <h1>The Hidden Cost of <em>Expert Paralysis</em></h1>
+        <p class="header-sub">How a paper‑based product selector was costing Waterloo engineers hours per decision — and how we rebuilt it around how experts actually think.</p>
+        <div class="header-stats">
+            <div class="stat-item">
+                <span class="stat-label">Faultline Severity</span>
+                <span class="stat-value" style="color:var(--red)">High</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Primary Impact</span>
+                <span class="stat-value">Cognitive overload on every selection</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Selection Speed</span>
+                <span class="stat-value highlight">3× faster (18 min → 6 min)</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Training Reduction</span>
+                <span class="stat-value highlight">−50% (16 weeks → 8 weeks)</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Error Rate</span>
+                <span class="stat-value highlight">11% → 3%</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ═══════════════ STICKY NAV ═══════════════ -->
+<nav class="case-nav" aria-label="Case study navigation">
+    <div class="nav-inner">
+        <a href="index.html">← Framework</a>
+        <a href="waterloo.html" class="active">Waterloo Air</a>
+        <a href="amazon.html">Amazon</a>
+        <a href="payPal.html">PayPal</a>
+        <a href="cisco.html">Cisco</a>
+        <div class="nav-section-links">
+            <a href="#context">Context</a>
+            <a href="#investigation">Investigation</a>
+            <a href="#topology">Topology</a>
+            <a href="#remediation">Remediation</a>
+            <a href="#outcomes">Outcomes</a>
+        </div>
+    </div>
+</nav>
+    <!-- ── FTM FRAMEWORK BRIDGE ── -->
+    <div style="background:var(--paper-dark); border-bottom:2px solid var(--rule);">
+      <div style="max-width:1100px; margin:0 auto; padding:24px 48px;">
+        <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:16px;">
+          <a href="index.html" style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:var(--red); text-decoration:none; display:flex; align-items:center; gap:6px; border:1px solid var(--red); padding:5px 12px; flex-shrink:0;">← Fault Topology Method™</a>
+          <span style="font-family:'DM Mono',monospace; font-size:10px; color:rgba(15,14,11,0.4);">This case study demonstrates the FTM applied in full. The concepts below link to the relevant framework sections.</span>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr auto; gap:24px; align-items:start; flex-wrap:wrap;">
+          <div>
+            <div style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:rgba(15,14,11,0.4); margin-bottom:10px;">Primary Heuristics Applied</div>
+            <div style="display:flex; flex-wrap:wrap; gap:6px;">
+              <a href="index.html#heuristics" style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.08em; background:rgba(192,57,43,0.1); color:var(--red); padding:4px 10px; text-decoration:none; border:1px solid rgba(192,57,43,0.25); white-space:nowrap;">P1 — Relevance Realization</a>
+            <a href="index.html#heuristics" style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.08em; background:rgba(192,57,43,0.1); color:var(--red); padding:4px 10px; text-decoration:none; border:1px solid rgba(192,57,43,0.25); white-space:nowrap;">P4 — Cognitive Load Distribution</a>
+            <a href="index.html#heuristics" style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.08em; background:rgba(192,57,43,0.1); color:var(--red); padding:4px 10px; text-decoration:none; border:1px solid rgba(192,57,43,0.25); white-space:nowrap;">B6 — Scale-Induced Debt</a>
+            <a href="index.html#heuristics" style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.08em; background:rgba(192,57,43,0.1); color:var(--red); padding:4px 10px; text-decoration:none; border:1px solid rgba(192,57,43,0.25); white-space:nowrap;">B3 — Feedback Loop Integrity</a>
+            <a href="index.html#heuristics" style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.08em; background:rgba(192,57,43,0.1); color:var(--red); padding:4px 10px; text-decoration:none; border:1px solid rgba(192,57,43,0.25); white-space:nowrap;">H6 — Recognition Over Recall</a>
+            
+            </div>
+          </div>
+          <div style="flex-shrink:0;">
+            <div style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:rgba(15,14,11,0.4); margin-bottom:8px;">Faultline Classification</div>
+            <span style="font-family:'DM Mono',monospace; font-size:11px; background:var(--ink); color:var(--paper); padding:6px 12px; display:inline-block;">Type 2 — Structural Faultline</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Method breakdown - collapsed details -->
+    <details style="border-bottom:1px solid var(--rule);">
+      <summary style="background:var(--ink); color:rgba(245,240,232,0.7); font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.12em; text-transform:uppercase; padding:10px 48px; cursor:pointer; list-style:none; display:flex; align-items:center; gap:8px; max-width:100%;">
+        <span style="color:var(--red);">▸</span> How the FTM was applied — method annotation
+      </summary>
+      <div style="background:var(--ink); border-bottom:2px solid var(--red);">
+        <div style="max-width:1100px; margin:0 auto; padding:0 48px 20px;">
+          <div style="display:grid; grid-template-columns:160px 1fr; border-bottom:1px solid rgba(255,255,255,0.06);">
+              <div style="padding:8px 12px; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:rgba(245,240,232,0.4); display:flex; align-items:center;">Stakeholder Alignment</div>
+              <div style="padding:8px 12px; font-size:14px; color:rgba(245,240,232,0.75);">Sales team interviews (Phase 1) revealed the real cost: lost deals due to slow spec delivery</div>
+            </div>
+            <div style="display:grid; grid-template-columns:160px 1fr; border-bottom:1px solid rgba(255,255,255,0.06);">
+              <div style="padding:8px 12px; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:rgba(245,240,232,0.4); display:flex; align-items:center;">Behaviour Pattern Analysis</div>
+              <div style="padding:8px 12px; font-size:14px; color:rgba(245,240,232,0.75);">Session observations showed experts reverting to paper even when digital was available</div>
+            </div>
+            <div style="display:grid; grid-template-columns:160px 1fr; border-bottom:1px solid rgba(255,255,255,0.06);">
+              <div style="padding:8px 12px; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:rgba(245,240,232,0.4); display:flex; align-items:center;">P1 Relevance Realization</div>
+              <div style="padding:8px 12px; font-size:14px; color:rgba(245,240,232,0.75);">Core diagnosis: system presented all parameters equally — experts needed progressive filtering</div>
+            </div>
+            <div style="display:grid; grid-template-columns:160px 1fr; border-bottom:1px solid rgba(255,255,255,0.06);">
+              <div style="padding:8px 12px; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:rgba(245,240,232,0.4); display:flex; align-items:center;">Before/After Hypothesis</div>
+              <div style="padding:8px 12px; font-size:14px; color:rgba(245,240,232,0.75);">Horizon 2 brief predicted 3× speed improvement — measured outcome: confirmed</div>
+            </div>
+            
+          <div style="padding-top:14px;">
+            <a href="index.html#phase1" style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(245,240,232,0.5); text-decoration:none; margin-right:20px;">Phase 1 Reconnaissance →</a>
+            <a href="index.html#phase2" style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(245,240,232,0.5); text-decoration:none; margin-right:20px;">Phase 2 Investigation →</a>
+            <a href="index.html#phase3" style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(245,240,232,0.5); text-decoration:none; margin-right:20px;">Phase 3 Diagnosis →</a>
+            <a href="index.html#phase4" style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(245,240,232,0.5); text-decoration:none;">Phase 4 Remediation →</a>
+          </div>
+        </div>
+      </div>
+    </details>
+    
+
+<!-- ═══════════════ SECTION 0 — FORENSIC BRIEF ═══════════════ -->
+<section id="brief">
+    <div class="container">
+        <div class="forensic-brief" role="region" aria-label="Forensic Audit Brief">
+            <div class="brief-title">■ Forensic Audit Brief — Waterloo Air Management Product Selector</div>
+            <div class="brief-row"><span class="brief-key">Client Context</span><span class="brief-val">Waterloo Air Management — Commercial HVAC diffuser/grille manufacturer · North American operations</span></div>
+            <div class="brief-row"><span class="brief-key">User Population</span><span class="brief-val">25‑person engineering team · 400+ product catalog · 120 selections/engineer/month</span></div>
+            <div class="brief-divider"></div>
+            <div class="brief-row"><span class="brief-key">Faultline Type</span><span class="brief-val">Structural · Cognitive Load · Systemic (knowledge transfer)</span></div>
+            <div class="brief-row"><span class="brief-key">Severity</span><span class="brief-val" style="color:#e74c3c;">■ HIGH — 900 engineering hours lost monthly to interface friction</span></div>
+            <div class="brief-divider"></div>
+            <div class="brief-row"><span class="brief-key">Business Impact</span><span class="brief-val">Extended specification cycles · 11% error revision rate · 16‑week training bottleneck · Senior engineer mentorship drain</span></div>
+            <div class="brief-divider"></div>
+            <div class="brief-row"><span class="brief-key">Root Cause</span><span class="brief-val">Interface designed for data storage, not decision‑making. Served algorithmic layer only — ignored heuristic pattern recognition and contextual relevance.</span></div>
+            <div class="brief-row"><span class="brief-key">Resolution</span><span class="brief-val">Adaptive product selector with contextual relevance engine, dynamic performance curves, parallel comparison, and embedded expertise</span></div>
+            <div class="brief-divider"></div>
+            <div class="brief-row"><span class="brief-key">Outcome</span><span class="brief-val outcome">■ 3× faster selection · 50% training reduction · $68K annual rework savings · Engineering trust restored</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ SECTION 1 — BUSINESS CONTEXT ═══════════════ -->
+<section id="context">
+    <div class="container">
+        <div class="section-phase">
+            <span class="phase-number">Phase 1</span>
+            <span class="phase-name">Reconnaissance</span>
+            <span class="phase-line"></span>
+        </div>
+        <h2><span class="section-num">01</span>The Business Context</h2>
+        <p class="section-subtitle">A tool that was technically accurate — but cognitively violent.</p>
+
+        <h3>The Invisible Tax on Expert Time</h3>
+        <p>Waterloo's 25‑person engineering team specified air diffusers and grilles for commercial buildings across North America. Every day, each engineer made approximately 6 product selections from a catalog of 400+ models, matching performance curves to project‑specific airflow, noise, and pressure requirements. The task happened <strong>120 times per month per engineer</strong> — and the tool they used was quietly consuming their expertise.</p>
+        <p>The existing system was a collection of static PDF performance charts — well‑organised as a technical reference, but <strong>completely broken as a decision‑making interface</strong>. Every selection forced engineers to mentally interpolate values across 3‑5 parameters simultaneously, hold numbers in working memory while flipping between 14 separate documents, and filter the 400+ products manually based on project context.</p>
+
+        <div class="ruled-box-red">
+            <strong>The real cost nobody had named:</strong> At 18 minutes per selection, 120 selections per engineer per month, the team was losing <strong>900 engineering hours per month</strong> to cognitive friction — hours that could not be recovered by working faster because the interface itself was the speed limit. New engineers required 16 weeks of mentorship before they could select independently. The gap between novices (22 min, 17% error rate) and experts (12 min, 4% error rate) was not knowledge — it was <strong>perceptual efficiency</strong>. And the tool provided zero support to develop it.
+        </div>
+
+        <h3>Four Faultlines Named</h3>
+        <ol class="fault-list">
+            <li><strong>Fragmented data architecture:</strong> 14 separate PDFs with inconsistent formatting. Each comparison required up to 8 context‑switches between documents.</li>
+            <li><strong>Mental interpolation demand:</strong> Charts showed discrete performance points. Engineers manually estimated values between curves — an average of 4 interpolation judgments per selection with no visual guidance.</li>
+            <li><strong>No contextual filtering:</strong> All 400+ products presented equally regardless of project parameters. Engineers did the filtering manually, consuming an extra 5‑7 minutes per specification.</li>
+            <li><strong>Institutional knowledge dependency:</strong> The interface embedded no expert heuristics. New engineers required 16 weeks of mentorship. Knowledge lived in people's heads, not in the system — fragile, unscalable, invisible to management.</li>
+        </ol>
+    </div>
+</section>
+
+<!-- ═══════════════ SECTION 2 — INVESTIGATION ═══════════════ -->
+<section id="investigation">
+    <div class="container">
+        <div class="section-phase">
+            <span class="phase-number">Phase 2</span>
+            <span class="phase-name">Investigation — Dual Track</span>
+            <span class="phase-line"></span>
+        </div>
+        <h2><span class="section-num">02</span>The Investigation</h2>
+        <p class="section-subtitle">Where standard research watches. Forensic research interrupts at the point of hesitation.</p>
+
+        <div class="pull-quote">
+            "They were not reading the charts. They were pattern‑matching against them."
+            <cite>— The insight that changed the entire design direction</cite>
+        </div>
+
+        <h4>Track A — Heuristic Evaluation</h4>
+
+        <h3>Expert Shadowing with Cognitive Interrupt Protocol</h3>
+        <p>Over 15 live selection sessions, we paused engineers each time they hesitated, flipped between PDFs, or reached for a calculator. The question: <em>"What are you trying to figure out right now?"</em> The responses revealed that senior engineers were not processing numbers linearly — they were using curve shape, slope, and relative position as heuristic shortcuts. The charts were being read as visual filters, not algebraic data sources. The interface supported algorithmic precision (Layer 1) but completely ignored heuristic pattern recognition (Layer 2) and relevance filtering (Layer 3).</p>
+
+        <h3>Novice‑Expert Comparison</h3>
+        <p>New engineers (under 2 years): 22 minutes per selection, 17% error rate. Senior engineers (10+ years): 12 minutes, 4% error. The gap was <strong>perceptual efficiency</strong> — experts had learned to see what mattered. The interface provided no mechanism to develop that skill.</p>
+
+        <h4>Track B — Algorithmic / Data Forensics</h4>
+
+        <h3>Error Archaeology</h3>
+        <p>Reviewing 18 months of specification revisions (1,840 correction requests), we found <strong>78% of errors clustered at interpolation points</strong> — precisely where the interface demanded mental calculation rather than providing direct guidance. This correlated perfectly with the heuristic finding: the highest‑frequency cognitive demand was also the primary error source.</p>
+
+        <h3>Time‑and‑Motion Analysis</h3>
+        <p>We mapped the selection process end‑to‑end for 340 selections. Data navigation (flipping between PDFs) consumed 31% of total selection time. Interpolation judgments consumed 24%. Together, these two cognitively‑induced activities accounted for more than half of the 18‑minute average.</p>
+
+        <!-- CONVERGENCE MATRIX -->
+        <h4>The Convergence Matrix — Phase 2 Synthesis</h4>
+
+        <div class="convergence-matrix">
+            <div class="convergence-header">■ Convergence Matrix — Waterloo Product Selector</div>
+            <div class="convergence-row header-row">
+                <div class="conv-cell">Faultline</div>
+                <div class="conv-cell">Heuristic Source</div>
+                <div class="conv-cell">Data Source</div>
+                <div class="conv-cell">Business Impact</div>
+                <div class="conv-cell">Confidence</div>
+            </div>
+            <div class="convergence-row">
+                <div class="conv-cell">Fragmented data architecture — 14 PDFs, 8 switches/selection</div>
+                <div class="conv-cell">H4 Consistency · B6 Scale‑Induced Debt</div>
+                <div class="conv-cell">Time‑and‑motion: 31% of selection time on navigation</div>
+                <div class="conv-cell" style="color:var(--red)">High — structural friction on every decision</div>
+                <div class="conv-cell"><span class="conf-high">■ Confirmed</span></div>
+            </div>
+            <div class="convergence-row">
+                <div class="conv-cell">Mental interpolation — 4 judgments per selection with no guidance</div>
+                <div class="conv-cell">P4 Cognitive Load Distribution · H8 Minimalist Design</div>
+                <div class="conv-cell">78% of errors at interpolation points; 24% of selection time</div>
+                <div class="conv-cell" style="color:var(--red)">Critical — primary error source and highest‑frequency cognitive demand</div>
+                <div class="conv-cell"><span class="conf-high">■ Confirmed</span></div>
+            </div>
+            <div class="convergence-row">
+                <div class="conv-cell">No contextual filtering — 400+ products shown equally</div>
+                <div class="conv-cell">P1 Relevance Realisation · H7 Flexibility/Efficiency</div>
+                <div class="conv-cell">Observation: engineers spent 5‑7 min per selection on manual filtering</div>
+                <div class="conv-cell" style="color:var(--red)">High — extraneous load imposed on every decision</div>
+                <div class="conv-cell"><span class="conf-high">■ Confirmed</span></div>
+            </div>
+            <div class="convergence-row">
+                <div class="conv-cell">Institutional knowledge dependency — 16‑week training, zero embedded expertise</div>
+                <div class="conv-cell">B3 Feedback Loop Integrity · B7 Adoption Gravity</div>
+                <div class="conv-cell">Novice‑expert gap: 22 min / 17% error vs 12 min / 4% error</div>
+                <div class="conv-cell" style="color:var(--red)">Systemic — unscalable training model</div>
+                <div class="conv-cell"><span class="conf-high">■ Confirmed</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ SECTION 3 — FAULT TOPOLOGY ═══════════════ -->
+<section id="topology">
+    <div class="container">
+        <div class="section-phase">
+            <span class="phase-number">Phase 3</span>
+            <span class="phase-name">Diagnosis</span>
+            <span class="phase-line"></span>
+        </div>
+        <h2><span class="section-num">03</span>The Fault Topology</h2>
+        <p class="section-subtitle">Five faultlines mapped across the selection journey. The deepest is systemic — knowledge transfer failure.</p>
+
+        <div class="table-responsive">
+            <table class="topology-table" aria-label="Fault topology map">
+                <thead>
+                    <tr><th>Journey Stage</th><th>Faultline Description</th><th>Type</th><th>Depth</th><th>Severity</th><th>Root Cause Category</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Project Entry</td>
+                        <td>No parameter context setting — all 400+ products shown equally</td>
+                        <td>Structural</td>
+                        <td>Surface</td>
+                        <td class="sev-high">▲ High</td>
+                        <td>User research gap — decision context never mapped</td>
+                    </tr>
+                    <tr>
+                        <td>Data Navigation</td>
+                        <td>14 fragmented PDFs — cross‑document switching up to 8× per selection</td>
+                        <td>Structural</td>
+                        <td>Structural</td>
+                        <td class="sev-high">▲ High</td>
+                        <td>Legacy data architecture — repository, not interface</td>
+                    </tr>
+                    <tr>
+                        <td>Value Reading</td>
+                        <td>Mental interpolation required — 4 judgments per selection, zero visual guidance</td>
+                        <td>Cognitive Load</td>
+                        <td>Structural</td>
+                        <td class="sev-critical">■ Critical</td>
+                        <td>No user cognition considered in original design</td>
+                    </tr>
+                    <tr>
+                        <td>Comparison</td>
+                        <td>No side‑by‑side mode — sequential viewing only</td>
+                        <td>Surface</td>
+                        <td>Surface</td>
+                        <td class="sev-medium">● Medium</td>
+                        <td>Feature gap — comparison never designed</td>
+                    </tr>
+                    <tr>
+                        <td>Knowledge Transfer</td>
+                        <td>Interface embeds no expert pattern — novices require 16‑week mentorship</td>
+                        <td>Systemic</td>
+                        <td>Systemic</td>
+                        <td class="sev-critical">■ Critical</td>
+                        <td>Measurement gap — training cost never tied to interface design</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3>The Systemic Faultline — Why It Was the Most Expensive</h3>
+        <p>The knowledge‑transfer faultline was not just a training problem. It was an <strong>organisational intelligence leak</strong>. Every new engineer had to rediscover what the previous generation had already learned — 16 weeks of reinvention each time. At an average salary of $85,000, those 16 weeks represented approximately $26,000 in direct training cost per new hire. Multiplied across 4‑6 new engineers annually, that was $100,000‑$150,000 spent on a problem the interface could have solved for a fraction of the cost.</p>
+    </div>
+</section>
+
+<!-- ═══════════════ SECTION 4 — REMEDIATION ═══════════════ -->
+<section id="remediation">
+    <div class="container">
+        <div class="section-phase">
+            <span class="phase-number">Phase 4</span>
+            <span class="phase-name">Remediation</span>
+            <span class="phase-line"></span>
+        </div>
+        <h2><span class="section-num">04</span>The Remediation</h2>
+        <p class="section-subtitle">Not adding features. Removing cognitive burden — systematically, at each faultline.</p>
+
+        <div class="ruled-box-green">
+            <strong>The remediation principle:</strong> The design solution was not about adding functionality. It was about <strong>eliminating extraneous cognitive load</strong>. Every intervention was traced back to a specific faultline, with a forensic rationale grounded in cognitive science.
+        </div>
+
+        <!-- RICE-F SCORING -->
+        <h4>RICE-F Prioritisation — All Faultlines Scored</h4>
+        <div class="table-responsive">
+            <table class="rice-table" aria-label="RICE-F prioritisation scores">
+                <thead>
+                    <tr><th>Remediation</th><th>Reach</th><th>Impact</th><th>Confidence</th><th>Effort ↓</th><th>F-Mult</th><th>Score</th><th>Horizon</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Contextual relevance engine</td>
+                        <td>5</td><td>5</td><td>5</td><td>3</td><td>×1.2 Structural</td>
+                        <td class="rice-total high">450</td>
+                        <td><span class="rice-horizon-badge h1-badge">H1</span></td>
+                    </tr>
+                    <tr>
+                        <td>Dynamic performance visualisation</td>
+                        <td>5</td><td>5</td><td>5</td><td>2</td><td>×1.0 (Cognitive Load)</td>
+                        <td class="rice-total high">250</td>
+                        <td><span class="rice-horizon-badge h1-badge">H1</span></td>
+                    </tr>
+                    <tr>
+                        <td>Intelligent comparison architecture</td>
+                        <td>5</td><td>4</td><td>5</td><td>3</td><td>×1.2 Structural</td>
+                        <td class="rice-total high">360</td>
+                        <td><span class="rice-horizon-badge h2-badge">H2</span></td>
+                    </tr>
+                    <tr>
+                        <td>Progressive expertise embedding</td>
+                        <td>4</td><td>5</td><td>4</td><td>2</td><td>×1.3 Systemic</td>
+                        <td class="rice-total high">208</td>
+                        <td><span class="rice-horizon-badge h2-badge">H2</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- REMEDIATION CARDS -->
+        <h4>Horizon 1 (0–30 days)</h4>
+
+        <div class="remediation-card">
+            <div class="rem-card-header">
+                <span class="rem-card-id">FL-001 · RC-01</span>
+                <span class="rem-card-title">Contextual Relevance Engine</span>
+                <div class="rem-card-badges"><span class="rice-horizon-badge h1-badge">H1</span><span class="sev-high">▲ High</span></div>
+            </div>
+            <div class="rem-card-body">
+                <div class="rem-row"><span class="rem-label">Faultline</span><span class="rem-val">No contextual filtering — all 400+ products presented equally regardless of project parameters</span></div>
+                <div class="rem-row"><span class="rem-label">Intervention</span><span class="rem-val">An input layer at journey entry captures room dimensions, airflow requirements, noise constraints, and pressure limits. Only products within those parameters are displayed — reducing the initial decision space from 400+ to 8‑12 candidates.</span></div>
+                <div class="rem-row"><span class="rem-label">Cognitive Basis</span><span class="rem-val">Implements <strong>Relevance Realisation</strong> (Vervaeke): the system determines what is pertinent before presenting any data, eliminating the manual filtering that consumed 5‑7 minutes per selection.</span></div>
+                <div class="rem-row"><span class="rem-label">Success Metric</span><span class="rem-val green">Selection entry time · Baseline: 5‑7 min of manual filtering · Target: < 1 min · Measure at 30 days</span></div>
+            </div>
+        </div>
+
+        <div class="remediation-card">
+            <div class="rem-card-header">
+                <span class="rem-card-id">FL-002 · RC-02</span>
+                <span class="rem-card-title">Dynamic Performance Visualisation</span>
+                <div class="rem-card-badges"><span class="rice-horizon-badge h1-badge">H1</span><span class="sev-critical">■ Critical</span></div>
+            </div>
+            <div class="rem-card-body">
+                <div class="rem-row"><span class="rem-label">Faultline</span><span class="rem-val">Mental interpolation — 4 judgments per selection, 78% of errors at interpolation points, 24% of selection time spent estimating</span></div>
+                <div class="rem-row"><span class="rem-label">Intervention</span><span class="rem-val">Interactive performance curves that update in real‑time as engineers adjust parameters. Values read directly from the curve at the specified input — eliminating interpolation entirely.</span></div>
+                <div class="rem-row"><span class="rem-label">Forensic Rationale</span><span class="rem-val">Eliminates the highest‑frequency cognitive demand in the workflow and the primary source of selection errors. Curve shape and slope are preserved so expert pattern‑recognition skills remain applicable — serving both algorithmic precision and heuristic efficiency.</span></div>
+                <div class="rem-row"><span class="rem-label">Success Metric</span><span class="rem-val green">Error rate at value‑reading stage · Baseline: 78% of total errors · Target: below 15% · Measure at 60 days</span></div>
+            </div>
+        </div>
+
+        <h4>Horizon 2 (30–90 days)</h4>
+
+        <div class="remediation-card">
+            <div class="rem-card-header">
+                <span class="rem-card-id">FL-003 · RC-03</span>
+                <span class="rem-card-title">Intelligent Comparison Architecture</span>
+                <div class="rem-card-badges"><span class="rice-horizon-badge h2-badge">H2</span><span class="sev-high">▲ High</span></div>
+            </div>
+            <div class="rem-card-body">
+                <div class="rem-row"><span class="rem-label">Faultline</span><span class="rem-val">Fragmented data architecture — 14 PDFs, 8 context‑switches per selection consuming 31% of selection time</span></div>
+                <div class="rem-row"><span class="rem-label">Intervention</span><span class="rem-val">Side‑by‑side comparison mode that extracts key parameters from selected products into a unified view — eliminating cross‑document navigation entirely.</span></div>
+                <div class="rem-row"><span class="rem-label">Success Metric</span><span class="rem-val green">Data navigation time · Baseline: 31% of total selection time · Target: below 5% · Measure at 90 days</span></div>
+            </div>
+        </div>
+
+        <div class="remediation-card">
+            <div class="rem-card-header">
+                <span class="rem-card-id">FL-004 · RC-04</span>
+                <span class="rem-card-title">Progressive Expertise Embedding</span>
+                <div class="rem-card-badges"><span class="rice-horizon-badge h2-badge">H2</span><span class="sev-critical">■ Critical (Systemic)</span></div>
+            </div>
+            <div class="rem-card-body">
+                <div class="rem-row"><span class="rem-label">Faultline</span><span class="rem-val">Institutional knowledge dependency — 16‑week training, $26K per new hire, zero embedded expertise in the tool</span></div>
+                <div class="rem-row"><span class="rem-label">Intervention</span><span class="rem-val">The system surfaces the reasoning behind each recommendation — not just <em>what</em> product matches, but <em>why</em>, based on which parameters drove the match. Expert heuristics (curve shape, slope, boundary conditions) are embedded as contextual guidance at each decision point.</span></div>
+                <div class="rem-row"><span class="rem-label">Forensic Rationale</span><span class="rem-val">Institutional knowledge that lives in people is fragile. Embedded in the system, it becomes scalable, consistent, and independent of personnel turnover. Over time, the system actively teaches selection logic — compressing the mentorship period.</span></div>
+                <div class="rem-row"><span class="rem-label">Success Metric</span><span class="rem-val green">New engineer onboarding to independent proficiency · Baseline: 16 weeks · Target: 8 weeks · Measure at 6 months</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ SECTION 5 — OUTCOMES ═══════════════ -->
+<section id="outcomes">
+    <div class="container">
+        <div class="section-phase">
+            <span class="phase-number">Result</span>
+            <span class="phase-name">Measured Outcomes</span>
+            <span class="phase-line"></span>
+        </div>
+        <h2><span class="section-num">05</span>The Outcomes</h2>
+        <p class="section-subtitle">Cognitive burden removed. Engineering trust restored. All without adding a single engineer.</p>
+
+        <div class="outcome-grid">
+            <div class="outcome-card">
+                <div class="outcome-label">Selection Speed</div>
+                <div class="outcome-metric green">3×</div>
+                <div class="outcome-desc">18 minutes → 6 minutes per selection. Across 25 engineers making 120 selections/month, <strong>600 engineering hours recovered monthly</strong> — the equivalent of 3.5 full‑time hires without adding headcount.</div>
+            </div>
+            <div class="outcome-card">
+                <div class="outcome-label">Training Time</div>
+                <div class="outcome-metric amber">−50%</div>
+                <div class="outcome-desc">New engineer onboarding reduced from 16 weeks to 8 weeks. The system now actively teaches selection logic, reducing mentorship burden on senior engineers.</div>
+            </div>
+            <div class="outcome-card">
+                <div class="outcome-label">Error Rate</div>
+                <div class="outcome-metric green">−73%</div>
+                <div class="outcome-desc">Specification error rate dropped from 11% to 3%. At an average rework cost of $850 per revision, this saves approximately <strong>$68,000 annually</strong> in direct correction costs alone.</div>
+            </div>
+        </div>
+
+        <h3>The Qualitative Shift</h3>
+        <div class="grid-2" style="margin-top:24px;">
+            <div class="grid-card" style="border-left: 3px solid var(--red);">
+                <div class="grid-card-title">Before — Anxiety</div>
+                <div class="grid-card-headline" style="color:var(--red);">"I need to check my work again."</div>
+                <p style="font-size:15px; margin:0;">Engineers described constantly second‑guessing their selections. The interface provided no confidence — just data. Error risk lived in every interpolation.</p>
+            </div>
+            <div class="grid-card" style="border-left: 3px solid var(--green);">
+                <div class="grid-card-title">After — Trust</div>
+                <div class="grid-card-headline" style="color:var(--green);">"The system shows me what I would have figured out anyway — but in seconds, not minutes."</div>
+                <p style="font-size:15px; margin:0;">A 15‑year veteran describing the shift. From checking work to trusting the tool — the distinction that determines whether a tool gets adopted or worked around.</p>
+            </div>
+        </div>
+
+        <div class="ruled-box-green" style="margin-top:32px;">
+            <strong>Design investment. Engineering return. Measurable.</strong> The project cost was recouped in under 4 months through recovered engineering hours alone. Training cost savings and error reduction delivered additional compounding value annually.
+        </div>
+
+        <!-- FORENSIC SIGNATURE -->
+        <div class="forensic-summary">
+            <div class="summary-title">■ Forensic Signature — Waterloo Air Management</div>
+            <div class="summary-row"><span class="summary-key">Heuristic Finding</span><span class="summary-val">Interface demanded cognitive work the system should have performed — P4 Cognitive Load Distribution · P1 Relevance Realisation</span></div>
+            <div class="summary-divider"></div>
+            <div class="summary-row"><span class="summary-key">Algorithmic Confirmation</span><span class="summary-val">78% of errors clustered at interpolation points; 55% of selection time spent on navigation + interpolation</span></div>
+            <div class="summary-divider"></div>
+            <div class="summary-row"><span class="summary-key">Convergence Level</span><span class="summary-val">High — all four primary faultlines confirmed by both tracks</span></div>
+            <div class="summary-divider"></div>
+            <div class="summary-row"><span class="summary-key">Root Cause</span><span class="summary-val">Interface designed for data storage (algorithmic Layer 1 only), ignoring heuristic pattern recognition (Layer 2) and contextual relevance (Layer 3). No user cognition considered in original design.</span></div>
+            <div class="summary-divider"></div>
+            <div class="summary-row"><span class="summary-key">Remediation</span><span class="summary-val">Four‑layer solution — contextual relevance engine (H1) · dynamic performance curves (H1) · intelligent comparison (H2) · expertise embedding (H2)</span></div>
+            <div class="summary-divider"></div>
+            <div class="summary-row"><span class="summary-key">Outcome</span><span class="summary-val outcome">■ 3× faster selection · 50% training reduction · 73% error reduction · $68K annual rework savings · Project payback in < 4 months</span></div>
+            <div class="summary-divider"></div>
+            <div class="summary-row"><span class="summary-key">Transferable Pattern</span><span class="summary-val">Most enterprise tools are data interfaces pretending to be decision interfaces. Find the gap between data architecture and cognitive architecture — and you'll find the faultline your users are paying for every day.</span></div>
+        </div>
+
+        <!-- CTA -->
+        <div class="cta-block">
+            <div>
+                <div class="cta-headline">Is your engineering tool a data repository or a decision partner?</div>
+                <p class="cta-sub">The Waterloo audit revealed that the gap between how tools present data and how experts actually think can cost hundreds of engineering hours every month. A forensic audit of your critical workflows may reveal the same.</p>
+            </div>
+            <div class="cta-actions">
+                <a href="mailto:anil@anilksoman.com?subject=Forensic Audit Enquiry" class="btn-primary">Request a Forensic Audit</a>
+                <a href="index.html" class="btn-ghost">← View Full Framework</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer>
+    <div>
+        <strong>The Fault Topology Method™</strong><br>
+        A forensic approach to mapping where products break, why they break, and what it costs.<br>
+        <span style="margin-top:6px; display:block;">By <strong>Anil Kumar Soman</strong> · UX Forensic Auditor</span>
+    </div>
+    <div class="footer-nav">
+        <a href="index.html">Framework</a>
+        <a href="amazon.html">Amazon</a>
+        <a href="payPal.html">PayPal</a>
+        <a href="cisco.html">Cisco</a>
+        <a href="mailto:anil@anilksoman.com">Contact</a>
+    </div>
+    <div style="text-align:right;">
+        <a href="#reading-progress" id="back-to-top">↑ Back to top</a><br>
+        <span style="margin-top:4px;display:block;">© 2026 Anil Kumar Soman. All rights reserved.</span>
+    </div>
+</footer>
+
+<script>
+    (function() {
+        const bar = document.getElementById('reading-progress');
+        function update() {
+            const scrollTop = window.scrollY || document.documentElement.scrollTop;
+            const docH = document.documentElement.scrollHeight - window.innerHeight;
+            bar.style.width = docH > 0 ? (scrollTop / docH * 100) + '%' : '0%';
+        }
+        window.addEventListener('scroll', update, { passive: true });
+        update();
+    })();
+
+    (function() {
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-section-links a');
+        const NAV_H = 56;
+        function onScroll() {
+            const scrollY = window.scrollY + NAV_H + 20;
+            let current = '';
+            sections.forEach(s => { if (s.offsetTop <= scrollY) current = s.id; });
+            navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
+        }
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+    })();
+
+    document.getElementById('back-to-top').addEventListener('click', function(e) {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+</script>
+
+</body>
+</html>

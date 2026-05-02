@@ -1,0 +1,1781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>The Trust Audit | Fault Topology Method™ Case Study — Anil Soman</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ── TOKENS ── */
+        :root {
+            --ink:         #0f0e0b;
+            --paper:       #f5f0e8;
+            --paper-dark:  #ede7d6;
+            --paper-mid:   #e6dfce;
+            --red:         #c0392b;
+            --amber:       #d4a017;
+            --green:       #1a6b3c;
+            --blue:        #1a4a7a;
+            --rule:        #c8bfa8;
+            --nav-h:       48px;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; scroll-padding-top: calc(var(--nav-h) + 8px); }
+
+        body {
+            background: var(--paper);
+            color: var(--ink);
+            font-family: 'EB Garamond', Georgia, serif;
+            font-size: 18px;
+            line-height: 1.75;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* paper grain */
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none; z-index: 0;
+        }
+
+        /* ── PROGRESS BAR ── */
+        #reading-progress {
+            position: fixed;
+            top: 0; left: 0;
+            height: 3px;
+            width: 0%;
+            background: var(--red);
+            z-index: 9999;
+            transition: width 0.1s linear;
+        }
+
+        /* ── HEADER ── */
+        header {
+            position: relative;
+            border-bottom: 2px solid var(--ink);
+            overflow: hidden;
+        }
+        .header-eyebrow {
+            background: var(--ink);
+            color: var(--paper);
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            padding: 10px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .eyebrow-meta { display: flex; gap: 24px; align-items: center; }
+        .eyebrow-tag {
+            background: var(--red);
+            color: var(--paper);
+            padding: 2px 8px;
+            font-size: 10px;
+            letter-spacing: 0.12em;
+        }
+        .header-body {
+            padding: 72px 48px 60px;
+            max-width: 1100px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .header-phase-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--red);
+            margin-bottom: 20px;
+            border: 1px solid var(--red);
+            padding: 5px 12px;
+        }
+        .phase-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--red);
+            display: inline-block;
+        }
+        h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(40px, 6vw, 80px);
+            font-weight: 800;
+            line-height: 1.0;
+            letter-spacing: -0.03em;
+            max-width: 800px;
+            margin-bottom: 28px;
+        }
+        h1 em {
+            font-style: italic;
+            color: var(--red);
+            font-family: 'EB Garamond', serif;
+            font-weight: 400;
+        }
+        .header-sub {
+            font-size: 20px;
+            max-width: 680px;
+            color: rgba(15,14,11,0.65);
+            margin-bottom: 36px;
+            font-style: italic;
+        }
+        .header-stats {
+            display: flex;
+            gap: 32px;
+            flex-wrap: wrap;
+            border-top: 1px solid var(--rule);
+            padding-top: 28px;
+        }
+        .stat-item {
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+        }
+        .stat-label {
+            color: rgba(15,14,11,0.45);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .stat-value {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--ink);
+        }
+        .stat-value.highlight { color: var(--green); }
+
+        /* ── STICKY NAV ── */
+        .case-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--ink);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            height: var(--nav-h);
+        }
+        .nav-inner {
+            display: flex;
+            overflow-x: auto;
+            scrollbar-width: none;
+            padding: 0 32px;
+            justify-content: center;
+            height: 100%;
+            align-items: stretch;
+        }
+        .nav-inner::-webkit-scrollbar { display: none; }
+        .case-nav a {
+            color: rgba(245,240,232,0.45);
+            text-decoration: none;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 0 16px;
+            white-space: nowrap;
+            border-right: 1px solid rgba(255,255,255,0.06);
+            border-bottom: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .case-nav a:last-child { border-right: none; }
+        .case-nav a:hover { color: var(--paper); }
+        .case-nav a.active {
+            color: var(--paper);
+            border-bottom-color: var(--red);
+        }
+        .nav-section-links {
+            display: flex;
+            align-items: stretch;
+            margin-left: auto;
+            border-left: 1px solid rgba(255,255,255,0.08);
+            padding-left: 0;
+        }
+        .nav-section-links a {
+            font-size: 9px;
+            color: rgba(245,240,232,0.35);
+            border-right: none;
+        }
+        .nav-section-links a:hover { color: rgba(245,240,232,0.7); }
+
+        /* ── LAYOUT ── */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 48px;
+        }
+        section {
+            padding: 80px 0;
+            border-bottom: 1px solid var(--rule);
+            position: relative;
+        }
+        section:last-of-type { border-bottom: none; }
+
+        /* ── PHASE LABEL (section opener) ── */
+        .section-phase {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+        .phase-number {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--paper);
+            background: var(--ink);
+            padding: 4px 10px;
+        }
+        .phase-name {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(15,14,11,0.45);
+        }
+        .phase-line {
+            flex: 1;
+            height: 1px;
+            background: var(--rule);
+        }
+
+        /* ── TYPOGRAPHY ── */
+        h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(26px, 3.5vw, 40px);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            margin-bottom: 8px;
+        }
+        h2 .section-num {
+            font-family: 'DM Mono', monospace;
+            font-size: 13px;
+            color: var(--red);
+            font-weight: 400;
+            margin-right: 10px;
+            letter-spacing: 0.05em;
+        }
+        .section-subtitle {
+            font-size: 16px;
+            color: rgba(15,14,11,0.5);
+            font-style: italic;
+            margin-bottom: 40px;
+            font-family: 'EB Garamond', serif;
+        }
+        h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            margin-bottom: 10px;
+            margin-top: 40px;
+            color: var(--ink);
+        }
+        h4 {
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--red);
+            margin-bottom: 8px;
+            margin-top: 28px;
+        }
+        p { margin-bottom: 16px; color: rgba(15,14,11,0.82); }
+        strong { font-weight: 600; color: var(--ink); }
+        em { font-style: italic; }
+
+        /* ── FORENSIC BRIEF CARD ── */
+        .forensic-brief {
+            background: var(--ink);
+            color: var(--paper);
+            padding: 32px 36px;
+            margin-bottom: 3rem;
+            font-family: 'DM Mono', monospace;
+            font-size: 12px;
+            line-height: 2;
+            position: relative;
+            border-left: 4px solid var(--red);
+        }
+        .brief-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--red);
+            margin-bottom: 1.4rem;
+            font-weight: 600;
+        }
+        .brief-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem 0.75rem;
+            margin-bottom: 0.25rem;
+        }
+        .brief-key {
+            color: rgba(245,240,232,0.38);
+            min-width: 160px;
+            flex-shrink: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .brief-val { color: rgba(245,240,232,0.85); font-weight: 500; }
+        .brief-val.severity-critical { color: #e74c3c; font-weight: 700; }
+        .brief-val.outcome { color: #2ecc71; font-weight: 600; }
+        .brief-divider {
+            border: none;
+            border-top: 1px solid rgba(245,240,232,0.1);
+            margin: 0.8rem 0;
+        }
+
+        /* ── RULED BOXES ── */
+        .ruled-box {
+            border: 1px solid var(--rule);
+            background: var(--paper-dark);
+            padding: 28px 32px;
+            margin: 28px 0;
+        }
+        .ruled-box-red {
+            border-left: 3px solid var(--red);
+            background: rgba(192,57,43,0.05);
+            padding: 20px 24px;
+            margin: 24px 0;
+        }
+        .ruled-box-amber {
+            border-left: 3px solid var(--amber);
+            background: rgba(212,160,23,0.05);
+            padding: 20px 24px;
+            margin: 24px 0;
+        }
+        .ruled-box-green {
+            border-left: 3px solid var(--green);
+            background: rgba(26,107,60,0.05);
+            padding: 20px 24px;
+            margin: 24px 0;
+        }
+        .ruled-box-blue {
+            border-left: 3px solid var(--blue);
+            background: rgba(26,74,122,0.05);
+            padding: 20px 24px;
+            margin: 24px 0;
+        }
+
+        /* ── PULL QUOTE ── */
+        .pull-quote {
+            border-left: 4px solid var(--red);
+            padding: 20px 28px;
+            font-size: 22px;
+            font-style: italic;
+            line-height: 1.45;
+            color: rgba(15,14,11,0.75);
+            margin: 40px 0;
+            background: var(--paper-dark);
+        }
+        .pull-quote cite {
+            display: block;
+            font-size: 12px;
+            font-family: 'DM Mono', monospace;
+            font-style: normal;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(15,14,11,0.4);
+            margin-top: 10px;
+        }
+
+        /* ── GRID ── */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin: 24px 0;
+        }
+        .grid-card {
+            background: var(--paper-dark);
+            border: 1px solid var(--rule);
+            padding: 24px;
+        }
+        .grid-card-title {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(15,14,11,0.45);
+            margin-bottom: 12px;
+        }
+        .grid-card-headline {
+            font-family: 'Syne', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        /* ── JOURNEY TIMELINE ── */
+        .journey-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 28px 0;
+        }
+        .journey-col-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 8px 14px;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+        .journey-col-label.customer { background: rgba(26,107,60,0.12); color: var(--green); }
+        .journey-col-label.merchant { background: rgba(192,57,43,0.1); color: var(--red); }
+
+        .journey-step {
+            display: flex;
+            gap: 10px;
+            padding: 10px 14px;
+            border-bottom: 1px dotted var(--rule);
+            font-size: 14px;
+            align-items: flex-start;
+        }
+        .journey-step:last-child { border-bottom: none; }
+        .step-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: rgba(15,14,11,0.4);
+            white-space: nowrap;
+            min-width: 100px;
+            padding-top: 2px;
+        }
+        .step-emotion {
+            font-size: 13px;
+            color: rgba(15,14,11,0.75);
+        }
+        .step-emotion.ok { color: var(--green); }
+        .step-emotion.bad { color: var(--red); }
+        .step-emotion.neutral { color: var(--amber); }
+
+        /* ── FAULT LIST ── */
+        .fault-list {
+            list-style: none;
+            padding: 0;
+            margin: 16px 0 24px;
+        }
+        .fault-list li {
+            padding: 8px 0 8px 22px;
+            position: relative;
+            color: rgba(15,14,11,0.8);
+            border-bottom: 1px dotted var(--rule);
+            font-size: 16px;
+        }
+        .fault-list li:last-child { border-bottom: none; }
+        .fault-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--red);
+            font-family: 'DM Mono', monospace;
+            font-size: 12px;
+            top: 10px;
+        }
+
+        /* ── TOPOLOGY TABLE ── */
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 28px 0;
+            border: 1px solid var(--rule);
+        }
+        .topology-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'DM Mono', monospace;
+            font-size: 12px;
+        }
+        .topology-table thead th {
+            background: var(--ink);
+            color: var(--paper);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        .topology-table tbody td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--rule);
+            border-right: 1px solid var(--rule);
+            vertical-align: top;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+        .topology-table tbody td:last-child { border-right: none; }
+        .topology-table tbody tr:nth-child(even) td { background: var(--paper-dark); }
+        .topology-table tbody tr:hover td { background: rgba(192,57,43,0.04); }
+        .sev-critical { color: var(--red); font-weight: 700; }
+        .sev-high     { color: var(--red); font-weight: 500; }
+        .sev-medium   { color: var(--amber); font-weight: 500; }
+        .sev-well     { color: var(--green); }
+        .ftype-trust  { color: var(--red); }
+        .ftype-sys    { color: #8b4513; }
+        .ftype-cog    { color: var(--amber); }
+        .ftype-loop   { color: var(--blue); }
+
+        /* ── CONVERGENCE MATRIX ── */
+        .convergence-matrix {
+            margin: 28px 0;
+            border: 1px solid var(--rule);
+            overflow-x: auto;
+        }
+        .convergence-header {
+            background: var(--ink);
+            color: var(--paper);
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            padding: 10px 16px;
+        }
+        .convergence-row {
+            display: grid;
+            grid-template-columns: 2fr 1.2fr 1fr 1.2fr 1fr;
+            border-bottom: 1px solid var(--rule);
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+        }
+        .convergence-row:last-child { border-bottom: none; }
+        .convergence-row.header-row {
+            background: var(--paper-dark);
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: rgba(15,14,11,0.45);
+        }
+        .conv-cell {
+            padding: 10px 14px;
+            border-right: 1px solid var(--rule);
+            vertical-align: top;
+            line-height: 1.5;
+        }
+        .conv-cell:last-child { border-right: none; }
+        .conf-high   { color: var(--green);  font-weight: 700; }
+        .conf-medium { color: var(--amber);  font-weight: 600; }
+        .conf-anomaly{ color: var(--blue);   font-weight: 600; }
+        .impact-critical { color: var(--red); font-weight: 700; }
+
+        /* ── RICE-F SCORING ── */
+        .rice-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            margin: 24px 0;
+            border: 1px solid var(--rule);
+        }
+        .rice-table thead th {
+            background: var(--paper-dark);
+            padding: 10px 14px;
+            text-align: center;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: rgba(15,14,11,0.5);
+            border: 1px solid var(--rule);
+        }
+        .rice-table thead th:first-child { text-align: left; }
+        .rice-table tbody td {
+            padding: 10px 14px;
+            border: 1px solid var(--rule);
+            text-align: center;
+            vertical-align: middle;
+            font-size: 12px;
+        }
+        .rice-table tbody td:first-child { text-align: left; font-size: 11px; }
+        .rice-table .score-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .score-pip {
+            width: 10px; height: 10px;
+            border-radius: 2px;
+            background: var(--rule);
+            display: inline-block;
+        }
+        .score-pip.filled-r { background: var(--red); }
+        .score-pip.filled-a { background: var(--amber); }
+        .score-pip.filled-g { background: var(--green); }
+        .rice-total {
+            font-weight: 700;
+            font-size: 13px;
+        }
+        .rice-total.high { color: var(--red); }
+        .rice-total.med  { color: var(--amber); }
+        .rice-horizon-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            font-size: 9px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        .h1-badge { background: rgba(192,57,43,0.15); color: var(--red); }
+        .h2-badge { background: rgba(212,160,23,0.15); color: var(--amber); }
+        .h3-badge { background: rgba(26,74,122,0.12); color: var(--blue); }
+
+        /* ── REMEDIATION CARDS ── */
+        .remediation-card {
+            border: 1px solid var(--rule);
+            margin: 28px 0;
+            position: relative;
+        }
+        .rem-card-header {
+            background: var(--ink);
+            color: var(--paper);
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .rem-card-id {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(245,240,232,0.45);
+        }
+        .rem-card-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--paper);
+            flex: 1;
+            padding: 0 16px;
+        }
+        .rem-card-badges {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .rem-card-body {
+            padding: 24px;
+        }
+        .rem-row {
+            display: flex;
+            gap: 12px;
+            padding: 8px 0;
+            border-bottom: 1px dotted var(--rule);
+            font-size: 15px;
+            align-items: flex-start;
+        }
+        .rem-row:last-child { border-bottom: none; }
+        .rem-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(15,14,11,0.4);
+            min-width: 120px;
+            flex-shrink: 0;
+            padding-top: 3px;
+        }
+        .rem-val { color: rgba(15,14,11,0.82); flex: 1; }
+        .rem-val.green { color: var(--green); font-weight: 600; }
+        .rem-val.red   { color: var(--red);   font-weight: 600; }
+
+        /* copy before/after */
+        .copy-compare {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            margin: 16px 0;
+            border: 1px solid var(--rule);
+            font-family: 'DM Mono', monospace;
+            font-size: 12px;
+        }
+        .copy-before, .copy-after {
+            padding: 16px 18px;
+        }
+        .copy-before {
+            background: rgba(192,57,43,0.06);
+            border-right: 1px solid var(--rule);
+        }
+        .copy-after {
+            background: rgba(26,107,60,0.06);
+        }
+        .copy-label {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .copy-before .copy-label { color: var(--red); }
+        .copy-after  .copy-label { color: var(--green); }
+        .copy-text {
+            font-size: 12px;
+            line-height: 1.6;
+            color: rgba(15,14,11,0.8);
+            font-family: 'EB Garamond', serif;
+        }
+
+        /* ── OUTCOMES ── */
+        .outcome-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 32px 0;
+        }
+        .outcome-card {
+            background: var(--paper-dark);
+            border: 1px solid var(--rule);
+            padding: 24px 20px;
+            text-align: center;
+        }
+        .outcome-metric {
+            font-family: 'Syne', sans-serif;
+            font-size: 42px;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+        .outcome-metric.green { color: var(--green); }
+        .outcome-metric.red   { color: var(--red); }
+        .outcome-metric.amber { color: var(--amber); }
+        .outcome-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: rgba(15,14,11,0.45);
+            margin-bottom: 8px;
+        }
+        .outcome-desc {
+            font-size: 14px;
+            color: rgba(15,14,11,0.7);
+            line-height: 1.4;
+        }
+
+        /* ── FORENSIC SIGNATURE ── */
+        .forensic-summary {
+            background: var(--ink);
+            color: var(--paper);
+            padding: 32px 36px;
+            font-family: 'DM Mono', monospace;
+            font-size: 12px;
+            line-height: 2.2;
+            margin-top: 3rem;
+            border-left: 4px solid var(--green);
+        }
+        .summary-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--green);
+            margin-bottom: 1.2rem;
+            font-weight: 600;
+        }
+        .summary-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem 0.75rem;
+            margin-bottom: 0.2rem;
+        }
+        .summary-key {
+            color: rgba(245,240,232,0.35);
+            min-width: 190px;
+            flex-shrink: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .summary-val { color: rgba(245,240,232,0.8); }
+        .summary-val.outcome { color: #2ecc71; font-weight: 600; }
+        .summary-divider {
+            border: none;
+            border-top: 1px solid rgba(245,240,232,0.08);
+            margin: 0.6rem 0;
+        }
+
+        /* ── CTA BLOCK ── */
+        .cta-block {
+            background: var(--paper-dark);
+            border: 1px solid var(--ink);
+            padding: 48px;
+            margin: 48px 0 0;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 32px;
+            align-items: center;
+        }
+        .cta-headline {
+            font-family: 'Syne', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 10px;
+        }
+        .cta-sub {
+            font-size: 16px;
+            color: rgba(15,14,11,0.6);
+            font-style: italic;
+            margin: 0;
+        }
+        .cta-actions { display: flex; flex-direction: column; gap: 10px; }
+        .btn-primary {
+            display: inline-block;
+            background: var(--ink);
+            color: var(--paper);
+            text-decoration: none;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            padding: 14px 24px;
+            text-align: center;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        .btn-primary:hover { background: var(--red); }
+        .btn-ghost {
+            display: inline-block;
+            border: 1px solid var(--rule);
+            color: rgba(15,14,11,0.6);
+            text-decoration: none;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 12px 24px;
+            text-align: center;
+            transition: border-color 0.2s, color 0.2s;
+            white-space: nowrap;
+        }
+        .btn-ghost:hover { border-color: var(--ink); color: var(--ink); }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--ink);
+            color: rgba(245,240,232,0.45);
+            padding: 48px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.05em;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        footer strong { color: var(--paper); }
+        footer a { color: var(--amber); text-decoration: none; }
+        footer a:hover { color: var(--paper); }
+        .footer-nav {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 900px) {
+            .grid-2,
+            .journey-grid,
+            .outcome-grid { grid-template-columns: 1fr; }
+            .copy-compare  { grid-template-columns: 1fr; }
+            .copy-before   { border-right: none; border-bottom: 1px solid var(--rule); }
+            .cta-block     { grid-template-columns: 1fr; }
+            .convergence-row { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 768px) {
+            .container { padding: 0 24px; }
+            .header-eyebrow { padding: 10px 20px; font-size: 10px; }
+            .header-body { padding: 48px 24px 40px; }
+            .header-sub { font-size: 17px; }
+            h1 { font-size: clamp(32px, 7vw, 56px); }
+            section { padding: 56px 0; }
+            .forensic-brief, .forensic-summary { padding: 20px 24px; font-size: 11px; }
+            .brief-key, .summary-key { min-width: 110px; }
+            .topology-table { font-size: 10px; }
+            .topology-table thead th,
+            .topology-table tbody td { padding: 8px 10px; }
+            .case-nav a { padding: 0 10px; font-size: 9px; }
+            footer { padding: 32px 24px; }
+            .pull-quote { font-size: 18px; }
+            .outcome-metric { font-size: 32px; }
+            .rem-label { min-width: 90px; }
+            .convergence-row { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 480px) {
+            .container { padding: 0 16px; }
+            body { font-size: 16px; }
+            .header-body { padding: 36px 16px 32px; }
+            .cta-block { padding: 28px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Reading progress bar -->
+<div id="reading-progress"></div>
+
+<!-- ═══════════════════════════════ HEADER ═══════════════════════════════ -->
+<header>
+    <div class="header-eyebrow">
+        <span>Fault Topology Method™ · Case File 03</span>
+        <div class="eyebrow-meta">
+            <span>PayPal Global Payments</span>
+            <span class="eyebrow-tag">Trust Faultline</span>
+            <span>~14 min read</span>
+        </div>
+    </div>
+    <div class="header-body">
+        <div class="header-phase-badge">
+            <span class="phase-dot"></span>
+            Forensic Audit — Dispute Resolution Portal
+        </div>
+        <h1>The <em>Trust</em> Audit</h1>
+        <p class="header-sub">Where PayPal's dispute resolution was failing everyone — but merchants were paying the highest price. Fair decisions, communicated unfairly, produce the same trust damage as unfair decisions.</p>
+        <div class="header-stats">
+            <div class="stat-item">
+                <span class="stat-label">Faultline Severity</span>
+                <span class="stat-value" style="color:var(--red)">Critical</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Primary Impact</span>
+                <span class="stat-value">Two-sided market trust</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Adoption Lift</span>
+                <span class="stat-value highlight">+1% (millions of retained transactions)</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Support Reduction</span>
+                <span class="stat-value highlight">−43% merchant dispute contacts</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Merchant NPS</span>
+                <span class="stat-value highlight">−12 → +8</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ═══════════════════════════════ STICKY NAV ═══════════════════════════ -->
+<nav class="case-nav" aria-label="Case study navigation">
+    <div class="nav-inner">
+        <a href="index.html">← Framework</a>
+        <a href="waterloo.html">Waterloo Air</a>
+        <a href="amazon.html">Amazon</a>
+        <a href="payPal.html" class="active">PayPal</a>
+        <a href="cisco.html">Cisco</a>
+        <div class="nav-section-links">
+            <a href="#context">Context</a>
+            <a href="#investigation">Investigation</a>
+            <a href="#topology">Topology</a>
+            <a href="#remediation">Remediation</a>
+            <a href="#outcomes">Outcomes</a>
+        </div>
+    </div>
+</nav>
+    <!-- ── FTM FRAMEWORK BRIDGE ── -->
+    <div style="background:var(--paper-dark); border-bottom:2px solid var(--rule);">
+      <div style="max-width:1100px; margin:0 auto; padding:24px 48px;">
+        <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:16px;">
+          <a href="index.html" style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:var(--red); text-decoration:none; display:flex; align-items:center; gap:6px; border:1px solid var(--red); padding:5px 12px; flex-shrink:0;">← Fault Topology Method™</a>
+          <span style="font-family:'DM Mono',monospace; font-size:10px; color:rgba(15,14,11,0.4);">This case study demonstrates the FTM applied in full. The concepts below link to the relevant framework sections.</span>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr auto; gap:24px; align-items:start; flex-wrap:wrap;">
+          <div>
+            <div style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:rgba(15,14,11,0.4); margin-bottom:10px;">Primary Heuristics Applied</div>
+            <div style="display:flex; flex-wrap:wrap; gap:6px;">
+              <a href="index.html#heuristics" style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.08em; background:rgba(192,57,43,0.1); color:var(--red); padding:4px 10px; text-decoration:none; border:1px solid rgba(192,57,43,0.25); white-space:nowrap;">B1 — Trust Coherence</a>
+            <a href="index.html#heuristics" style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.08em; background:rgba(192,57,43,0.1); color:var(--red); padding:4px 10px; text-decoration:none; border:1px solid rgba(192,57,43,0.25); white-space:nowrap;">B3 — Feedback Loop Integrity</a>
+            <a href="index.html#heuristics" style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.08em; background:rgba(192,57,43,0.1); color:var(--red); padding:4px 10px; text-decoration:none; border:1px solid rgba(192,57,43,0.25); white-space:nowrap;">B5 — Failure Mode Dignity</a>
+            <a href="index.html#heuristics" style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.08em; background:rgba(192,57,43,0.1); color:var(--red); padding:4px 10px; text-decoration:none; border:1px solid rgba(192,57,43,0.25); white-space:nowrap;">H9 — Error Recovery</a>
+            <a href="index.html#heuristics" style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.08em; background:rgba(192,57,43,0.1); color:var(--red); padding:4px 10px; text-decoration:none; border:1px solid rgba(192,57,43,0.25); white-space:nowrap;">H1 — Visibility of System Status</a>
+            
+            </div>
+          </div>
+          <div style="flex-shrink:0;">
+            <div style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:rgba(15,14,11,0.4); margin-bottom:8px;">Faultline Classification</div>
+            <span style="font-family:'DM Mono',monospace; font-size:11px; background:var(--ink); color:var(--paper); padding:6px 12px; display:inline-block;">Type 3 — Trust Faultline</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Method breakdown - collapsed details -->
+    <details style="border-bottom:1px solid var(--rule);">
+      <summary style="background:var(--ink); color:rgba(245,240,232,0.7); font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.12em; text-transform:uppercase; padding:10px 48px; cursor:pointer; list-style:none; display:flex; align-items:center; gap:8px; max-width:100%;">
+        <span style="color:var(--red);">▸</span> How the FTM was applied — method annotation
+      </summary>
+      <div style="background:var(--ink); border-bottom:2px solid var(--red);">
+        <div style="max-width:1100px; margin:0 auto; padding:0 48px 20px;">
+          <div style="display:grid; grid-template-columns:160px 1fr; border-bottom:1px solid rgba(255,255,255,0.06);">
+              <div style="padding:8px 12px; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:rgba(245,240,232,0.4); display:flex; align-items:center;">Track A</div>
+              <div style="padding:8px 12px; font-size:14px; color:rgba(245,240,232,0.75);">Business-impact heuristics B1, B3, B5 drove the trust diagnosis</div>
+            </div>
+            <div style="display:grid; grid-template-columns:160px 1fr; border-bottom:1px solid rgba(255,255,255,0.06);">
+              <div style="padding:8px 12px; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:rgba(245,240,232,0.4); display:flex; align-items:center;">Track B</div>
+              <div style="padding:8px 12px; font-size:14px; color:rgba(245,240,232,0.75);">Support ticket forensics revealed the failure demand % in dispute contacts</div>
+            </div>
+            <div style="display:grid; grid-template-columns:160px 1fr; border-bottom:1px solid rgba(255,255,255,0.06);">
+              <div style="padding:8px 12px; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:rgba(245,240,232,0.4); display:flex; align-items:center;">Convergence</div>
+              <div style="padding:8px 12px; font-size:14px; color:rgba(245,240,232,0.75);">Heuristic finding (trust break) confirmed by NPS data — high confidence faultline</div>
+            </div>
+            <div style="display:grid; grid-template-columns:160px 1fr; border-bottom:1px solid rgba(255,255,255,0.06);">
+              <div style="padding:8px 12px; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:rgba(245,240,232,0.4); display:flex; align-items:center;">Root Cause</div>
+              <div style="padding:8px 12px; font-size:14px; color:rgba(245,240,232,0.75);">5-Why analysis traced to org boundary: legal and UX teams not communicating</div>
+            </div>
+            
+          <div style="padding-top:14px;">
+            <a href="index.html#phase1" style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(245,240,232,0.5); text-decoration:none; margin-right:20px;">Phase 1 Reconnaissance →</a>
+            <a href="index.html#phase2" style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(245,240,232,0.5); text-decoration:none; margin-right:20px;">Phase 2 Investigation →</a>
+            <a href="index.html#phase3" style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(245,240,232,0.5); text-decoration:none; margin-right:20px;">Phase 3 Diagnosis →</a>
+            <a href="index.html#phase4" style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(245,240,232,0.5); text-decoration:none;">Phase 4 Remediation →</a>
+          </div>
+        </div>
+      </div>
+    </details>
+    
+
+<!-- ═══════════════════ SECTION 0 — FORENSIC BRIEF ══════════════════════ -->
+<section id="brief">
+    <div class="container">
+        <div class="forensic-brief" role="region" aria-label="Forensic Audit Brief">
+            <div class="brief-title">■ Forensic Audit Brief — PayPal Dispute Resolution Portal</div>
+            <div class="brief-row"><span class="brief-key">Client Context</span><span class="brief-val">PayPal — Global payments platform · 400M+ active accounts · 30M+ merchant partners</span></div>
+            <div class="brief-row"><span class="brief-key">User Segments</span><span class="brief-val">Merchants (B) in active disputes · Customers (C) filing disputes</span></div>
+            <div class="brief-divider"></div>
+            <div class="brief-row"><span class="brief-key">Faultline Type</span><span class="brief-val">Trust · Cognitive Load · Feedback Loop · Systemic</span></div>
+            <div class="brief-row"><span class="brief-key">Severity</span><span class="brief-val severity-critical">■ CRITICAL — Accelerating two-sided market erosion</span></div>
+            <div class="brief-divider"></div>
+            <div class="brief-row"><span class="brief-key">Business Impact</span><span class="brief-val">Merchant churn compounding · trust scores below competitive threshold · 41% merchant contacts citing systemic unfairness independent of outcomes</span></div>
+            <div class="brief-divider"></div>
+            <div class="brief-row"><span class="brief-key">Root Cause</span><span class="brief-val">Interface designed for policy compliance — not trust maintenance under adversarial conditions. No single team owned end-to-end merchant communication architecture.</span></div>
+            <div class="brief-row"><span class="brief-key">Resolution</span><span class="brief-val">Five-layer trust architecture — advance notification · language redesign · review transparency · intelligence dashboard · recourse pathway</span></div>
+            <div class="brief-divider"></div>
+            <div class="brief-row"><span class="brief-key">Outcome</span><span class="brief-val outcome">■ +1% adoption · Merchant NPS −12 → +8 · 43% support reduction · Trust recovered without a single policy change</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════ SECTION 1 — BUSINESS CONTEXT ════════════════════ -->
+<section id="context">
+    <div class="container">
+        <div class="section-phase">
+            <span class="phase-number">Phase 1</span>
+            <span class="phase-name">Reconnaissance</span>
+            <span class="phase-line"></span>
+        </div>
+        <h2><span class="section-num">01</span>The Business Context</h2>
+        <p class="section-subtitle">Understanding what was actually at stake before investigating what was broken.</p>
+
+        <h3>The Two-Sided Market Problem</h3>
+        <p>PayPal operates a two-sided market. This is not a detail — it is the entire architecture of the business. Every design decision affects two distinct user populations with fundamentally conflicting needs. The dispute resolution interface is where that conflict becomes most acute.</p>
+
+        <div class="grid-2">
+            <div class="grid-card">
+                <div class="grid-card-title">Side A — Customers</div>
+                <div class="grid-card-headline">400M+ accounts. One core promise.</div>
+                <p style="font-size:15px; margin:0;">People who use PayPal because it feels safe. Their trust is built on a single belief: <em>if something goes wrong, PayPal will protect me.</em> They encounter the dispute portal rarely — averaging 0.3 disputes per year — and experience it as a one-time crisis.</p>
+            </div>
+            <div class="grid-card">
+                <div class="grid-card-title">Side B — Merchants</div>
+                <div class="grid-card-headline">30M+ businesses. A different promise.</div>
+                <p style="font-size:15px; margin:0;">Businesses that accept PayPal because their customers expect it. Their trust is built on a different belief: <em>the platform will treat me fairly, not just protect customers at my expense.</em> Mid-size merchants encounter the portal 8–12 times per month — as operational routine.</p>
+            </div>
+        </div>
+
+        <p>This frequency asymmetry is <strong>the foundational forensic finding</strong>. An interface designed for the occasional user — the customer in acute distress — will systematically fail the operational user — the merchant in a routine process. These two people were using the same interface. They were having entirely different relationships with the platform.</p>
+
+        <h3>What Merchant Churn Actually Costs</h3>
+        <p>Before examining the interface, the audit required understanding the asymmetric cost of losing a merchant versus a customer.</p>
+
+        <ul class="fault-list">
+            <li>All transactions from that merchant — permanently removed from PayPal's GMV</li>
+            <li>All customers of that merchant who used PayPal — potentially lost as payment behaviour follows merchants</li>
+            <li>The merchant's industry network — one dissatisfied merchant influences 5–8 peer businesses through direct conversation</li>
+            <li>The signal to the remaining merchant base — every merchant who hears of unfair treatment recalibrates their own platform risk</li>
+        </ul>
+
+        <div class="ruled-box-red">
+            <strong>In two-sided market economics, merchant churn compounds.</strong> A customer who leaves removes one person's volume. A merchant who leaves removes every customer who shopped there — and creates a signal that propagates through their network. The dispute resolution interface was the primary point of merchant trust destruction. Not because disputes are avoidable. But because the interface managing them was <strong>communicating unfairness at every interaction point</strong> — regardless of what the underlying policy actually decided.
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════ SECTION 2 — INVESTIGATION ═══════════════════════ -->
+<section id="investigation">
+    <div class="container">
+        <div class="section-phase">
+            <span class="phase-number">Phase 2</span>
+            <span class="phase-name">Investigation — Dual Track</span>
+            <span class="phase-line"></span>
+        </div>
+        <h2><span class="section-num">02</span>The Investigation</h2>
+        <p class="section-subtitle">Five methods. Two tracks. One central forensic hypothesis.</p>
+
+        <div class="pull-quote">
+            "Merchants were perceiving PayPal always favoured customers… the dispute portal was a pain for both persons though since merchants deal with them on a day-to-day basis it amplified their bias."
+            <cite>— The insight that drove the entire investigation</cite>
+        </div>
+
+        <p>The forensic key: <strong>perception of bias was operating independently of actual outcomes.</strong> Approximately 52% of disputes resolved in the merchant's favour — yet 41% of merchant support tickets cited systemic unfairness. The bias was not in the decisions. <strong>It was in the interface.</strong></p>
+
+        <p>An interface that makes fair decisions but communicates them unfairly is more dangerous than one that occasionally makes wrong decisions — because it is invisible to policy review. The policy team looked at outcomes and saw balance. The merchant looked at the same outcomes and felt betrayal. Both were right. The interface was failing to translate fair decisions into fair experiences.</p>
+
+        <!-- TRACK A: HEURISTIC -->
+        <h4>Track A — Heuristic Evaluation</h4>
+
+        <h3>Method 1 — Frequency Amplification Analysis</h3>
+        <p>The merchants-versus-customers asymmetry was the first heuristic finding. This is not a standard usability issue — it is a <strong>usage pattern faultline</strong> that standard audits never examine.</p>
+
+        <div class="ruled-box-amber">
+            <strong>Faultline Zero — The Foundational Design Error</strong><br><br>
+            The dispute portal was designed for the <em>occasional user</em> — the customer encountering it once in distress. It had never been designed for the <em>operational user</em> — the merchant encountering it as a regular business process.<br><br>
+            An interface that treats both users identically is <strong>not neutral</strong>. The same experience repeated across 40–60 merchant disputes per month builds a systematic pattern perception that a single customer interaction never could. Frequency amplifies every signal — positive and negative — into a belief about platform character.
+        </div>
+
+        <h3>Method 2 — Emotional Journey Mapping with Timestamp Correlation</h3>
+        <p>Over 60 journey maps were constructed, recording emotional state at each interface event. The maps revealed that the <em>same 18-day review process</em> produced entirely different emotional trajectories for each party.</p>
+
+        <div class="journey-grid">
+            <div>
+                <div class="journey-col-label customer">Customer Journey</div>
+                <div class="journey-step"><span class="step-label">Files dispute</span><span class="step-emotion neutral">Anxiety — doing this right?</span></div>
+                <div class="journey-step"><span class="step-label">Confirmation</span><span class="step-emotion ok">Relief — claim registered</span></div>
+                <div class="journey-step"><span class="step-label">Waiting</span><span class="step-emotion ok">Diminishing anxiety — system working <em>for</em> me</span></div>
+                <div class="journey-step"><span class="step-label">Resolution</span><span class="step-emotion ok">Relief (won) or disappointment accepted</span></div>
+            </div>
+            <div>
+                <div class="journey-col-label merchant">Merchant Journey</div>
+                <div class="journey-step"><span class="step-label">Dispute received</span><span class="step-emotion bad">Defensive alert — money at risk</span></div>
+                <div class="journey-step"><span class="step-label">Response sent</span><span class="step-emotion bad">Uncertainty — was this received?</span></div>
+                <div class="journey-step"><span class="step-label">Waiting</span><span class="step-emotion bad">Growing frustration — system working <em>against</em> me</span></div>
+                <div class="journey-step"><span class="step-label">Resolution</span><span class="step-emotion bad">If won: relief + resentment. If lost: platform distrust.</span></div>
+            </div>
+        </div>
+
+        <div class="ruled-box-red">
+            <strong>The waiting period was identical for both parties. The experience of waiting was completely different — and the interface did nothing to address that difference.</strong> The customer waited while the system worked <em>for</em> them. The merchant waited while the system, in their perception, worked <em>against</em> them. Silence is not neutral. In an adversarial process, silence reads as hostility.
+        </div>
+
+        <h3>Method 3 — Language Forensics</h3>
+        <p>All 247 distinct text elements across both user journeys were audited against four neutrality questions: Does this imply institutional allegiance? Does it communicate obligation asymmetrically? Does it imply one party's evidence matters more? Does it communicate outcome emotion asymmetrically?</p>
+
+        <h4>Finding 1 — Asymmetric Party Framing</h4>
+        <div class="copy-compare">
+            <div class="copy-before">
+                <div class="copy-label">Customer language</div>
+                <div class="copy-text">"Your claim" · "Your protection" · "We're reviewing your case." — <em>Addressed as someone receiving help.</em></div>
+            </div>
+            <div class="copy-after">
+                <div class="copy-label">Merchant language</div>
+                <div class="copy-text">"A dispute has been filed" · "You are required to respond" · "Provide evidence to support your position." — <em>Addressed as someone under obligation.</em></div>
+            </div>
+        </div>
+        <p>This was not policy. It was copywriting — and it was systematically communicating institutional bias through word choice alone. To a merchant reading 40+ of these notices per month, the pattern was unmistakable: <em>PayPal is the customer's ally and my interrogator.</em></p>
+
+        <h4>Finding 2 — Outcome Communication Asymmetry</h4>
+        <div class="copy-compare">
+            <div class="copy-before">
+                <div class="copy-label">Merchant win message (before)</div>
+                <div class="copy-text">"This dispute has been closed. No further action is required."</div>
+            </div>
+            <div class="copy-after">
+                <div class="copy-label">Customer win message</div>
+                <div class="copy-text">"Good news — we've reviewed your claim and found in your favour. Your refund has been processed."</div>
+            </div>
+        </div>
+        <p>The customer win was celebrated. The merchant win was merely notified. After experiencing this pattern across multiple disputes, a merchant's conclusion was inevitable: <em>"When I win, it's just process. When the customer wins, PayPal is happy about it."</em></p>
+
+        <!-- TRACK B: ALGORITHMIC -->
+        <h4>Track B — Algorithmic / Data Forensics</h4>
+
+        <h3>Method 4 — Support Ticket Forensics</h3>
+        <p>8,500 dispute-related support tickets over 12 months were analysed for vocabulary patterns, emotional intensity, and the specific interface moments that triggered each contact.</p>
+
+        <div class="ruled-box-blue">
+            <strong>Merchant ticket vocabulary — the vocabulary of institutional distrust:</strong>
+            <ul class="fault-list" style="margin-top:12px;">
+                <li>"This is unfair" — 41% of dispute-related merchant contacts</li>
+                <li>"PayPal always sides with…" — 28% of contacts (the word "always" reveals systematic belief, not single incident)</li>
+                <li>"I provided all the evidence" — 34% of contacts (evidence submitted but not acknowledged)</li>
+                <li>"Why was my account debited without warning" — 19% of contacts</li>
+                <li>"There's no way to appeal" — 22% of contacts</li>
+            </ul>
+            <br>
+            <strong>Customer ticket vocabulary — the vocabulary of someone waiting for help:</strong> "How long will this take" · "When do I get my money back" · "What do I need to submit." Same interface. Two completely different relationship experiences — and only one was destroying platform loyalty.
+        </div>
+
+        <p>The word "always" appearing in 28% of merchant contacts is the most significant data point in the entire ticket analysis. "Always" is not a complaint about a single experience. It is a belief about platform character built through pattern accumulation. No single bad interaction produces "always." Only a systematic design failure does.</p>
+
+        <h3>Method 5 — Competitive Benchmark Analysis</h3>
+        <p>PayPal was benchmarked against Stripe Radar, Shopify Payments disputes, and traditional card network chargeback processes.</p>
+
+        <div class="ruled-box-amber">
+            <strong>The competitive forensic finding:</strong> PayPal's dispute <em>outcomes</em> were comparable to or better than competitors — 52% merchant win rate vs. industry average of 45–48%. The way those decisions were <em>communicated</em> was systematically inferior. Merchants who switched to Stripe or Shopify Payments cited disputes as the trigger — not because they lost unfairly, but because the <em>experience</em> of the process convinced them the platform did not respect their interests. <strong>They were leaving a fair process because it felt unfair.</strong> The interface was costing PayPal merchant relationships that the policy team believed it had protected.
+        </div>
+
+        <!-- CONVERGENCE MATRIX -->
+        <h4>The Convergence Matrix — Phase 2 Synthesis</h4>
+        <p>All Track A and Track B findings are entered into the Convergence Matrix — where heuristic judgment meets algorithmic data. Convergence = high confidence faultline. Divergence = anomaly requiring deeper investigation.</p>
+
+        <div class="convergence-matrix">
+            <div class="convergence-header">■ Convergence Matrix — PayPal Dispute Resolution</div>
+            <div class="convergence-row header-row">
+                <div class="conv-cell">Faultline</div>
+                <div class="conv-cell">Heuristic Source</div>
+                <div class="conv-cell">Data Source</div>
+                <div class="conv-cell">Business Impact</div>
+                <div class="conv-cell">Confidence</div>
+            </div>
+            <div class="convergence-row">
+                <div class="conv-cell">Pre-notification account action</div>
+                <div class="conv-cell">B5 Failure Mode Dignity · H9 Error Prevention</div>
+                <div class="conv-cell">19% ticket share "debited without warning"</div>
+                <div class="conv-cell impact-critical">Critical — trust event at cash-flow moment</div>
+                <div class="conv-cell"><span class="conf-high">■ Confirmed</span></div>
+            </div>
+            <div class="convergence-row">
+                <div class="conv-cell">Asymmetric language — accusation vs. help framing</div>
+                <div class="conv-cell">B1 Trust Coherence · H2 System–World Match</div>
+                <div class="conv-cell">41% tickets "unfair" · 28% use "always" language</div>
+                <div class="conv-cell impact-critical">Critical — pattern belief formation</div>
+                <div class="conv-cell"><span class="conf-high">■ Confirmed</span></div>
+            </div>
+            <div class="convergence-row">
+                <div class="conv-cell">Invisible review period — zero visibility during 18-day wait</div>
+                <div class="conv-cell">P2 Predictive Processing · B3 Feedback Loop Integrity</div>
+                <div class="conv-cell">Ticket volume spike at days 5–7 and 14–15</div>
+                <div class="conv-cell impact-critical">Critical — silence reads as hostility</div>
+                <div class="conv-cell"><span class="conf-high">■ Confirmed</span></div>
+            </div>
+            <div class="convergence-row">
+                <div class="conv-cell">No evidence receipt confirmation</div>
+                <div class="conv-cell">H1 Visibility of Status · B3 Feedback Loop Integrity</div>
+                <div class="conv-cell">34% tickets "I provided all the evidence"</div>
+                <div class="conv-cell">High — anxiety without acknowledgement</div>
+                <div class="conv-cell"><span class="conf-high">■ Confirmed</span></div>
+            </div>
+            <div class="convergence-row">
+                <div class="conv-cell">Pattern invisibility — no aggregate dispute view</div>
+                <div class="conv-cell">B6 Scale-Induced Debt · H7 Flexibility/Efficiency</div>
+                <div class="conv-cell">No existing data — measurement gap finding</div>
+                <div class="conv-cell">High — enables narrative construction</div>
+                <div class="conv-cell"><span class="conf-anomaly">◆ Anomaly</span></div>
+            </div>
+            <div class="convergence-row">
+                <div class="conv-cell">No post-outcome recourse pathway</div>
+                <div class="conv-cell">H3 User Control · P5 Agency and Autonomy</div>
+                <div class="conv-cell">22% tickets "no way to appeal"</div>
+                <div class="conv-cell">High — final-arbiter perception</div>
+                <div class="conv-cell"><span class="conf-high">■ Confirmed</span></div>
+            </div>
+        </div>
+
+        <p style="font-size:14px; color:rgba(15,14,11,0.5); font-family:'DM Mono',monospace; margin-top:8px;">Heuristics referenced: B = Business-Impact layer · H = Foundation Nielsen layer · P = Psychological layer — Fault Topology Method™</p>
+    </div>
+</section>
+
+<!-- ═══════════════════ SECTION 3 — FAULT TOPOLOGY ══════════════════════ -->
+<section id="topology">
+    <div class="container">
+        <div class="section-phase">
+            <span class="phase-number">Phase 3</span>
+            <span class="phase-name">Diagnosis</span>
+            <span class="phase-line"></span>
+        </div>
+        <h2><span class="section-num">03</span>The Fault Topology</h2>
+        <p class="section-subtitle">Every finding classified by type and depth. Nodes sized by business impact. Three faultlines reach Critical.</p>
+
+        <div class="table-responsive">
+            <table class="topology-table" aria-label="Fault topology map">
+                <thead>
+                    <tr>
+                        <th>Journey Stage</th>
+                        <th>Faultline Description</th>
+                        <th>Faultline Type</th>
+                        <th>Depth</th>
+                        <th>Severity</th>
+                        <th>Root Cause Category</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Dispute Notification (Merchant)</td>
+                        <td>No advance warning before account action — funds held before merchant knows dispute exists</td>
+                        <td class="ftype-trust">Trust</td>
+                        <td>Structural</td>
+                        <td class="sev-critical">■ CRITICAL</td>
+                        <td>Org boundary — risk team owns action, no one owns communication</td>
+                    </tr>
+                    <tr>
+                        <td>Initial Framing</td>
+                        <td>Accusation language for merchant vs. help language for customer — same event, opposite institutional posture</td>
+                        <td class="ftype-trust">Trust + Cognitive</td>
+                        <td>Surface</td>
+                        <td class="sev-critical">■ CRITICAL</td>
+                        <td>Legacy copywriting — never reviewed through merchant lens</td>
+                    </tr>
+                    <tr>
+                        <td>Evidence Submission (Merchant)</td>
+                        <td>No receipt confirmation — merchant cannot verify submission was received and complete</td>
+                        <td class="ftype-loop">Feedback Loop</td>
+                        <td>Surface</td>
+                        <td class="sev-high">▲ HIGH</td>
+                        <td>User research gap — merchant anxiety around submission never studied</td>
+                    </tr>
+                    <tr>
+                        <td>Waiting Period (Merchant)</td>
+                        <td>Zero visibility for 18+ days — no status, no timeline, no indication evidence is being evaluated</td>
+                        <td class="ftype-trust">Trust + Cognitive</td>
+                        <td>Structural</td>
+                        <td class="sev-critical">■ CRITICAL</td>
+                        <td>System-operations design — "system working, so no comms needed"</td>
+                    </tr>
+                    <tr>
+                        <td>Waiting Period (Customer)</td>
+                        <td>Clear status + timeline — system visibly working for them</td>
+                        <td>—</td>
+                        <td>Well-designed</td>
+                        <td class="sev-well">Well-designed</td>
+                        <td>—</td>
+                    </tr>
+                    <tr>
+                        <td>Outcome Communication</td>
+                        <td>Merchant wins merely notified; customer wins actively celebrated — emotional asymmetry across identical outcome types</td>
+                        <td class="ftype-trust">Trust</td>
+                        <td>Surface</td>
+                        <td class="sev-high">▲ HIGH</td>
+                        <td>Legacy copywriting — no merchant outcome communication design</td>
+                    </tr>
+                    <tr>
+                        <td>Post-Outcome (Merchant loss)</td>
+                        <td>No recourse pathway communicated — interface implies decision is final and unquestionable</td>
+                        <td class="ftype-trust">Trust + Agency</td>
+                        <td>Structural</td>
+                        <td class="sev-high">▲ HIGH</td>
+                        <td>Policy–UX gap — recourse exists in policy, invisible in interface</td>
+                    </tr>
+                    <tr>
+                        <td>Pattern Accumulation (Merchant)</td>
+                        <td>No aggregate dispute view — each dispute isolated despite merchant experiencing them as operational pattern</td>
+                        <td class="ftype-sys">Systemic</td>
+                        <td>Systemic</td>
+                        <td class="sev-critical">■ CRITICAL</td>
+                        <td>Measurement gap — nobody tracking merchant-level dispute narrative</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3>The Three Critical Faultlines — Root Cause Analysis</h3>
+
+        <div class="ruled-box-red">
+            <strong>Critical Faultline 1 — Pre-Notification Account Action</strong><br><br>
+            Merchants discovered funds had been placed on hold through their account balance — not through a notification. "PayPal took my money without telling me" (19% of support tickets) was technically inaccurate — PayPal had policy grounds. It was experientially precise — the interface had provided no advance communication.<br><br>
+            <strong>5-Why root cause:</strong> Why did this happen? → Account action policy was developed by risk and finance teams. → Why wasn't communication designed? → Communication design for account action was never assigned to anyone. → Why not? → The policy team and UX team had no shared accountability for the merchant communication experience. → <strong>Organisational boundary faultline — a problem visible to everyone, owned by no one.</strong>
+        </div>
+
+        <div class="ruled-box-amber">
+            <strong>Critical Faultline 2 — The Invisible Review</strong><br><br>
+            For 18+ days — the average resolution time — the merchant's interface showed two states only: "Under review" or "Closed." Drawing on predictive processing theory: the brain expects systems to behave consistently with their implied promises. A dispute interface implies: <em>"We are working toward a fair resolution."</em> Silence during the working period violates that promise. Each day without communication was a day in which the merchant's negative pattern perception deepened.<br><br>
+            <strong>5-Why root cause:</strong> The review period communication was designed from a system-operations perspective — the system was working, therefore no communication was necessary. The merchant's psychological experience of <em>being waited on</em> had never been considered as a design requirement.
+        </div>
+
+        <div class="ruled-box-blue">
+            <strong>Critical Faultline 3 — Pattern Invisibility (The Most Structurally Significant)</strong><br><br>
+            This is the faultline most unique to the merchant experience — and the one a standard UX audit would never find, because it requires thinking about <em>repeated use across time</em> rather than a single session.<br><br>
+            Without aggregate context, merchants constructed their own pattern narrative from isolated incidents. The belief "PayPal always sides with customers" was built from uncontextualised experience. If the portal had shown: <em>"Your dispute rate is 0.3% of transactions — category average is 0.8%. Of your last 12 disputes, 7 were resolved in your favour"</em> — the merchant's narrative would have been completely different.<br><br>
+            <strong>5-Why root cause:</strong> The portal was designed for individual dispute management. Merchant-level dispute intelligence was never identified as a product requirement — because no one was studying merchant trust as a longitudinal outcome.
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════ SECTION 4 — REMEDIATION ═════════════════════════ -->
+<section id="remediation">
+    <div class="container">
+        <div class="section-phase">
+            <span class="phase-number">Phase 4</span>
+            <span class="phase-name">Remediation</span>
+            <span class="phase-line"></span>
+        </div>
+        <h2><span class="section-num">04</span>The Remediation</h2>
+        <p class="section-subtitle">Five interventions. Sequenced by RICE-F score. Each addressed to a specific faultline. No policy changed.</p>
+
+        <div class="ruled-box-green">
+            <strong>The remediation principle:</strong> Fair decisions communicated unfairly produce the same trust damage as unfair decisions. The intervention addresses <em>communication architecture</em> — not policy. This distinction was critical for stakeholder alignment. The policy team had been defending outcomes. The forensic audit revealed that outcomes were not the problem. Communication of outcomes — and the process leading to them — was destroying trust that the outcomes themselves had earned.
+        </div>
+
+        <!-- RICE-F SCORING TABLE -->
+        <h4>RICE-F Prioritisation — All Faultlines Scored</h4>
+        <p>Every faultline scored across Reach · Impact · Confidence · Effort (inverted) · Forensic Severity multiplier. Highest score = implement first.</p>
+
+        <div class="table-responsive">
+            <table class="rice-table" aria-label="RICE-F prioritisation scores">
+                <thead>
+                    <tr>
+                        <th style="min-width:200px">Remediation</th>
+                        <th>Reach<br><span style="font-weight:400;opacity:.6">1–5</span></th>
+                        <th>Impact<br><span style="font-weight:400;opacity:.6">1–5</span></th>
+                        <th>Confidence<br><span style="font-weight:400;opacity:.6">1–5</span></th>
+                        <th>Effort ↓<br><span style="font-weight:400;opacity:.6">1–5</span></th>
+                        <th>F-Mult<br><span style="font-weight:400;opacity:.6">×</span></th>
+                        <th>RICE-F<br><span style="font-weight:400;opacity:.6">Score</span></th>
+                        <th>Horizon</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Language system redesign (247 elements)</td>
+                        <td>5</td>
+                        <td>5</td>
+                        <td>5</td>
+                        <td>4</td>
+                        <td>×1.5 Trust</td>
+                        <td class="rice-total high">750</td>
+                        <td><span class="rice-horizon-badge h1-badge">H1</span></td>
+                    </tr>
+                    <tr>
+                        <td>Advance notification protocol</td>
+                        <td>5</td>
+                        <td>5</td>
+                        <td>5</td>
+                        <td>3</td>
+                        <td>×1.5 Trust</td>
+                        <td class="rice-total high">563</td>
+                        <td><span class="rice-horizon-badge h1-badge">H1</span></td>
+                    </tr>
+                    <tr>
+                        <td>Review period transparency system</td>
+                        <td>5</td>
+                        <td>4</td>
+                        <td>5</td>
+                        <td>3</td>
+                        <td>×1.5 Trust</td>
+                        <td class="rice-total high">450</td>
+                        <td><span class="rice-horizon-badge h2-badge">H2</span></td>
+                    </tr>
+                    <tr>
+                        <td>Recourse pathway communication</td>
+                        <td>4</td>
+                        <td>4</td>
+                        <td>5</td>
+                        <td>4</td>
+                        <td>×1.5 Trust</td>
+                        <td class="rice-total med">480</td>
+                        <td><span class="rice-horizon-badge h2-badge">H2</span></td>
+                    </tr>
+                    <tr>
+                        <td>Merchant dispute intelligence dashboard</td>
+                        <td>4</td>
+                        <td>5</td>
+                        <td>4</td>
+                        <td>2</td>
+                        <td>×1.3 Systemic</td>
+                        <td class="rice-total med">208</td>
+                        <td><span class="rice-horizon-badge h3-badge">H3</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- REMEDIATION CARDS -->
+        <h4>Remediation Cards — Horizon 1 (0–30 days)</h4>
+
+        <div class="remediation-card">
+            <div class="rem-card-header">
+                <span class="rem-card-id">FL-001 · RC-01</span>
+                <span class="rem-card-title">Language System Redesign</span>
+                <div class="rem-card-badges">
+                    <span class="rice-horizon-badge h1-badge">Horizon 1</span>
+                    <span class="sev-critical" style="font-family:'DM Mono',monospace;font-size:11px;">■ Critical</span>
+                </div>
+            </div>
+            <div class="rem-card-body">
+                <div class="rem-row"><span class="rem-label">Faultline</span><span class="rem-val">Asymmetric institutional language communicating bias through 247 text elements across merchant and customer journeys</span></div>
+                <div class="rem-row"><span class="rem-label">Evidence</span><span class="rem-val">Track A: B1 Trust Coherence — customer addressed as ally, merchant as defendant · Track B: 41% tickets "unfair", 28% "always" language</span></div>
+                <div class="rem-row"><span class="rem-label">Root Cause</span><span class="rem-val">Copywriting produced without merchant lens — text inherited from compliance documentation, never reviewed for trust impact</span></div>
+                <div class="rem-row"><span class="rem-label">Intervention</span><span class="rem-val">Neutrality audit applied to all 247 text elements. Four tests per element: institutional allegiance · obligation asymmetry · evidence weighting · outcome emotion asymmetry</span></div>
+
+                <h4 style="margin-top:20px;">Key Before / After Transformations</h4>
+                <div class="copy-compare" style="margin-bottom:12px;">
+                    <div class="copy-before">
+                        <div class="copy-label">Dispute acknowledgement — Before</div>
+                        <div class="copy-text">"A dispute has been filed against you. You are required to respond within 10 days."</div>
+                    </div>
+                    <div class="copy-after">
+                        <div class="copy-label">Dispute acknowledgement — After</div>
+                        <div class="copy-text">"A payment dispute has been opened for review. Your perspective is important — here's how to share it."</div>
+                    </div>
+                </div>
+                <div class="copy-compare" style="margin-bottom:12px;">
+                    <div class="copy-before">
+                        <div class="copy-label">Merchant win — Before</div>
+                        <div class="copy-text">"This dispute has been closed. No further action is required."</div>
+                    </div>
+                    <div class="copy-after">
+                        <div class="copy-label">Merchant win — After</div>
+                        <div class="copy-text">"This dispute has been resolved in your favour. After reviewing the evidence from both sides, we found that [reason]. Any held funds have been released to your account."</div>
+                    </div>
+                </div>
+                <div class="copy-compare">
+                    <div class="copy-before">
+                        <div class="copy-label">Merchant loss — Before</div>
+                        <div class="copy-text">"This dispute has been resolved. The amount has been returned to the customer."</div>
+                    </div>
+                    <div class="copy-after">
+                        <div class="copy-label">Merchant loss — After</div>
+                        <div class="copy-text">"This dispute was resolved in favour of the customer because [reason]. If you have new evidence not previously submitted, you may request a review within 10 days: [link]."</div>
+                    </div>
+                </div>
+
+                <div class="rem-row" style="margin-top:16px;"><span class="rem-label">Success Metric</span><span class="rem-val green">Tickets containing "unfair" language · Baseline: 41% · Target: below 20% · Measure at 60 and 90 days post-launch</span></div>
+                <div class="rem-row"><span class="rem-label">Forensic Note</span><span class="rem-val">The reason matters as much as the outcome. Telling a merchant <em>why</em> they won communicates that their evidence was considered — not that an automated default ran. Telling them why they lost, with recourse, converts the response from "platform verdict" to "accountable decision."</span></div>
+            </div>
+        </div>
+
+        <div class="remediation-card">
+            <div class="rem-card-header">
+                <span class="rem-card-id">FL-002 · RC-02</span>
+                <span class="rem-card-title">Advance Notification Protocol</span>
+                <div class="rem-card-badges">
+                    <span class="rice-horizon-badge h1-badge">Horizon 1</span>
+                    <span class="sev-critical" style="font-family:'DM Mono',monospace;font-size:11px;">■ Critical</span>
+                </div>
+            </div>
+            <div class="rem-card-body">
+                <div class="rem-row"><span class="rem-label">Faultline</span><span class="rem-val">Account action (fund hold) occurring before merchant notification — converting policy-legitimate action into perceived theft</span></div>
+                <div class="rem-row"><span class="rem-label">Evidence</span><span class="rem-val">Track A: B5 Failure Mode Dignity violation · Track B: 19% of merchant tickets "debited without warning" — entire support category preventable</span></div>
+                <div class="rem-row"><span class="rem-label">Root Cause</span><span class="rem-val">Organisational boundary faultline — risk team owns the account action, no team owned the merchant communication surrounding it</span></div>
+                <div class="rem-row"><span class="rem-label">Intervention</span><span class="rem-val red">Two-notification mandatory sequence: (1) Immediate dispute alert — within minutes of filing, before any account action. (2) Account action pre-alert — 24 hours before any fund hold, with exact date, amount, and expected release.</span></div>
+                <div class="rem-row"><span class="rem-label">Key Principle</span><span class="rem-val">The account action is identical. The communication surrounding it changes completely. Advance notification converts institutional betrayal into institutional transparency. The merchant may still be frustrated — but they cannot be ambushed.</span></div>
+                <div class="rem-row"><span class="rem-label">Success Metric</span><span class="rem-val green">Tickets "debited without warning" · Baseline: 19% share · Target: below 3% · Implementation: cross-team (risk + UX + notifications)</span></div>
+            </div>
+        </div>
+
+        <h4>Remediation Cards — Horizon 2 (30–90 days)</h4>
+
+        <div class="remediation-card">
+            <div class="rem-card-header">
+                <span class="rem-card-id">FL-003 · RC-03</span>
+                <span class="rem-card-title">Review Period Transparency System</span>
+                <div class="rem-card-badges">
+                    <span class="rice-horizon-badge h2-badge">Horizon 2</span>
+                    <span class="sev-critical" style="font-family:'DM Mono',monospace;font-size:11px;">■ Critical</span>
+                </div>
+            </div>
+            <div class="rem-card-body">
+                <div class="rem-row"><span class="rem-label">Faultline</span><span class="rem-val">Binary status system ("Under review" / "Closed") leaving merchants in unstructured 18-day silence — each day deepening negative pattern perception</span></div>
+                <div class="rem-row"><span class="rem-label">Evidence</span><span class="rem-val">Track A: P2 Predictive Processing violation — silence violates the implied promise "we are working toward fair resolution" · Track B: Support spike at days 5–7 and 14–15 confirming anxiety accumulation</span></div>
+                <div class="rem-row"><span class="rem-label">Intervention</span><span class="rem-val">Five-stage progress system replacing binary states:
+                    <br><br>
+                    <strong>Stage 1</strong> ✓ Dispute opened [date + customer filing]<br>
+                    <strong>Stage 2</strong> ✓ Your response received [date + documents listed — confirms receipt]<br>
+                    <strong>Stage 3</strong> → Under review — "Our team is evaluating information provided by both parties" + estimated completion range<br>
+                    <strong>Stage 4</strong> — Decision communicated [pending]<br>
+                    <strong>Stage 5</strong> — Resolution applied [pending]</span>
+                </div>
+                <div class="rem-row"><span class="rem-label">Forensic Rationale</span><span class="rem-val">Stage 2 confirms evidence receipt — eliminating "I provided all evidence" anxiety. Stage 3's explicit statement "both parties" addresses the core perceived-bias faultline. Bounded wait (estimated range) consistently outperforms unbounded wait in perceived fairness, even when actual duration is identical.</span></div>
+                <div class="rem-row"><span class="rem-label">Success Metric</span><span class="rem-val green">"What is happening with my dispute" contacts · Baseline: 24% of dispute tickets · Target: below 8% · Measure at 90 days</span></div>
+            </div>
+        </div>
+
+        <div class="remediation-card">
+            <div class="rem-card-header">
+                <span class="rem-card-id">FL-004 · RC-04</span>
+                <span class="rem-card-title">Recourse Architecture</span>
+                <div class="rem-card-badges">
+                    <span class="rice-horizon-badge h2-badge">Horizon 2</span>
+                    <span class="sev-high" style="font-family:'DM Mono',monospace;font-size:11px;">▲ High</span>
+                </div>
+            </div>
+            <div class="rem-card-body">
+                <div class="rem-row"><span class="rem-label">Faultline</span><span class="rem-val">Recourse pathway exists in policy but is invisible in interface — merchant perceives platform as final arbiter with no accountability mechanism</span></div>
+                <div class="rem-row"><span class="rem-label">Evidence</span><span class="rem-val">Track A: H3 User Control + P5 Agency violation · Track B: 22% tickets "no way to appeal" — merchants unaware recourse exists</span></div>
+                <div class="rem-row"><span class="rem-label">Key Intervention Detail</span><span class="rem-val">The honest caveat: <em>"Review requests are evaluated on the basis of new information not previously submitted. The same evidence will not change the outcome."</em> This is a trust-building statement, not a discouraging one — it tells the merchant the system is principled.</span></div>
+                <div class="rem-row"><span class="rem-label">Why Visibility Alone Works</span><span class="rem-val">The majority of merchants seeing a recourse pathway will not use it. But knowing it exists changes the platform relationship from "final arbiter" to "accountable partner." The recourse pathway itself is secondary. The <em>signal it sends about platform character</em> is primary.</span></div>
+                <div class="rem-row"><span class="rem-label">Success Metric</span><span class="rem-val green">Merchant NPS post-unfavourable outcome · Baseline: −12 · Target: above 0 · Tickets "no way to appeal": from 22% to below 5%</span></div>
+            </div>
+        </div>
+
+        <h4>Remediation Cards — Horizon 3 (90+ days)</h4>
+
+        <div class="remediation-card">
+            <div class="rem-card-header">
+                <span class="rem-card-id">FL-005 · RC-05</span>
+                <span class="rem-card-title">Merchant Dispute Intelligence Dashboard</span>
+                <div class="rem-card-badges">
+                    <span class="rice-horizon-badge h3-badge">Horizon 3</span>
+                    <span class="sev-critical" style="font-family:'DM Mono',monospace;font-size:11px;">■ Critical (Strategic)</span>
+                </div>
+            </div>
+            <div class="rem-card-body">
+                <div class="rem-row"><span class="rem-label">Faultline</span><span class="rem-val">Pattern invisibility — each dispute isolated despite merchants experiencing them as operational pattern, enabling biased narrative construction</span></div>
+                <div class="rem-row"><span class="rem-label">Evidence</span><span class="rem-val">Track A: B6 Scale-Induced Debt · B7 Adoption Gravity · Track B: Measurement gap — no data existed because no one was tracking merchant-level dispute narrative</span></div>
+                <div class="rem-row"><span class="rem-label">Dashboard Design</span><span class="rem-val">
+                    Dispute Health: your rate (0.3%) vs category average (0.8%) — ▼ 63% below average<br>
+                    Last 12 months: total disputes · resolved in your favour [%] · resolved for customer [%] · withdrawn [%]<br>
+                    Common dispute reasons in your category + prevention tips<br>
+                    Recent disputes timeline
+                </span></div>
+                <div class="rem-row"><span class="rem-label">The Strategic Shift</span><span class="rem-val">This transforms the relationship from adversarial to advisory. PayPal stops being the platform that takes money. It becomes the platform that helps merchants understand and manage their dispute risk. Merchants who see their 58% win rate and 0.3% dispute rate — against a 0.8% category average — cannot sustain the belief that the system is against them.</span></div>
+                <div class="rem-row"><span class="rem-label">Additional Value</span><span class="rem-val green">Dashboard creates natural discovery pathway for PayPal's merchant tools — shipping, verification, dispute-reduction services become contextual recommendations. Trust remediation becomes product discovery.</span></div>
+                <div class="rem-row"><span class="rem-label">Success Metric</span><span class="rem-val green">Merchant NPS overall · Baseline: −12 · Target: +8+ · "PayPal always sides with" ticket language: from 28% to below 8% · Measure at 6 months post-launch</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════ SECTION 5 — OUTCOMES ════════════════════════════ -->
+<section id="outcomes">
+    <div class="container">
+        <div class="section-phase">
+            <span class="phase-number">Result</span>
+            <span class="phase-name">Measured Outcomes</span>
+            <span class="phase-line"></span>
+        </div>
+        <h2><span class="section-num">05</span>The Outcomes</h2>
+        <p class="section-subtitle">Fair decisions, finally experienced as fair. Without changing a single policy.</p>
+
+        <div class="outcome-grid">
+            <div class="outcome-card">
+                <div class="outcome-label">Adoption Improvement</div>
+                <div class="outcome-metric green">+1%</div>
+                <div class="outcome-desc">At PayPal's $1.4T annual payment volume, 1% adoption represents millions of retained transactions and significant GMV remaining on platform.</div>
+            </div>
+            <div class="outcome-card">
+                <div class="outcome-label">Merchant NPS Recovery</div>
+                <div class="outcome-metric amber">−12 → +8</div>
+                <div class="outcome-desc">20-point NPS swing within two quarters of implementation — the largest single-initiative merchant trust improvement in the audit period.</div>
+            </div>
+            <div class="outcome-card">
+                <div class="outcome-label">Support Load Reduction</div>
+                <div class="outcome-metric green">−43%</div>
+                <div class="outcome-desc">Dispute-related merchant support contacts. Advance notification eliminated 19% alone. Review transparency eliminated another 24%. Reactive cost → designed communication.</div>
+            </div>
+        </div>
+
+        <h3>The Vocabulary Shift — Most Significant Qualitative Outcome</h3>
+        <div class="grid-2">
+            <div class="grid-card" style="border-left: 3px solid var(--red);">
+                <div class="grid-card-title">Before — Platform Relationship Statement</div>
+                <div class="grid-card-headline" style="color:var(--red);">"PayPal is against merchants"</div>
+                <p style="font-size:15px; margin:0;">Drives churn. Creates network-effect damage. Invisible to policy review. Builds from accumulated pattern — one bad interaction does not produce "always."</p>
+            </div>
+            <div class="grid-card" style="border-left: 3px solid var(--green);">
+                <div class="grid-card-title">After — Individual Outcome Statement</div>
+                <div class="grid-card-headline" style="color:var(--green);">"I didn't win this one"</div>
+                <p style="font-size:15px; margin:0;">Does not drive churn. Accepts outcome without condemning platform. The distinction between these two phrasings is the entire difference between retention and abandonment.</p>
+            </div>
+        </div>
+
+        <p>The interface redesign moved merchant perception from adversarial to advisory — without changing a single policy decision. Merchants who had believed PayPal "always" sided against them now had data showing their 58% win rate and below-average dispute frequency. The narrative couldn't survive the evidence.</p>
+
+        <div class="forensic-summary" role="region" aria-label="Forensic Signature">
+            <div class="summary-title">■ Forensic Signature — PayPal Dispute Resolution</div>
+            <div class="summary-row"><span class="summary-key">Heuristic Finding</span><span class="summary-val">Language asymmetry and review invisibility converting fair decisions into felt unfairness — 41% of merchant tickets citing unfairness independent of actual outcomes · B1 Trust Coherence · P2 Predictive Processing</span></div>
+            <div class="summary-divider"></div>
+            <div class="summary-row"><span class="summary-key">Algorithmic Confirmation</span><span class="summary-val">Support ticket vocabulary clustering — 28% using "always" language despite 52% merchant win rate · Support spike pattern at days 5–7 of review period confirming silence-as-hostility reading</span></div>
+            <div class="summary-divider"></div>
+            <div class="summary-row"><span class="summary-key">Convergence Level</span><span class="summary-val">High — 5 of 6 critical faultlines confirmed by both tracks · 1 anomaly (pattern invisibility) identified through measurement gap analysis</span></div>
+            <div class="summary-divider"></div>
+            <div class="summary-row"><span class="summary-key">Root Cause</span><span class="summary-val">Interface designed for policy compliance — not trust maintenance under adversarial conditions. Organisational boundary faultline: risk team owned account actions, no team owned merchant communication architecture.</span></div>
+            <div class="summary-divider"></div>
+            <div class="summary-row"><span class="summary-key">Remediation</span><span class="summary-val">Five-layer trust architecture — advance notification (H1) · language redesign 247 elements (H1) · review transparency (H2) · recourse pathway (H2) · intelligence dashboard (H3)</span></div>
+            <div class="summary-divider"></div>
+            <div class="summary-row"><span class="summary-key">Outcome</span><span class="summary-val outcome">■ Merchant NPS −12 → +8 · +1% adoption (millions retained) · −43% support contacts · Trust recovered without a single policy change</span></div>
+            <div class="summary-divider"></div>
+            <div class="summary-row"><span class="summary-key">Transferable Pattern</span><span class="summary-val">Trust is not built by outcomes. Trust is built by the experience of process. Any two-sided marketplace, fintech, or dispute-handling platform carries this faultline risk. Find it before your merchants find Stripe.</span></div>
+        </div>
+
+        <!-- CTA -->
+        <div class="cta-block">
+            <div>
+                <div class="cta-headline">Does your product have a trust faultline you haven't named yet?</div>
+                <p class="cta-sub">The PayPal audit found the gap between institutional intention and human experience. A forensic audit of your dispute or service resolution flows may reveal the same — before it shows up in your churn data.</p>
+            </div>
+            <div class="cta-actions">
+                <a href="mailto:anil@anilksoman.com?subject=Forensic Audit Enquiry" class="btn-primary">Request a Forensic Audit</a>
+                <a href="index.html" class="btn-ghost">← View Full Framework</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════ FOOTER ═══════════════════════════════ -->
+<footer>
+    <div>
+        <strong>The Fault Topology Method™</strong><br>
+        A forensic approach to mapping where products break, why they break, and what it costs.<br>
+        <span style="margin-top:6px; display:block;">By <strong>Anil Kumar Soman</strong> · UX Forensic Auditor</span>
+    </div>
+    <div class="footer-nav">
+        <a href="index.html">Framework</a>
+        <a href="waterloo.html">Waterloo</a>
+        <a href="amazon.html">Amazon</a>
+        <a href="cisco.html">Cisco</a>
+        <a href="mailto:anil@anilksoman.com">Contact</a>
+    </div>
+    <div style="text-align:right;">
+        <a href="#reading-progress" id="back-to-top">↑ Back to top</a><br>
+        <span style="margin-top:4px;display:block;">© 2026 Anil Kumar Soman. All rights reserved.</span>
+    </div>
+</footer>
+
+<script>
+    // ── Reading progress bar ──
+    (function() {
+        const bar = document.getElementById('reading-progress');
+        function update() {
+            const scrollTop = window.scrollY || document.documentElement.scrollTop;
+            const docH = document.documentElement.scrollHeight - window.innerHeight;
+            bar.style.width = docH > 0 ? (scrollTop / docH * 100) + '%' : '0%';
+        }
+        window.addEventListener('scroll', update, { passive: true });
+        update();
+    })();
+
+    // ── Active nav on scroll ──
+    (function() {
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-section-links a');
+        const NAV_H = 56;
+
+        function onScroll() {
+            const scrollY = window.scrollY + NAV_H + 20;
+            let current = '';
+            sections.forEach(s => {
+                if (s.offsetTop <= scrollY) current = s.id;
+            });
+            navLinks.forEach(a => {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+            });
+        }
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+    })();
+
+    // ── Back to top smooth ──
+    document.getElementById('back-to-top').addEventListener('click', function(e) {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+</script>
+
+</body>
+</html>

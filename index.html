@@ -736,6 +736,14 @@
         <div class="phase-days">3–5 days</div>
       </a>
     </div>
+    <div style="margin-top:20px; padding-top:20px; border-top:1px solid var(--rule); display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+      <span style="font-family:'DM Mono',monospace; font-size:11px; color:rgba(15,14,11,0.5); letter-spacing:0.08em;">See the method applied to real products:</span>
+      <a href="payPal.html" style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink); text-decoration:none; border-bottom:1px solid var(--rule); padding-bottom:1px;">PayPal — Trust Audit</a>
+      <a href="cisco.html" style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink); text-decoration:none; border-bottom:1px solid var(--rule); padding-bottom:1px;">Cisco — Design Debt</a>
+      <a href="amazon.html" style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink); text-decoration:none; border-bottom:1px solid var(--rule); padding-bottom:1px;">Amazon — Defect Diagnosis</a>
+      <a href="waterloo.html" style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink); text-decoration:none; border-bottom:1px solid var(--rule); padding-bottom:1px;">Waterloo — Expert Paralysis</a>
+      <a href="#case-studies" style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--red); text-decoration:none; margin-left:auto;">↓ All case studies</a>
+    </div>
   </div>
 </header>
 
@@ -752,6 +760,7 @@
     <a href="#remediation-card">Remedy Card</a>
     <!-- REFINEMENT 5: nav link for new applied section -->
     <a href="#applied-forensics">Applied</a>
+    <a href="#case-studies">In Practice</a>
   </div>
 </nav>
 
@@ -1161,6 +1170,9 @@
           </ul>
           <p class="proof-note">⚡ Rooted in a real trust breakdown at PayPal: merchants perceived unfairness in dispute outcomes despite a fair system, silently eroding adoption — this heuristic was built from that diagnosis.</p>
           <div class="forensic-box">What is the trust debt this product is accumulating — and what will it cost when it is called?</div>
+          <div style="margin-top:10px; font-family:'DM Mono',monospace; font-size:11px; color:rgba(15,14,11,0.55); border-top:1px solid var(--rule); padding-top:10px;">
+            <a href="payPal.html" style="color:var(--red); text-decoration:none;">→ See B1 applied: PayPal Trust Audit</a>
+          </div>
         </div>
 
         <div class="heuristic-block">
@@ -1247,6 +1259,9 @@
           </ul>
           <p class="proof-note">⚡ Applied at Cisco to surface design debt across 6 product teams — patterns that worked for a prototype had become systemic drag at enterprise scale.</p>
           <div class="forensic-box">What is the operational cost of scale-induced UX debt — in support time, training costs, and efficiency loss?</div>
+          <div style="margin-top:10px; font-family:'DM Mono',monospace; font-size:11px; color:rgba(15,14,11,0.55); border-top:1px solid var(--rule); padding-top:10px;">
+            <a href="cisco.html" style="color:var(--red); text-decoration:none;">→ See B6 applied: Cisco Design Debt Audit</a>
+          </div>
         </div>
 
         <div class="heuristic-block">
@@ -1283,6 +1298,9 @@
             <li>Is relevance determined by user behaviour and history — or is it static for all users?</li>
             <li>Does the product's information architecture reflect relevance hierarchies or categorical hierarchies?</li>
           </ul>
+          <div style="margin-top:10px; font-family:'DM Mono',monospace; font-size:11px; color:rgba(15,14,11,0.55); border-top:1px solid var(--rule); padding-top:10px;">
+            <a href="waterloo.html" style="color:var(--red); text-decoration:none;">→ See P1 applied: Waterloo Expert Paralysis case</a>
+          </div>
         </div>
 
         <div class="heuristic-block">
@@ -1355,6 +1373,10 @@
     <!-- TRACK B -->
     <h3 style="margin-top:48px">Track B — Algorithmic & Data Forensics</h3>
     <p>Where Track A applies expert judgment, Track B applies structured data analysis to find faultlines that expert judgment alone cannot see.</p>
+    <div style="border-left:3px solid var(--amber); background:rgba(212,160,23,0.06); padding:14px 20px; margin:0 0 24px; font-size:15px;">
+      <strong style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:var(--amber); display:block; margin-bottom:8px;">In Practice</strong>
+      The Amazon case study shows Track B in fullest form: funnel forensics, support ticket vocabulary analysis, and session behaviour analysis all converging on a single structural faultline. <a href="amazon.html" style="color:var(--red); text-decoration:none; border-bottom:1px solid var(--red);">Read The Defect Diagnosis Faultline →</a>
+    </div>
 
     <div class="grid-2">
       <div class="card">
@@ -1813,7 +1835,167 @@
   </div>
 </section>
 
-<!-- ── REFINEMENT 5: CLEAR CALL TO ACTION SECTION ── -->
+<!-- ── CASE STUDIES ── -->
+<section id="case-studies">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-meta">
+        <span class="section-num">→</span>
+        <span class="section-tag">The Method in Practice</span>
+      </div>
+      <div>
+        <h2 class="section-title">Four faultlines.<br>Four real diagnoses.</h2>
+        <p class="section-subtitle">The FTM is not a theoretical framework. Each case study below walks through all four phases — reconnaissance, investigation, diagnosis, remediation — on a real product with real consequences. Read them to see how abstract heuristics become concrete findings, and how findings become business cases.</p>
+      </div>
+    </div>
+
+    <!-- Case study cards -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:0; border:1px solid var(--rule); margin-bottom:48px;">
+
+      <!-- PayPal -->
+      <div style="padding:36px; border-right:1px solid var(--rule); border-bottom:1px solid var(--rule); position:relative;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px;">
+          <span style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.15em; text-transform:uppercase; background:var(--ink); color:var(--paper); padding:3px 10px;">Trust Faultline</span>
+          <span style="font-family:'DM Mono',monospace; font-size:10px; color:rgba(15,14,11,0.4);">PayPal</span>
+        </div>
+        <h3 style="font-family:'Syne',sans-serif; font-size:24px; font-weight:800; line-height:1.1; margin-bottom:12px; letter-spacing:-0.02em;">The Trust Audit</h3>
+        <p style="font-size:16px; font-style:italic; color:rgba(15,14,11,0.65); margin-bottom:20px; line-height:1.5;">Where PayPal's dispute resolution was failing everyone — but merchants were paying the highest price.</p>
+        <div style="border-top:1px solid var(--rule); padding-top:16px; margin-bottom:24px;">
+          <div style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(15,14,11,0.4); margin-bottom:10px;">FTM Concepts Demonstrated</div>
+          <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px;">
+            <a href="#heuristics" style="font-family:'DM Mono',monospace; font-size:10px; background:rgba(192,57,43,0.08); color:var(--red); padding:3px 8px; text-decoration:none; border:1px solid rgba(192,57,43,0.2);">B1 Trust Coherence</a>
+            <a href="#heuristics" style="font-family:'DM Mono',monospace; font-size:10px; background:rgba(192,57,43,0.08); color:var(--red); padding:3px 8px; text-decoration:none; border:1px solid rgba(192,57,43,0.2);">B3 Feedback Loop Integrity</a>
+            <a href="#heuristics" style="font-family:'DM Mono',monospace; font-size:10px; background:rgba(192,57,43,0.08); color:var(--red); padding:3px 8px; text-decoration:none; border:1px solid rgba(192,57,43,0.2);">B5 Failure Mode Dignity</a>
+            <a href="#heuristics" style="font-family:'DM Mono',monospace; font-size:10px; background:rgba(192,57,43,0.08); color:var(--red); padding:3px 8px; text-decoration:none; border:1px solid rgba(192,57,43,0.2);">H9 Error Recovery</a>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:24px;">
+          <div>
+            <div style="font-family:'DM Mono',monospace; font-size:10px; color:rgba(15,14,11,0.4); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px;">Merchant NPS</div>
+            <div style="font-family:'DM Mono',monospace; font-size:14px; color:#1a6b3c; font-weight:500;">−12 → +8</div>
+          </div>
+          <div>
+            <div style="font-family:'DM Mono',monospace; font-size:10px; color:rgba(15,14,11,0.4); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px;">Support Reduction</div>
+            <div style="font-family:'DM Mono',monospace; font-size:14px; color:#1a6b3c; font-weight:500;">−43% contacts</div>
+          </div>
+        </div>
+        <a href="payPal.html" style="display:inline-flex; align-items:center; gap:8px; font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--red); text-decoration:none; border-bottom:1px solid var(--red); padding-bottom:2px;">Read the Case Study →</a>
+      </div>
+
+      <!-- Cisco -->
+      <div style="padding:36px; border-bottom:1px solid var(--rule); position:relative;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px;">
+          <span style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.15em; text-transform:uppercase; background:var(--ink); color:var(--paper); padding:3px 10px;">Systemic Debt</span>
+          <span style="font-family:'DM Mono',monospace; font-size:10px; color:rgba(15,14,11,0.4);">Cisco</span>
+        </div>
+        <h3 style="font-family:'Syne',sans-serif; font-size:24px; font-weight:800; line-height:1.1; margin-bottom:12px; letter-spacing:-0.02em;">The Design Debt Audit</h3>
+        <p style="font-size:16px; font-style:italic; color:rgba(15,14,11,0.65); margin-bottom:20px; line-height:1.5;">How six teams building independently created a hidden velocity crisis — and how a unified system fixed it.</p>
+        <div style="border-top:1px solid var(--rule); padding-top:16px; margin-bottom:24px;">
+          <div style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(15,14,11,0.4); margin-bottom:10px;">FTM Concepts Demonstrated</div>
+          <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px;">
+            <a href="#heuristics" style="font-family:'DM Mono',monospace; font-size:10px; background:rgba(192,57,43,0.08); color:var(--red); padding:3px 8px; text-decoration:none; border:1px solid rgba(192,57,43,0.2);">B6 Scale-Induced Debt</a>
+            <a href="#heuristics" style="font-family:'DM Mono',monospace; font-size:10px; background:rgba(192,57,43,0.08); color:var(--red); padding:3px 8px; text-decoration:none; border:1px solid rgba(192,57,43,0.2);">B2 Cognitive Load Architecture</a>
+            <a href="#convergence" style="font-family:'DM Mono',monospace; font-size:10px; background:rgba(192,57,43,0.08); color:var(--red); padding:3px 8px; text-decoration:none; border:1px solid rgba(192,57,43,0.2);">H4 Consistency</a>
+            <a href="#phase3" style="font-family:'DM Mono',monospace; font-size:10px; background:rgba(192,57,43,0.08); color:var(--red); padding:3px 8px; text-decoration:none; border:1px solid rgba(192,57,43,0.2);">Type 4 Systemic Faultline</a>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:24px;">
+          <div>
+            <div style="font-family:'DM Mono',monospace; font-size:10px; color:rgba(15,14,11,0.4); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px;">Eng. Hours Saved</div>
+            <div style="font-family:'DM Mono',monospace; font-size:14px; color:#1a6b3c; font-weight:500;">900+ / year</div>
+          </div>
+          <div>
+            <div style="font-family:'DM Mono',monospace; font-size:10px; color:rgba(15,14,11,0.4); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px;">Handoff Reduction</div>
+            <div style="font-family:'DM Mono',monospace; font-size:14px; color:#1a6b3c; font-weight:500;">−40%</div>
+          </div>
+        </div>
+        <a href="cisco.html" style="display:inline-flex; align-items:center; gap:8px; font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--red); text-decoration:none; border-bottom:1px solid var(--red); padding-bottom:2px;">Read the Case Study →</a>
+      </div>
+
+      <!-- Amazon -->
+      <div style="padding:36px; border-right:1px solid var(--rule); position:relative;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px;">
+          <span style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.15em; text-transform:uppercase; background:var(--ink); color:var(--paper); padding:3px 10px;">Cognitive Load Faultline</span>
+          <span style="font-family:'DM Mono',monospace; font-size:10px; color:rgba(15,14,11,0.4);">Amazon</span>
+        </div>
+        <h3 style="font-family:'Syne',sans-serif; font-size:24px; font-weight:800; line-height:1.1; margin-bottom:12px; letter-spacing:-0.02em;">The Defect Diagnosis Faultline</h3>
+        <p style="font-size:16px; font-style:italic; color:rgba(15,14,11,0.65); margin-bottom:20px; line-height:1.5;">How Amazon's defect management system was creating the errors it was designed to prevent.</p>
+        <div style="border-top:1px solid var(--rule); padding-top:16px; margin-bottom:24px;">
+          <div style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(15,14,11,0.4); margin-bottom:10px;">FTM Concepts Demonstrated</div>
+          <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px;">
+            <a href="#heuristics" style="font-family:'DM Mono',monospace; font-size:10px; background:rgba(192,57,43,0.08); color:var(--red); padding:3px 8px; text-decoration:none; border:1px solid rgba(192,57,43,0.2);">P4 Cognitive Load Distribution</a>
+            <a href="#heuristics" style="font-family:'DM Mono',monospace; font-size:10px; background:rgba(192,57,43,0.08); color:var(--red); padding:3px 8px; text-decoration:none; border:1px solid rgba(192,57,43,0.2);">B3 Feedback Loop Integrity</a>
+            <a href="#heuristics" style="font-family:'DM Mono',monospace; font-size:10px; background:rgba(192,57,43,0.08); color:var(--red); padding:3px 8px; text-decoration:none; border:1px solid rgba(192,57,43,0.2);">P2 Predictive Processing</a>
+            <a href="#phase2" style="font-family:'DM Mono',monospace; font-size:10px; background:rgba(192,57,43,0.08); color:var(--red); padding:3px 8px; text-decoration:none; border:1px solid rgba(192,57,43,0.2);">B.3 Support Ticket Forensics</a>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:24px;">
+          <div>
+            <div style="font-family:'DM Mono',monospace; font-size:10px; color:rgba(15,14,11,0.4); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px;">SLA Compliance</div>
+            <div style="font-family:'DM Mono',monospace; font-size:14px; color:#1a6b3c; font-weight:500;">78% → 94%</div>
+          </div>
+          <div>
+            <div style="font-family:'DM Mono',monospace; font-size:10px; color:rgba(15,14,11,0.4); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px;">Repeat Defects</div>
+            <div style="font-family:'DM Mono',monospace; font-size:14px; color:#1a6b3c; font-weight:500;">−40%</div>
+          </div>
+        </div>
+        <a href="amazon.html" style="display:inline-flex; align-items:center; gap:8px; font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--red); text-decoration:none; border-bottom:1px solid var(--red); padding-bottom:2px;">Read the Case Study →</a>
+      </div>
+
+      <!-- Waterloo -->
+      <div style="padding:36px; position:relative;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px;">
+          <span style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.15em; text-transform:uppercase; background:var(--ink); color:var(--paper); padding:3px 10px;">Cognitive Load Faultline</span>
+          <span style="font-family:'DM Mono',monospace; font-size:10px; color:rgba(15,14,11,0.4);">Waterloo Air</span>
+        </div>
+        <h3 style="font-family:'Syne',sans-serif; font-size:24px; font-weight:800; line-height:1.1; margin-bottom:12px; letter-spacing:-0.02em;">The Hidden Cost of Expert Paralysis</h3>
+        <p style="font-size:16px; font-style:italic; color:rgba(15,14,11,0.65); margin-bottom:20px; line-height:1.5;">How a paper-based product selector was costing engineers hours per decision — and how we rebuilt it around how experts actually think.</p>
+        <div style="border-top:1px solid var(--rule); padding-top:16px; margin-bottom:24px;">
+          <div style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(15,14,11,0.4); margin-bottom:10px;">FTM Concepts Demonstrated</div>
+          <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px;">
+            <a href="#heuristics" style="font-family:'DM Mono',monospace; font-size:10px; background:rgba(192,57,43,0.08); color:var(--red); padding:3px 8px; text-decoration:none; border:1px solid rgba(192,57,43,0.2);">P1 Relevance Realization</a>
+            <a href="#heuristics" style="font-family:'DM Mono',monospace; font-size:10px; background:rgba(192,57,43,0.08); color:var(--red); padding:3px 8px; text-decoration:none; border:1px solid rgba(192,57,43,0.2);">P4 Cognitive Load Distribution</a>
+            <a href="#heuristics" style="font-family:'DM Mono',monospace; font-size:10px; background:rgba(192,57,43,0.08); color:var(--red); padding:3px 8px; text-decoration:none; border:1px solid rgba(192,57,43,0.2);">B6 Scale-Induced Debt</a>
+            <a href="#phase4" style="font-family:'DM Mono',monospace; font-size:10px; background:rgba(192,57,43,0.08); color:var(--red); padding:3px 8px; text-decoration:none; border:1px solid rgba(192,57,43,0.2);">Horizon 1 Remediation</a>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:24px;">
+          <div>
+            <div style="font-family:'DM Mono',monospace; font-size:10px; color:rgba(15,14,11,0.4); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px;">Selection Speed</div>
+            <div style="font-family:'DM Mono',monospace; font-size:14px; color:#1a6b3c; font-weight:500;">3× faster</div>
+          </div>
+          <div>
+            <div style="font-family:'DM Mono',monospace; font-size:10px; color:rgba(15,14,11,0.4); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px;">Training Reduction</div>
+            <div style="font-family:'DM Mono',monospace; font-size:14px; color:#1a6b3c; font-weight:500;">−50%</div>
+          </div>
+        </div>
+        <a href="waterloo.html" style="display:inline-flex; align-items:center; gap:8px; font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--red); text-decoration:none; border-bottom:1px solid var(--red); padding-bottom:2px;">Read the Case Study →</a>
+      </div>
+
+    </div>
+
+    <!-- Reading guide -->
+    <div style="border:1px solid var(--rule); padding:28px 32px; background:var(--paper);">
+      <div style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:var(--red); margin-bottom:14px;">How to read these cases</div>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;">
+        <div>
+          <strong style="font-size:15px;">If you're new to the FTM</strong>
+          <p style="font-size:14px; margin-top:6px; color:rgba(15,14,11,0.65);">Start with the PayPal Trust Audit. It's the clearest demonstration of how a non-obvious faultline is isolated, diagnosed, and remediated with measurable outcome.</p>
+        </div>
+        <div>
+          <strong style="font-size:15px;">If you lead a product team</strong>
+          <p style="font-size:14px; margin-top:6px; color:rgba(15,14,11,0.65);">Read Cisco first. The scale-induced debt pattern is the most common hidden crisis in mid-size product organisations — and the most consistently underestimated.</p>
+        </div>
+        <div>
+          <strong style="font-size:15px;">If you're evaluating this for your product</strong>
+          <p style="font-size:14px; margin-top:6px; color:rgba(15,14,11,0.65);">Read Amazon. The defect management case demonstrates the full four-phase method in the most compressed form, with the root cause chain fully exposed.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
 <section style="background:var(--ink); padding:64px 0; text-align:center; color:var(--paper); border-bottom:none;">
   <div class="container">
     <h2 style="font-family:'Syne',sans-serif; font-size:clamp(28px,4vw,42px); font-weight:800; margin-bottom:16px;">Suspect your product has hidden faultlines?</h2>
